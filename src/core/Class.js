@@ -1,13 +1,13 @@
 /**
- * Provides OOP functionaity of the library.
+ * Provides OOP class functionaity of the library.
  */
 Crystal.Class = function() {};
 
 /**
  * Provides an inheritance.
  * 
- * @param string child Child object
- * @param string parent Parent object
+ * @param {String} child Child object.
+ * @param {String} parent Parent object.
  */
 Crystal.Class.extend = function (child, parent) {
 	var F = function() { }
