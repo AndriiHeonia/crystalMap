@@ -28,7 +28,7 @@ Crystal.Interface = function(name, methods)
  */
 Crystal.Interface.isImplements = function(object, interfaces)
 {
-    if(typeof (object) === undefined)
+    if(typeof(object) === 'undefined')
     {
         throw new ReferenceError('Parameter "object" should be passed.');
     }
@@ -38,18 +38,18 @@ Crystal.Interface.isImplements = function(object, interfaces)
         throw new TypeError('Parameter "interfaces" is required and should be not empty array.');
     }
 	
-    for(var i = 0; i < interfaces.lengrh; i++)
+    for(var i = 0; i < interfaces.length; i++)
     {
         if(interfaces[i].constructor !== Crystal.Interface)
         {
             throw new TypeError('Interface should be instance of "Crystal.Interface".');
         }
-        for(var j = 0, methodsLen = interfaces[i].methods.length; j < methodsLen; j++)
+        for(var j = 0; j < interfaces[i].methods.length; j++)
         {
             var method = interfaces[i].methods[j];
-            if(!object[method] || Object.prototype.toString.call(object[method]) != '[object Function]')
+            if(!object[method] || typeof(object[method]) !== 'function')
             {
-                throw new ReferenceError('Object does not implement the ' + interfaces[i].name + ' interface. Method ' + method + ' was not found.');
+                throw new ReferenceError('Object does not implement the "' + interfaces[i].name + '" interface. Method "' + method + '" was not found.');
             }
         }
     }
