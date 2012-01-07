@@ -7,7 +7,7 @@ Crystal.Interface = function(name, methods)
 {
     if(arguments.length != 2)
     {
-        throw new ReferenceError('Interface constructor called with ' + arguments.length + 'arguments, but expected exactly 2.');
+        throw new ReferenceError('Interface constructor called with ' + arguments.length + ' argument(s), but expected exactly 2.');
     }
     this.name = name;
     this.methods = [];
@@ -22,11 +22,11 @@ Crystal.Interface = function(name, methods)
 }
 
 /**
- * Checks or object impements interfaces.
+ * Ensure that object impements interfaces.
  * @param {Object} object Object to be checked.
  * @param {Array} interfaces Array with Interface instances.
  */
-Crystal.Interface.isImplements = function(object, interfaces)
+Crystal.Interface.ensureImplements = function(object, interfaces)
 {
     if(typeof(object) === 'undefined')
     {
