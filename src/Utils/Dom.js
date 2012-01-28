@@ -32,4 +32,26 @@ Crystal.Utils.Dom.create = function(tagName, id, className, container)
     return el;
 }
 
+/**
+ * Checks or object is a DOM node.
+ * @static
+ * @param {Object} object Checkable object. Required.
+ * @return {Boolean}
+ */
+Crystal.Utils.Dom.isNode = function(object)
+{
+    return object.nodeType ? true : false;
+}
+
+/**
+ * Checks or object is a DOM element.
+ * @static
+ * @param {Object} object Checkable object. Required.
+ * @return {Boolean}
+ */
+Crystal.Utils.Dom.isElement = function(object)
+{
+    return (object.nodeType && object.nodeType == 1) ? true : false;
+}
+
 Crystal.Utils.Dom.CLASS_NAME = 'Crystal.Utils.Dom';
