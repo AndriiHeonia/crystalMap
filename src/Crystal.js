@@ -1,4 +1,0 @@
-/**
- * Library namespace
- */
-Crystal = {}

@@ -1,5 +1,6 @@
 /**
  * Provides OOP interface functionaity of the library.
+ * @constructor
  * @param {String} name Interface name.
  * @param {Array} methods Interface methods.
  */
@@ -54,3 +55,5 @@ Crystal.Interface.ensureImplements = function(object, interfaces)
         }
     }
 }
+
+Crystal.Interface.prototype.CLASS_NAME = 'Crystal.Interface';

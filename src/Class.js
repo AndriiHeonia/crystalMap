@@ -29,3 +29,5 @@ Crystal.Class.extend = function(child, parent)
 		}
 	}    
 }
+
+Crystal.Class.CLASS_NAME = 'Crystal.Class';
