@@ -209,7 +209,6 @@ Crystal.Map = function(container, center, zoom)
 
     /**
      * Initialization.
-     * @todo validate params.
      */
     _validateConstructorParams(container, center, zoom);
     _container = Object.prototype.toString.call(container) == '[object String]' ? document.getElementById(container) : container;
