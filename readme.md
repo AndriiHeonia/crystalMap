@@ -1,1 +1,1 @@
-Crystal Map. Client-side GIS rendering engine (Version: in developing...)
+Crystal Map. JavaScript GIS rendering engine (Version: in developing...)
