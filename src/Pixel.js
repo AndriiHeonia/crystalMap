@@ -1,8 +1,8 @@
 /**
  * Represents a screen point.
  * @constructor
- * @param {Number} x X coordinate.
- * @param {Number} y Y coordinate.
+ * @param {Number} x X coordinate. Required.
+ * @param {Number} y Y coordinate. Required.
  */
 Crystal.Pixel = function(x, y)
 {
@@ -34,8 +34,8 @@ Crystal.Pixel = function(x, y)
     
     /**
      * Validate constructor params.
-     * @param {Number} lat Geographic latitude. Required.
-     * @param {Number} lon Geographic longitude. Required.
+     * @param {Number} x X coordinate. Required.
+     * @param {Number} y Y coordinate. Required.
      */
     var _validateConstructorParams = function(x, y)
     {
