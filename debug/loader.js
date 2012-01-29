@@ -39,6 +39,7 @@ else if (/.*spec.html/.test(location.href))
      // spec suites
     .script('../spec/suites/ClassSpec.js').wait()
     .script('../spec/suites/InterfaceSpec.js').wait()
+    .script('../spec/suites/GeoPointSpec.js').wait()
     .script('../spec/suites/MapSpec.js')
     .wait(
     function()

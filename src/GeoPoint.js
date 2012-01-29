@@ -1,8 +1,8 @@
 /**
  * Represents a geographic point.
  * @constructor
- * @param {Number} lat Geographic latitude.
- * @param {Number} lon Geographic longitude.
+ * @param {Number} lat Geographic latitude. Required.
+ * @param {Number} lon Geographic longitude. Required.
  */
 Crystal.GeoPoint = function(lat, lon)
 {
@@ -33,11 +33,28 @@ Crystal.GeoPoint = function(lat, lon)
     {
         return _lon;
     }
-    
+
+    /**
+     * Validate constructor params.
+     * @param {Number} lat Geographic latitude. Required.
+     * @param {Number} lon Geographic longitude. Required.
+     */
+    var _validateConstructorParams = function(lat, lon)
+    {
+        if(Object.prototype.toString.call(lat) != '[object Number]' || lat < -90 || lat > 90)
+        {
+            throw new TypeError('GeoPoint constructor called with invalid latitude.')
+        }
+        if(Object.prototype.toString.call(lon) != '[object Number]' || lon < -180 || lon > 180)
+        {
+            throw new TypeError('GeoPoint constructor called with invalid longitude.')
+        }        
+    }
+
     /**
      * Initialization.
-     * @todo validate params.
      */
+    _validateConstructorParams(lat, lon);    
     _lat = lat;
     _lon = lon;    
 }
