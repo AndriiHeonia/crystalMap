@@ -43,11 +43,11 @@ Crystal.GeoPoint = function(lat, lon)
     {
         if(Object.prototype.toString.call(lat) != '[object Number]' || lat < -90 || lat > 90)
         {
-            throw new TypeError('GeoPoint constructor called with invalid latitude.')
+            throw new Error('GeoPoint constructor called with invalid latitude.')
         }
         if(Object.prototype.toString.call(lon) != '[object Number]' || lon < -180 || lon > 180)
         {
-            throw new TypeError('GeoPoint constructor called with invalid longitude.')
+            throw new Error('GeoPoint constructor called with invalid longitude.')
         }        
     }
 

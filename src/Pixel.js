@@ -33,9 +33,26 @@ Crystal.Pixel = function(x, y)
     }
     
     /**
-     * Initialization.
-     * @todo validate params.
+     * Validate constructor params.
+     * @param {Number} lat Geographic latitude. Required.
+     * @param {Number} lon Geographic longitude. Required.
      */
+    var _validateConstructorParams = function(x, y)
+    {
+        if(Object.prototype.toString.call(x) != '[object Number]')
+        {
+            throw new TypeError('Pixel constructor called with invalid x.')
+        }
+        if(Object.prototype.toString.call(y) != '[object Number]')
+        {
+            throw new TypeError('Pixel constructor called with invalid y.')
+        }        
+    }
+    
+    /**
+     * Initialization.
+     */
+    _validateConstructorParams(x, y);    
     _x = x;
     _y = y;
 }

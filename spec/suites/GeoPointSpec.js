@@ -12,42 +12,42 @@ describe("Crystal.GeoPoint", function()
         {
             expect(function() {
                 new Crystal.GeoPoint('50', 50);
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid latitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid latitude.'));            
         });
         
         it("should throw an error, because lat is < -90", function()
         {
             expect(function() {
                 new Crystal.GeoPoint(-91, 50);
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid latitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid latitude.'));            
         });        
         
         it("should throw an error, because lat is > 90", function()
         {
             expect(function() {
                 new Crystal.GeoPoint(91, 50);
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid latitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid latitude.'));            
         });
         
         it("should throw an error, because lon is not a number", function()
         {
             expect(function() {
                 new Crystal.GeoPoint(50, '50');
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid longitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid longitude.'));            
         });
         
         it("should throw an error, because lon is < -180", function()
         {
             expect(function() {
                 new Crystal.GeoPoint(50, -181);
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid longitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid longitude.'));            
         });        
         
         it("should throw an error, because lon is > 180", function()
         {
             expect(function() {
                 new Crystal.GeoPoint(50, 181);
-            }).toThrow(new ReferenceError('GeoPoint constructor called with invalid longitude.'));            
+            }).toThrow(new Error('GeoPoint constructor called with invalid longitude.'));            
         });        
     });
     
