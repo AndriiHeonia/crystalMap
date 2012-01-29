@@ -1,5 +1,5 @@
 (function() {
-    var mapCenter = new Crystal.GeoPoint(10, 20);
+    var mapCenter = new Crystal.GeoPoint(55.028936234826, 82.927810142519);
     var map = new Crystal.Map('myMap', mapCenter, 2);
     var layer = new Crystal.Layers.Tile({
         url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',

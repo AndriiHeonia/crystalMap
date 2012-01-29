@@ -30,7 +30,7 @@ Crystal.Layers.Tile = function(options)
      * Handles and process addition to the map notification.
      * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
      */
-    this.onAddToMap = function(mapEvent) 
+    this.onAddToMap = function(mapEvent)
     {
         _map = mapEvent.getMap();
         _initContainer();
@@ -72,47 +72,118 @@ Crystal.Layers.Tile = function(options)
      */
     var _showTiles = function()
     {
-        //N = H * W
-        //H = W = 2^Z, где  H – количество плиток по высоте,
-        //W – количество плиток по ширине,
-        //Z – номер уровня, начиная с нуля
+        // http://politerm.com.ru/zuludoc/tile_servers.htm
+        // http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#C.2FC.2B.2B
+
+        var xCenter;
+        var yCenter;
+        var x; // current x
+        var y; // current y
+        var xSize; // size by x
+        var ySize; // size by y
+        var size; // xSize * ySize
+        var spiral = 1; // spiral number        
+        var showed = 0; // tiles showed count
         
-// function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); }
-// function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); }        
-
-// function tile2long(x,z) {
-//  return (x/Math.pow(2,z)*360-180);
-// }
-// function tile2lat(y,z) {
-//  var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
-//  return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
-// }
-
-
-        var h, w;
-        h = w = Math.pow(2, _map.getZoom());
+        xCenter = x = _getTileX(_map.getCenter().getLon(), _map.getZoom());
+        yCenter = y = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
+        xSize = ySize = Math.pow(2, _map.getZoom());
+        size = xSize * ySize;
         
-        for(var x = 0; x < w; x++)
+        // show central tile
+        _showTile(x, y);
+        showed++;
+        
+        while(showed < size)
         {
-            for (var y = 0; y < h; y++)
+            while(x < xCenter + spiral) // move >
             {
-                var img = Crystal.Utils.Dom.create('img');
-                
-                var url = _options.url;
-                url = url.replace("{x}", x);
-                url = url.replace("{y}", y);
-                url = url.replace("{z}", _map.getZoom());
-                
-                img.src = 'http://' + _options.subdomains[0] + '.' + url;
-                img.width = img.height = _options.tileSize;
-                
-                img.style.position = 'absolute';
-                img.style.left = (x * _options.tileSize) + 'px';
-                img.style.top = (y * _options.tileSize) + 'px';
-                
-                _container.appendChild(img);
+                x++;
+                _showTile(x, y);
+                showed++;
             }
+            
+            while(y < yCenter + spiral) // move v
+            {
+                y++;
+                _showTile(x, y);
+                showed++;
+            }
+
+            while(x > xCenter - spiral) // move <
+            {
+                x--;
+                _showTile(x, y);
+                showed++;
+            }
+
+            while(y > yCenter - spiral && y != 0) // move ^
+            {
+                y--;
+                _showTile(x, y);
+                showed++;
+            }
+            
+            spiral++;
         }
+    }
+    
+    var _showTile = function(x, y)
+    {
+        var viewPortWidth;
+        var viewPortHeight;
+        var img;
+        var url;
+        var xPixel;
+        var yPixel;
+        var centerTileX;
+        var centerTileY;
+        
+        viewPortWidth = _map.getContainer().offsetWidth;
+        viewPortHeight = _map.getContainer().offsetHeight;
+        
+        centerTileX = _getTileX(_map.getCenter().getLon(), _map.getZoom());
+        centerTileY = _getTileY(_map.getCenter().getLat(), _map.getZoom());
+
+        xPixel = ((viewPortWidth / 2) - (_options.tileSize / 2)) + ((x - centerTileX) * _options.tileSize);
+        yPixel = ((viewPortHeight / 2) - (_options.tileSize / 2)) + ((y - centerTileY) * _options.tileSize);
+
+        url = _options.url;
+        url = url.replace("{x}", x);
+        url = url.replace("{y}", y);
+        url = url.replace("{z}", _map.getZoom());
+
+        img = Crystal.Utils.Dom.create('img');
+        img.src = 'http://' + _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)] + '.' + url;
+        img.width = img.height = _options.tileSize;
+
+        img.style.position = 'absolute';
+        img.style.left = xPixel + 'px';
+        img.style.top = yPixel + 'px';
+
+        _container.appendChild(img);
+    }
+
+    /**
+     * Returns X position of the tile in a tile server.
+     * @param {Number} lon Longitude.
+     * @param {Number} zoom Zoom level.
+     * @return {Number}
+     */
+    var _getTileX = function(lon, zoom)
+    {
+        return Math.floor((lon + 180) / 360 * Math.pow(2, zoom));        
+    }
+
+    /**
+     * Returns Y position of the tile in a tile server.
+     * @param {Number} lat Latitude.
+     * @param {Number} zoom Zoom level.
+     * @return {Number} 
+     */
+    var _getTileY = function(lat, zoom)
+    {
+        return Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 *Math.pow(2, zoom));
     }
         
     /**
