@@ -15,7 +15,7 @@ Crystal.Utils.Common.createUniqueId = function(prefix)
     var date = new Date;
     var time = date.getTime();
     
-    return prefix ? prefix + '_' + time : time;    
+    return prefix ? prefix + '_' + time : '' + time;    
 }
 
 Crystal.Utils.Common.CLASS_NAME = 'Crystal.Utils.Common';

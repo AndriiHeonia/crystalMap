@@ -41,6 +41,7 @@ else if (/.*spec.html/.test(location.href))
     .script('../spec/suites/InterfaceSpec.js').wait()
     .script('../spec/suites/GeoPointSpec.js').wait()
     .script('../spec/suites/PixelSpec.js').wait()
+    .script('../spec/suites/Utils/Common.js').wait()
     .script('../spec/suites/MapSpec.js')
     .wait(
     function()
