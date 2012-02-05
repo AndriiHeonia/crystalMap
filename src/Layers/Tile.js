@@ -144,8 +144,9 @@ Crystal.Layers.Tile = function(options)
         var yCenter; // y position of the central tile in a tile grid
         var xPixelCenter; // x position of the central tile on the screen
         var yPixelCenter; // y position of the central tile on the screen
-        var xPixel;
-        var yPixel;
+        var xPixel; // x position on the screen
+        var yPixel; // y position on the screen
+        var subdomain; // subdomain of the tile server
         
         xCenter = _getTileX(_map.getCenter().getLon(), _map.getZoom());
         yCenter = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
@@ -158,15 +159,20 @@ Crystal.Layers.Tile = function(options)
         xPixel = xPixelCenter + ((x - xCenter) * _options.tileSize);
         yPixel = yPixelCenter + ((y - yCenter) * _options.tileSize);
         
+        subdomain = _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)];
+        
         url = _options.url;
         url = url.replace("{x}", x);
         url = url.replace("{y}", y);
         url = url.replace("{z}", _map.getZoom());
 
         img = Crystal.Utils.Dom.create('img');
-        img.src = 'http://' + _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)] + '.' + url;
+        Crystal.Utils.Dom.setOpacity(img, 0);
+        img.onload = function () {
+            Crystal.Utils.Dom.fadeIn(img, 300);
+        };
+        img.src = 'http://' + subdomain + '.' + url;
         img.width = img.height = _options.tileSize;
-
         img.style.left = xPixel + 'px';
         img.style.top = yPixel + 'px';
 

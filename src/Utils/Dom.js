@@ -54,30 +54,46 @@ Crystal.Utils.Dom.isElement = function(object)
     return (object.nodeType && object.nodeType == 1) ? true : false;
 }
 
-Crystal.Utils.Dom.getScrollBarWidth = function() {
-  var inner = document.createElement('p');
-    inner.style.width = "100%";
-    inner.style.height = "200px";
+/**
+ * Sets opacity to the DOM element.
+ * @static
+ * @param {Object} element DOM element. Required.
+ * @param {Number} opacity. Opacity (0.0-1.0). Required.
+ */
+Crystal.Utils.Dom.setOpacity = function(element, opacity)
+{
+    element.style.opacity = opacity;
+    element.style.MozOpacity = opacity;
+    element.style.KhtmlOpacity = opacity;
+    element.style.filter = 'alpha(opacity=' + (opacity * 100) + ');';    
+},
 
-    var outer = document.createElement('div');
-    outer.style.position = "absolute";
-    outer.style.top = "0px";
-    outer.style.left = "0px";
-    outer.style.visibility = "hidden";
-    outer.style.width = "200px";
-    outer.style.height = "150px";
-    outer.style.overflow = "hidden";
-    outer.appendChild (inner);
+/**
+ * Displays a DOM element with the fade animation.
+ * @static
+ * @param {Object} element DOM element. Required.
+ * @param {Number} duration. Fade duration in milliseconds. Required.
+ */
+Crystal.Utils.Dom.fadeIn = function(element, duration)
+{
+    for (var i = 0; i <= 1; i += 0.05)
+    {
+        setTimeout(Crystal.Utils.Dom.setOpacity, i * duration, element, i);
+    }
+}
 
-    document.body.appendChild (outer);
-    var w1 = inner.offsetWidth;
-    outer.style.overflow = 'scroll';
-    var w2 = inner.offsetWidth;
-    if (w1 == w2) w2 = outer.clientWidth;
-
-    document.body.removeChild (outer);
-
-    return (w1 - w2);
-};
+/**
+ * Hides a DOM element with the fade animation.
+ * @static
+ * @param {Object} element DOM element. Required.
+ * @param {Number} duration. Fade duration in milliseconds. Required.
+ */
+Crystal.Utils.Dom.fadeOut = function(element, duration)
+{
+    for (var i = 0; i <= 1; i += 0.05)
+    {
+        setTimeout(Crystal.Utils.Dom.setOpacity, i * duration, element, (1 - i));
+    }
+}
 
 Crystal.Utils.Dom.CLASS_NAME = 'Crystal.Utils.Dom';
