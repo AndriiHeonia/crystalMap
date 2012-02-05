@@ -64,37 +64,38 @@ Crystal.Layers.Tile = function(options)
             'crystal-layer',
             _map.getContainer()
         );
-        _container.style.position = 'absolute';
     }
     
     /**
      * Displays tiles.
+     * @see http://politerm.com.ru/zuludoc/tile_servers.htm
+     * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#C.2FC.2B.2B
      */
     var _showTiles = function()
     {
-        // http://politerm.com.ru/zuludoc/tile_servers.htm
-        // http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#C.2FC.2B.2B
-
-        var xCenter;
-        var yCenter;
-        var x; // current x
-        var y; // current y
-        var xSize; // size by x
-        var ySize; // size by y
-        var size; // xSize * ySize
+        var xCenter; // x position of the central tile in a tile grid
+        var yCenter; // y position of the central tile in a tile grid
+        var x; // x position of the current tile in a tile grid
+        var y; // y position of the current tile in a tile grid
         var spiral = 1; // spiral number        
         var showed = 0; // tiles showed count
+        var viewPortXTileSize; // max count of the tiles, view port can contains by x
+        var viewPortYTileSize; // max count of the tiles, view port can contains by y
+        var viewPortTileSize; // max count of the tiles, view port can contains
+        
+        viewPortXTileSize = Math.ceil(_map.getContainer().offsetWidth / _options.tileSize);
+        viewPortYTileSize = Math.ceil(_map.getContainer().offsetHeight / _options.tileSize);
+        viewPortTileSize = viewPortXTileSize * viewPortYTileSize;
         
         xCenter = x = _getTileX(_map.getCenter().getLon(), _map.getZoom());
         yCenter = y = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
-        xSize = ySize = Math.pow(2, _map.getZoom());
-        size = xSize * ySize;
         
         // show central tile
         _showTile(x, y);
         showed++;
         
-        while(showed < size)
+        // show another tiles by spiral from the center
+        while(showed < viewPortTileSize)
         {
             while(x < xCenter + spiral) // move >
             {
@@ -128,26 +129,35 @@ Crystal.Layers.Tile = function(options)
         }
     }
     
+    /**
+     * Displays tile.
+     * @param {Number} x X position in a tile grid.
+     * @param {Number} y Y position in a tile grid.
+     */
     var _showTile = function(x, y)
     {
-        var viewPortWidth;
-        var viewPortHeight;
+        var viewPortXCenter;
+        var viewPortYCenter;
         var img;
         var url;
+        var xCenter; // x position of the central tile in a tile grid
+        var yCenter; // y position of the central tile in a tile grid
+        var xPixelCenter; // x position of the central tile on the screen
+        var yPixelCenter; // y position of the central tile on the screen
         var xPixel;
         var yPixel;
-        var centerTileX;
-        var centerTileY;
         
-        viewPortWidth = _map.getContainer().offsetWidth;
-        viewPortHeight = _map.getContainer().offsetHeight;
+        xCenter = _getTileX(_map.getCenter().getLon(), _map.getZoom());
+        yCenter = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
         
-        centerTileX = _getTileX(_map.getCenter().getLon(), _map.getZoom());
-        centerTileY = _getTileY(_map.getCenter().getLat(), _map.getZoom());
-
-        xPixel = ((viewPortWidth / 2) - (_options.tileSize / 2)) + ((x - centerTileX) * _options.tileSize);
-        yPixel = ((viewPortHeight / 2) - (_options.tileSize / 2)) + ((y - centerTileY) * _options.tileSize);
-
+        viewPortXCenter = _map.getContainer().offsetWidth / 2;
+        viewPortYCenter = _map.getContainer().offsetHeight / 2;
+                
+        xPixelCenter = Math.floor(viewPortXCenter - _options.tileSize / 2);
+        yPixelCenter = Math.floor(viewPortYCenter - _options.tileSize / 2);
+        xPixel = xPixelCenter + ((x - xCenter) * _options.tileSize);
+        yPixel = yPixelCenter + ((y - yCenter) * _options.tileSize);
+        
         url = _options.url;
         url = url.replace("{x}", x);
         url = url.replace("{y}", y);
@@ -157,7 +167,6 @@ Crystal.Layers.Tile = function(options)
         img.src = 'http://' + _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)] + '.' + url;
         img.width = img.height = _options.tileSize;
 
-        img.style.position = 'absolute';
         img.style.left = xPixel + 'px';
         img.style.top = yPixel + 'px';
 

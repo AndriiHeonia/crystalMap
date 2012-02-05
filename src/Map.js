@@ -213,6 +213,7 @@ Crystal.Map = function(container, center, zoom)
     _validateConstructorParams(container, center, zoom);
     _container = Object.prototype.toString.call(container) == '[object String]' ? document.getElementById(container) : container;
     _container.innerHtml = '';
+    _container.style.position = 'relative';
     _center = center;
     _zoom = zoom || 0;
 }
