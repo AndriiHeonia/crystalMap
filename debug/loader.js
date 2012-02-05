@@ -15,6 +15,7 @@ var lab = $LAB
 .script('../src/Class.js').wait()
 
 // 1st level classes
+.script('../src/Observable.js')
 .script('../src/GeoPoint.js')
 .script('../src/Map.js')
 .script('../src/Pixel.js')

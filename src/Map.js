@@ -4,15 +4,9 @@
  * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
  * @param {Crystal.GeoPoint} center Geographic coordinates of the center. Optional.
  * @param {Number} zoom Zoom level. Optional.
- * @implements {IObservable}
  */
 Crystal.Map = function(container, center, zoom)
 {
-    /**
-     * @todo To think about event manager.
-     */
-    var _observers = [];
-    
     /**
      * @type {Array}
      */
@@ -31,7 +25,29 @@ Crystal.Map = function(container, center, zoom)
     /**
      * @type {Number}
      */
-    var _zoom;
+    var _zoom;    
+    
+    /**
+     * Initialization.
+     */
+    _validateConstructorParams(container, center, zoom);    
+    Crystal.Map.superclass.constructor.call(this);
+    _container = Object.prototype.toString.call(container) == '[object String]' ? document.getElementById(container) : container;
+    _container.innerHTML = '';
+    _container.style.position = 'relative';
+    _container.style.backgroundColor = '#F4F2EE';
+    _center = center || new Crystal.GeoPoint(0, 0);
+    _zoom = zoom || 0;
+    this.registerEvent(['LayerAdding', 'LayerRemoving', 'ZoomChanging', 'CenterChanging']); // events can be fired by this object
+    
+    /**
+     * Returns an event object with information about the map.
+     * @return {Crystal.Events.Map}
+     */
+    this.getEventObject = function()
+    {
+        return new Crystal.Events.Map(this);
+    }
     
     /**
      * Returns DOM element, which contains this map.
@@ -59,10 +75,10 @@ Crystal.Map = function(container, center, zoom)
     {
         if(!(center instanceof Crystal.GeoPoint))
         {
-            throw new TypeError('setCenter method called with invalid center.')
+            throw new TypeError('setCenter method called with invalid center.');
         }
         _center = center;
-        _notifyObserversOnUpdate.call(this);
+        this.fireEvent('CenterChanging');
     }
 
     /**
@@ -85,7 +101,7 @@ Crystal.Map = function(container, center, zoom)
             throw new TypeError('setZoom method called with invalid zoom.')
         }
         _zoom = zoom;
-        _notifyObserversOnUpdate.call(this);
+        this.fireEvent('ZoomChanging');
     }
 
     /**
@@ -95,9 +111,15 @@ Crystal.Map = function(container, center, zoom)
     this.addLayer = function(layer)
     {
         Crystal.Interface.ensureImplements(layer, [IMapObserver]);
+        
+        // subscribing to the map events
+        this.addListener('LayerAdding', layer.onAddToMap);
+        this.addListener('LayerRemoving', layer.onRemoveFromMap);
+        this.addListener('ZoomChanging', layer.onMapUpdate);
+        this.addListener('CenterChanging', layer.onMapUpdate);
+
         _layers.push(layer);
-        _observers.push(layer);
-        _notifyObserversOnAdd.call(this, layer);
+        this.fireEvent('LayerAdding');
     }
 
     /**
@@ -107,65 +129,7 @@ Crystal.Map = function(container, center, zoom)
     this.removeLayer = function(layer)
     {        
         _layers.splice(_layers.indexOf(layer), 1);
-        _observers.splice(_observers.indexOf(layer), 1);
-        _notifyObserversOnRemove.call(this, layer);        
-    }
-
-    /**
-     * Notifies observers about addition to the map.
-     * @param {IMapObserver} observer Observer, should be notified. Optional. If not passed - all observers will be notified.
-     */
-    var _notifyObserversOnAdd = function(observer)
-    {
-        if(observer)
-        {
-            observer.onAddToMap(new Crystal.Events.Map(this));
-        }
-        else
-        {
-            for(var i = 0; i < _layers.length; i++)
-            {
-                _observers[i].onAddToMap(new Crystal.Events.Map(this));
-            }            
-        }
-    }
-
-    /**
-     * Notifies observers about map updates.
-     * @param {IMapObserver} observer Observer, should be notified. Optional. If not passed - all observers will be notified.
-     */
-    var _notifyObserversOnUpdate = function(observer)
-    {
-        if(observer)
-        {
-            observer.onMapUpdate(new Crystal.Events.Map(this));
-        }
-        else
-        {
-            for(var i = 0; i < _layers.length; i++)
-            {
-                _observers[i].onMapUpdate(new Crystal.Events.Map(this));
-            }            
-        }
-    }
-    
-    /**
-     * Notifies observers about removal from the map.
-     * @param {IMapObserver} observer Observer, should be notified. Optional. If not passed - all observers will be notified.
-     */
-    var _notifyObserversOnRemove = function(observer)
-    {
-        if(observer)
-        {
-            observer.onRemoveFromMap(new Crystal.Events.Map(this));
-        }
-        else
-        {
-            for(var i = 0; i < _layers.length; i++)
-            {
-                _observers[i].onRemoveFromMap(new Crystal.Events.Map(this));
-            }            
-        }
+        this.fireEvent('LayerRemoving');
     }
 
     /**
@@ -174,7 +138,7 @@ Crystal.Map = function(container, center, zoom)
      * @param {Crystal.GeoPoint} center Geographic coordinates of the center. Optional.
      * @param {Number} zoom Zoom level. Optional.
      */
-    var _validateConstructorParams = function(container, center, zoom)
+    function _validateConstructorParams(container, center, zoom)
     {
         var containerIsStr;
         var containerObj;
@@ -206,16 +170,8 @@ Crystal.Map = function(container, center, zoom)
             throw new TypeError('Map constructor called with invalid zoom.')
         }
     }
-
-    /**
-     * Initialization.
-     */
-    _validateConstructorParams(container, center, zoom);
-    _container = Object.prototype.toString.call(container) == '[object String]' ? document.getElementById(container) : container;
-    _container.innerHtml = '';
-    _container.style.position = 'relative';
-    _center = center;
-    _zoom = zoom || 0;
 }
+
+Crystal.Class.extend(Crystal.Map, Crystal.Observable);
 
 Crystal.Map.prototype.CLASS_NAME = 'Crystal.Map';

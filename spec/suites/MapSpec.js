@@ -75,20 +75,20 @@ describe("Crystal.Map", function()
             expect(myMap.getCenter()).toEqual(center);
         });
 
-        it("should notify layers about map center changing", function()
-        {
-            var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            myMap.addLayer(layer);
-            spyOn(layer, 'onMapUpdate');
-            myMap.setCenter(new Crystal.GeoPoint(50, 50));
-            expect(layer.onMapUpdate).toHaveBeenCalled();
-        });
+//        it("should notify layers about map center changing", function()
+//        {
+//            var myMap = new Crystal.Map('myMap');
+//            var layer = new Crystal.Layers.Tile({
+//                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+//                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+//                tileSize: 255,
+//                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+//            });
+//            myMap.addLayer(layer);
+//            spyOn(layer, 'onMapUpdate');
+//            myMap.setCenter(new Crystal.GeoPoint(50, 50));
+//            expect(layer.onMapUpdate).toHaveBeenCalledWith(myMap.getEventObject());
+//        });
 
         it("should throw an error, because center is incorrect", function()
         {
@@ -114,20 +114,20 @@ describe("Crystal.Map", function()
             expect(myMap.getZoom()).toEqual(5);
         });
 
-        it("should notify layers about map zoom changing", function()
-        {
-            var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            myMap.addLayer(layer);
-            spyOn(layer, 'onMapUpdate');
-            myMap.setZoom(5);
-            expect(layer.onMapUpdate).toHaveBeenCalled();
-        });
+//        it("should notify layers about map zoom changing", function()
+//        {
+//            var myMap = new Crystal.Map('myMap');
+//            var layer = new Crystal.Layers.Tile({
+//                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+//                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+//                tileSize: 255,
+//                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+//            });
+//            myMap.addLayer(layer);
+//            spyOn(layer, 'onMapUpdate');
+//            myMap.setZoom(5);
+//            expect(layer.onMapUpdate).toHaveBeenCalledWith(myMap.getEventObject());
+//        });
 
         it("should throw an error, because zoom is incorrect", function()
         {
@@ -140,36 +140,36 @@ describe("Crystal.Map", function()
     
     describe("addLayer", function()
     {
-        it("should notify layers about addition to the map", function()
-        {
-            var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            spyOn(layer, 'onAddToMap');            
-            myMap.addLayer(layer);
-            expect(layer.onAddToMap).toHaveBeenCalled();
-        });      
+//        it("should notify layers about addition to the map", function()
+//        {
+//            var myMap = new Crystal.Map('myMap');
+//            var layer = new Crystal.Layers.Tile({
+//                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+//                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+//                tileSize: 255,
+//                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+//            });
+//            spyOn(layer, 'onAddToMap');            
+//            myMap.addLayer(layer);
+//            expect(layer.onAddToMap).toHaveBeenCalledWith(myMap.getEventObject());
+//        });      
     });
     
     describe("removeLayer", function()
     {
-        it("should notify layers about removing from the map", function()
-        {
-            var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            myMap.addLayer(layer);
-            spyOn(layer, 'onRemoveFromMap');
-            myMap.removeLayer(layer);
-            expect(layer.onRemoveFromMap).toHaveBeenCalled();
-        });      
+//        it("should notify layers about removing from the map", function()
+//        {
+//            var myMap = new Crystal.Map('myMap');
+//            var layer = new Crystal.Layers.Tile({
+//                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+//                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+//                tileSize: 255,
+//                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+//            });
+//            myMap.addLayer(layer);
+//            spyOn(layer, 'onRemoveFromMap');
+//            myMap.removeLayer(layer);
+//            expect(layer.onRemoveFromMap).toHaveBeenCalledWith(myMap.getEventObject());
+//        });      
     });    
 });

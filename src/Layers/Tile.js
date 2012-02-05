@@ -1,5 +1,7 @@
 /**
  * Provides a XYZ tile layer functionaity.
+ * @see http://politerm.com.ru/zuludoc/tile_servers.htm
+ * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  * @constructor
  * @implements {IMapObserver}
  * @param {Object} options Layer options object. Required.
@@ -34,25 +36,29 @@ Crystal.Layers.Tile = function(options)
     {
         _map = mapEvent.getMap();
         _initContainer();
-        _showTiles();
+        _redraw();
     }
     
-    /**
-     * Handles and process map update notification.
-     * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
-     */
-    this.onMapUpdate = function(mapEvent) 
+   /**
+    * Handles and process map update notification.
+    * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
+    */
+    this.onMapUpdate = function(mapEvent)
     {
+        _map = mapEvent.getMap();
+        _redraw();
     }
     
-    /**
-     * Handles and process removal from the map notification.
-     * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
-     */
-    this.onRemoveFromMap = function(mapEvent) 
+   /**
+    * Handles and process removal from the map notification.
+    * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
+    */
+    this.onRemoveFromMap = function(mapEvent)
     {
-    }
-    
+        _map = mapEvent.getMap();
+        _redraw();
+    }    
+
     /**
      * Initializes a tile container.
      */
@@ -68,10 +74,8 @@ Crystal.Layers.Tile = function(options)
     
     /**
      * Displays tiles.
-     * @see http://politerm.com.ru/zuludoc/tile_servers.htm
-     * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#C.2FC.2B.2B
      */
-    var _showTiles = function()
+    var _redraw = function()
     {
         var xCenter; // x position of the central tile in a tile grid
         var yCenter; // y position of the central tile in a tile grid
@@ -82,6 +86,8 @@ Crystal.Layers.Tile = function(options)
         var viewPortXTileSize; // max count of the tiles, view port can contains by x
         var viewPortYTileSize; // max count of the tiles, view port can contains by y
         var viewPortTileSize; // max count of the tiles, view port can contains
+        
+        _container.innerHTML = '';
         
         viewPortXTileSize = Math.ceil(_map.getContainer().offsetWidth / _options.tileSize);
         viewPortYTileSize = Math.ceil(_map.getContainer().offsetHeight / _options.tileSize);
@@ -169,7 +175,7 @@ Crystal.Layers.Tile = function(options)
         img = Crystal.Utils.Dom.create('img');
         Crystal.Utils.Dom.setOpacity(img, 0);
         img.onload = function () {
-            Crystal.Utils.Dom.fadeIn(img, 300);
+            Crystal.Utils.Dom.fadeIn(img, 250);
         };
         img.src = 'http://' + subdomain + '.' + url;
         img.width = img.height = _options.tileSize;
