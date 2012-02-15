@@ -34,5 +34,35 @@ describe("Crystal.Utils.Dom", function()
             expect(Crystal.Utils.Dom.isElement(document.createElement('div'))).toBeTruthy();
             expect(Crystal.Utils.Dom.isElement(document.createTextNode('text'))).toBeFalsy();
         });        
+    });
+    
+    describe("setOpacity", function()
+    {
+        it("opacity should be changed correct", function()
+        {
+            
+            var el = document.getElementById('myMap');
+            Crystal.Utils.Dom.setOpacity(el, 0.5);
+            var opacity = el.style.opacity || el.style.MozOpacity || el.style.KhtmlOpacity || el.style.filter;
+            expect(opacity).toBeTruthy();
+        });        
+    });
+    
+    describe("fadeIn", function()
+    {
+        it("fadeIn method should not throw any errors", function()
+        {
+            var el = document.getElementById('myMap');
+            Crystal.Utils.Dom.fadeIn(el, 500);
+        });        
+    });
+    
+    describe("fadeOut", function()
+    {
+        it("fadeOut method should not throw any errors", function()
+        {
+            var el = document.getElementById('myMap');
+            Crystal.Utils.Dom.fadeOut(el, 500);
+        });        
     });    
 });

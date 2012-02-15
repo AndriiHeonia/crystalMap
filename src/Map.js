@@ -1,6 +1,7 @@
 /**
  * Provides a Map functionaity.
  * @constructor
+ * @extends {Crystal.Observable}
  * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
  * @param {Crystal.GeoPoint} center Geographic coordinates of the center. Optional.
  * @param {Number} zoom Zoom level. Optional.

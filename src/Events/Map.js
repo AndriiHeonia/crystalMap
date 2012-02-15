@@ -9,20 +9,20 @@ Crystal.Events.Map = function(map)
      * @type {Crystal.Map}
      */
     var _map;
-    
+
+    /**
+     * Initialization.
+     * @todo validate params.
+     */
+    _map = map;
+
     /**
      * Returns map instance that has been raised an event.
      */
     this.getMap = function()
     {
         return _map;
-    }
-    
-    /**
-     * Initialization.
-     * @todo validate params.
-     */
-    _map = map;
+    }    
 }
 
 Crystal.Events.Map.prototype.CLASS_NAME = 'Crystal.Events.Map';

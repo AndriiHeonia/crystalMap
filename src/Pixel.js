@@ -15,7 +15,14 @@ Crystal.Pixel = function(x, y)
      * @type {Number}
      */
     var _y;
-    
+
+    /**
+     * Initialization.
+     */
+    _validateConstructorParams(x, y);    
+    _x = x;
+    _y = y;
+
     /**
      * Returns X coordinate of the point.
      */
@@ -37,7 +44,7 @@ Crystal.Pixel = function(x, y)
      * @param {Number} x X coordinate. Required.
      * @param {Number} y Y coordinate. Required.
      */
-    var _validateConstructorParams = function(x, y)
+    function _validateConstructorParams(x, y)
     {
         if(Object.prototype.toString.call(x) != '[object Number]')
         {
@@ -47,14 +54,7 @@ Crystal.Pixel = function(x, y)
         {
             throw new TypeError('Pixel constructor called with invalid y.')
         }        
-    }
-    
-    /**
-     * Initialization.
-     */
-    _validateConstructorParams(x, y);    
-    _x = x;
-    _y = y;
+    }    
 }
 
 Crystal.Pixel.prototype.CLASS_NAME = 'Crystal.Pixel';
