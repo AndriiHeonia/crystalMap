@@ -1,10 +1,8 @@
 /**
  * Represents a geographic point.
  * @constructor
- * @param {Number} lat Geographic latitude. Required.
- * @param {Number} lon Geographic longitude. Required.
  */
-Crystal.GeoPoint = function(lat, lon)
+Crystal.GeoPoint = function()
 {
     /**
      * @type {Number}
@@ -18,10 +16,15 @@ Crystal.GeoPoint = function(lat, lon)
 
     /**
      * Initialization.
+     * @param {Number} lat Geographic latitude. Required.
+     * @param {Number} lon Geographic longitude. Required.
      */
-    _validateConstructorParams(lat, lon);    
-    _lat = lat;
-    _lon = lon;
+    this.initialize = function(lat, lon)
+    {
+        _validateConstructorParams(lat, lon);    
+        _lat = lat;
+        _lon = lon;        
+    }
 
     /**
      * Returns geographic latitude.
@@ -57,6 +60,7 @@ Crystal.GeoPoint = function(lat, lon)
             throw new Error('GeoPoint constructor called with invalid longitude.')
         }
     }
+    
+    // apply constructor
+    this.initialize.apply(this, arguments);    
 }
-
-Crystal.GeoPoint.prototype.CLASS_NAME = 'Crystal.GeoPoint';

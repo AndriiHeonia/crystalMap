@@ -26,5 +26,3 @@ Crystal.Utils.Converter.geoPointToPixel = function(geoPoint)
 {
     
 }
-
-Crystal.Utils.Converter.CLASS_NAME = 'Crystal.Utils.Converter';

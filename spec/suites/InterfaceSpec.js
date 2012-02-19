@@ -1,6 +1,6 @@
 describe("Crystal.Interface", function()
 {	
-    describe("constructor", function()
+    describe("initialize", function()
     {
         it("should be initialized correct", function()
         {
@@ -26,7 +26,7 @@ describe("Crystal.Interface", function()
         });
     });
     
-    describe("ensureImplements", function()
+    describe("isImplements", function()
     {
         it("should NOT throw an exceptions", function()
         {
@@ -55,25 +55,25 @@ describe("Crystal.Interface", function()
             obj = new SubChildClass();
 
             expect(function(){
-                Crystal.Interface.ensureImplements(obj, [MyInterface1, MyInterface2]);
+                Crystal.Interface.isImplements(obj, [MyInterface1, MyInterface2]);
             }).not.toThrow();
         });
         
         it("should throw an exception, because object is not passed", function()
         {
             expect(function(){
-                Crystal.Interface.ensureImplements();
+                Crystal.Interface.isImplements();
             }).toThrow(new ReferenceError('Parameter "object" should be passed.'));
         });
         
         it("should throw an exception, because 2nd parameter is invalid", function()
         {
             expect(function(){
-                Crystal.Interface.ensureImplements({}, []);
+                Crystal.Interface.isImplements({}, []);
             }).toThrow(new ReferenceError('Parameter "interfaces" is required and should be not empty array.'));
 
             expect(function(){
-                Crystal.Interface.ensureImplements({}, 'someString');
+                Crystal.Interface.isImplements({}, 'someString');
             }).toThrow(new ReferenceError('Parameter "interfaces" is required and should be not empty array.'));
         });
         
@@ -97,7 +97,7 @@ describe("Crystal.Interface", function()
 
 
             expect(function(){
-                Crystal.Interface.ensureImplements(obj, [MyInterface1, MyInterface2, {}]);
+                Crystal.Interface.isImplements(obj, [MyInterface1, MyInterface2, {}]);
             }).toThrow(new TypeError('Interface should be instance of "Crystal.Interface".'));
         });
         
@@ -120,7 +120,7 @@ describe("Crystal.Interface", function()
 
 
             expect(function(){
-                Crystal.Interface.ensureImplements(obj, [MyInterface1, MyInterface2]);
+                Crystal.Interface.isImplements(obj, [MyInterface1, MyInterface2]);
             }).toThrow(new TypeError('Object does not implement the "myInterface2" interface. Method "method4" was not found.'));
         });
     });    

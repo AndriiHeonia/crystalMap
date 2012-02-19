@@ -1,6 +1,6 @@
 describe("Crystal.Map", function()
 {
-    describe("constructor", function()
+    describe("initialize", function()
     {        
         it("should be correct initialized", function()
         {
@@ -46,8 +46,143 @@ describe("Crystal.Map", function()
         });
     });
     
+    describe("getEventObject", function()
+    {
+        it("should return Crystal.Events.Map instance", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            expect(myMap.getEventObject() instanceof Crystal.Events.Map).toBeTruthy();
+        });
+    });
+    
+    describe("registerEvent", function()
+    {
+        it("should not throw any errors", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            myMap.registerEvent(['MyEvent1', 'MyEvent2']);
+        });
+        
+        it("should throw an error, because event name is incorrect", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            expect(function(){
+                myMap.registerEvent({});
+            }).toThrow(new TypeError('registerEvent method called with invalid event name(s).'));  
+        });        
+    });
+
+    describe("addListener", function()
+    {
+        it("should not throw any errors", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            myMap.addListener('MyEvent', function() {});
+        });
+        
+        it("should throw an error, because event name is incorrect", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            expect(function(){
+                myMap.addListener({}, function() {});
+            }).toThrow(new TypeError('addListener method called with invalid event name.'));  
+        });
+
+        it("should throw an error, because event hasn't been registered", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            expect(function(){
+                myMap.addListener('MyEvent1', function(){});
+            }).toThrow(new TypeError('addListener method called with invalid event name.'));  
+        });
+
+        it("should throw an error, because handler is incorrect", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            expect(function(){
+                myMap.addListener('MyEvent', {});
+            }).toThrow(new TypeError('addListener method called with invalid handler.'));  
+        });
+    });
+
+    describe("removeListener", function()
+    {
+        it("should not throw any errors", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            var myHandler = function(){}
+            myMap.addListener('MyEvent', myHandler);
+            myMap.removeListener('MyEvent', myHandler);
+        });
+        
+        it("should throw an error, because event name is incorrect", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            myMap.addListener('MyEvent', function(){});
+            expect(function(){
+                myMap.removeListener({}, function(){});
+            }).toThrow(new TypeError('removeListener method called with invalid event name.'));  
+        });
+
+        it("should throw an error, because event hasn't been registered", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            myMap.addListener('MyEvent', function(){});
+            expect(function(){
+                myMap.removeListener('MyEvent1', function(){});
+            }).toThrow(new TypeError('removeListener method called with invalid event name.'));  
+        });
+        
+        it("should throw an error, because handler hasn't been registered", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            var myHandler = function(){}
+            var myHandler1 = function(){}
+            myMap.addListener('MyEvent', myHandler);
+            expect(function(){
+                myMap.removeListener('MyEvent', myHandler1);
+            }).toThrow(new TypeError('removeListener method called with invalid handler.'));  
+        });        
+    });
+
+    describe("fireEvent", function()
+    {
+        it("should fire an event handler", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            
+            var Klass = {};
+            Klass.staticMethod = function(){};
+            spyOn(Klass, 'staticMethod');
+
+            myMap.addListener('MyEvent', Klass.staticMethod);
+            myMap.fireEvent('MyEvent');
+            
+            expect(Klass.staticMethod).toHaveBeenCalled();
+        });
+        
+        it("should throw an error, because event name is incorrect", function()
+        {
+            var myMap = new Crystal.Map('myMap');
+            myMap.registerEvent('MyEvent');
+            expect(function(){
+                myMap.fireEvent('MyUnregisteredEvent');
+            }).toThrow(new TypeError('fireEvent method called with invalid event name.'));  
+        });        
+    });
+
     describe("getContainer", function()
-    {        
+    {
         it("should return correct DOM element", function()
         {
             var myMap = new Crystal.Map('myMap');
@@ -75,7 +210,7 @@ describe("Crystal.Map", function()
             expect(myMap.getCenter()).toEqual(center);
         });
 
-        it("should notify layers about map center changing", function()
+        it("should notify observers about map center changing", function()
         {
             var myMap = new Crystal.Map('myMap');
             var layer = new Crystal.Layers.Tile({
@@ -85,7 +220,7 @@ describe("Crystal.Map", function()
                 errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
             });
             spyOn(layer, 'onMapUpdate');
-            myMap.addLayer(layer);
+            myMap.add(layer);
             myMap.setCenter(new Crystal.GeoPoint(50, 50));
             expect(layer.onMapUpdate).toHaveBeenCalled();
         });
@@ -96,7 +231,7 @@ describe("Crystal.Map", function()
                 var myMap = new Crystal.Map('myMap');            
                 myMap.setCenter({});
             }).toThrow(new TypeError('setCenter method called with invalid center.'));            
-        });        
+        });
     });
     
     describe("getZoom/setZoom", function()
@@ -114,7 +249,7 @@ describe("Crystal.Map", function()
             expect(myMap.getZoom()).toEqual(5);
         });
 
-        it("should notify layers about map zoom changing", function()
+        it("should notify observers about map zoom changing", function()
         {
             var myMap = new Crystal.Map('myMap');
             var layer = new Crystal.Layers.Tile({
@@ -124,7 +259,7 @@ describe("Crystal.Map", function()
                 errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
             });
             spyOn(layer, 'onMapUpdate');
-            myMap.addLayer(layer);
+            myMap.add(layer);
             myMap.setZoom(5);
             expect(layer.onMapUpdate).toHaveBeenCalled();
         });
@@ -135,12 +270,12 @@ describe("Crystal.Map", function()
                 var myMap = new Crystal.Map('myMap');            
                 myMap.setZoom('5');
             }).toThrow(new TypeError('setZoom method called with invalid zoom.'));            
-        });        
+        });
     });
     
-    describe("addLayer", function()
+    describe("add", function()
     {
-        it("should notify layers about addition to the map", function()
+        it("should notify observers about addition to the map", function()
         {
             var myMap = new Crystal.Map('myMap');
             var layer = new Crystal.Layers.Tile({
@@ -150,14 +285,22 @@ describe("Crystal.Map", function()
                 errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
             });
             spyOn(layer, 'onAddToMap');            
-            myMap.addLayer(layer);
+            myMap.add(layer);
             expect(layer.onAddToMap).toHaveBeenCalled();
         });
+        
+        it("should throw an error, because observer is incorrect", function()
+        {
+            expect(function(){
+                var myMap = new Crystal.Map('myMap');            
+                myMap.add({});
+            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onMapUpdate" was not found.');            
+        });    
     });
     
-    describe("removeLayer", function()
+    describe("remove", function()
     {
-        it("should notify layers about removing from the map", function()
+        it("should notify observers about removing from the map", function()
         {
             var myMap = new Crystal.Map('myMap');
             var layer = new Crystal.Layers.Tile({
@@ -167,9 +310,9 @@ describe("Crystal.Map", function()
                 errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
             });
             spyOn(layer, 'onRemoveFromMap');
-            myMap.addLayer(layer);
-            myMap.removeLayer(layer);
+            myMap.add(layer);
+            myMap.remove(layer);
             expect(layer.onRemoveFromMap).toHaveBeenCalled();
         });
-    });    
+    });
 });

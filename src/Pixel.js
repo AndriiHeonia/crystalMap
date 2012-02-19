@@ -1,10 +1,8 @@
 /**
  * Represents a screen point.
  * @constructor
- * @param {Number} x X coordinate. Required.
- * @param {Number} y Y coordinate. Required.
  */
-Crystal.Pixel = function(x, y)
+Crystal.Pixel = function()
 {
     /**
      * @type {Number}
@@ -18,10 +16,15 @@ Crystal.Pixel = function(x, y)
 
     /**
      * Initialization.
+     * @param {Number} x X coordinate. Required.
+     * @param {Number} y Y coordinate. Required.
      */
-    _validateConstructorParams(x, y);    
-    _x = x;
-    _y = y;
+    this.initialize = function(x, y)
+    {
+        _validateConstructorParams(x, y);    
+        _x = x;
+        _y = y;
+    }
 
     /**
      * Returns X coordinate of the point.
@@ -54,7 +57,8 @@ Crystal.Pixel = function(x, y)
         {
             throw new TypeError('Pixel constructor called with invalid y.')
         }        
-    }    
+    }
+    
+    // apply constructor
+    this.initialize.apply(this, arguments);
 }
-
-Crystal.Pixel.prototype.CLASS_NAME = 'Crystal.Pixel';

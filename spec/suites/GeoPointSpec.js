@@ -1,6 +1,6 @@
 describe("Crystal.GeoPoint", function()
 {
-    describe("constructor", function()
+    describe("initialize", function()
     {        
         it("should be correct initialized", function()
         {

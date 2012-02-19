@@ -1,9 +1,8 @@
 /**
  * Incapsulates information about the map that has been raised an event.
- * @param {Crystal.Map} map Map instance.
  * @constructor
  */
-Crystal.Events.Map = function(map)
+Crystal.Events.Map = function()
 {
     /**
      * @type {Crystal.Map}
@@ -12,17 +11,26 @@ Crystal.Events.Map = function(map)
 
     /**
      * Initialization.
-     * @todo validate params.
+     * @param {Crystal.Map} map Map instance.
      */
-    _map = map;
+    this.initialize = function(map)
+    {
+        if(!(map instanceof Crystal.Map))
+        {
+            throw new TypeError('Map event constructor called with invalid map object.');
+        }
+        _map = map;
+    }
 
     /**
      * Returns map instance that has been raised an event.
+     * @return {Crystal.Map}
      */
     this.getMap = function()
     {
         return _map;
-    }    
-}
+    }
 
-Crystal.Events.Map.prototype.CLASS_NAME = 'Crystal.Events.Map';
+    // apply constructor
+    this.initialize.apply(this, arguments);
+}

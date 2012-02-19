@@ -17,5 +17,3 @@ Crystal.Utils.Common.createUniqueId = function(prefix)
     
     return prefix ? prefix + '_' + time : '' + time;    
 }
-
-Crystal.Utils.Common.CLASS_NAME = 'Crystal.Utils.Common';

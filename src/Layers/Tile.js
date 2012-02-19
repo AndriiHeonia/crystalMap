@@ -4,14 +4,8 @@
  * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  * @constructor
  * @implements {IMapObserver}
- * @param {Object} options Layer options object. Required.
- * Object params:
- * - {String} url Tile server url (without "http://"). Required.
- * - {Array} subdomains Array with tile server subdomains. Required.
- * - {Number} tileSize Tile size. Required.
- * - {String} errorTileUrl Tile, should be displayed on error. Required.
  */
-Crystal.Layers.Tile = function(options)
+Crystal.Layers.Tile = function()
 {
     /**
      * @type {Crystal.Map} Map instance, layer belongs to.
@@ -31,8 +25,18 @@ Crystal.Layers.Tile = function(options)
     /**
      * Initialization.
      * @todo validate params.
+     * @param {Object} options Layer options object. Required.
+     * Object params:
+     * - {String} url Tile server url (without "http://"). Required.
+     * - {Array} subdomains Array with tile server subdomains. Required.
+     * - {Number} tileSize Tile size. Required.
+     * - {String} errorTileUrl Tile, should be displayed on error. Required.
      */
-    _options = options;
+    this.initialize = function(options)
+    {
+        _validateConstructorParams(options);
+        _options = options;
+    }
 
     /**
      * Handles and process addition to the map notification.
@@ -62,8 +66,46 @@ Crystal.Layers.Tile = function(options)
     this.onRemoveFromMap = function(mapEvent)
     {
         _map = mapEvent.getMap();
-        _redraw();
-    }    
+        _destroyContainer();
+        _map = null;
+    }
+
+    /**
+     * Validates constructor params.
+     * @param {Object} options Layer options object. Required.
+     * Object params:
+     * - {String} url Tile server url (without "http://"). Required.
+     * - {Array} subdomains Array with tile server subdomains. Required.
+     * - {Number} tileSize Tile size. Required.
+     * - {String} errorTileUrl Tile, should be displayed on error. Required.
+     */
+    function _validateConstructorParams(options)
+    {
+        if(typeof(options) == 'undefined')
+        {
+            throw new ReferenceError('Tile layer constructor called without options.');
+        }
+        
+        if(Object.prototype.toString.call(options.url) != '[object String]')
+        {
+            throw new TypeError('Tile layer constructor called with invalid url option.');            
+        }
+        
+        if(Object.prototype.toString.call(options.subdomains) != '[object Array]' || options.subdomains.length == 0)
+        {
+            throw new TypeError('Tile layer constructor called with invalid subdomains option.');            
+        }
+        
+        if(Object.prototype.toString.call(options.tileSize) != '[object Number]')
+        {
+            throw new TypeError('Tile layer constructor called with invalid tileSize option.');            
+        }
+
+        if(Object.prototype.toString.call(options.errorTileUrl) != '[object String]')
+        {
+            throw new TypeError('Tile layer constructor called with invalid errorTileUrl option.');            
+        }
+    }
 
     /**
      * Initializes a tile container.
@@ -77,7 +119,16 @@ Crystal.Layers.Tile = function(options)
             _map.getContainer()
         );
     }
-    
+
+    /**
+     * Destroys a tile container.
+     */
+    function _destroyContainer()
+    {
+        _map.getContainer().removeChild(_container);
+        _container = null;
+    }
+
     /**
      * Displays tiles.
      */
@@ -211,7 +262,8 @@ Crystal.Layers.Tile = function(options)
     function _getTileY(lat, zoom)
     {
         return Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 *Math.pow(2, zoom));
-    }        
+    }
+    
+    // apply constructor
+    this.initialize.apply(this, arguments);    
 }
-
-Crystal.Layers.Tile.prototype.CLASS_NAME = 'Crystal.Layers.Tile';

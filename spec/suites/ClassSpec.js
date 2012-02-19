@@ -1,5 +1,49 @@
 describe("Crystal.Class", function()
 {	
+    describe("initialize", function()
+    {
+        it("should call all private and public methods via constructor and set params", function()
+        {
+            var MyClass;
+            var obj;
+            
+            MyClass = function()
+            {
+                var _publicIsCalled = false;
+                var _privateIsCalled = false;
+                var _param1;
+                var _param2;
+                
+                function initialize(param1, param2)
+                {
+                    this.publicMethod1();
+                    _param1 = param1;
+                    _param2 = param2;
+                    _privateMethod1();
+                }
+                
+                this.publicMethod1 = function()
+                {
+                    _publicIsCalled = true;
+                }
+                
+                function _privateMethod1()
+                {
+                    _privateIsCalled = true;
+                }
+                
+                this.isSuccess = function()
+                {
+                    return _publicIsCalled && _privateIsCalled && _param1 == 'param1' && _param2 == 'param2';
+                }
+                
+                initialize.apply(this, arguments);
+            }
+            
+            obj = new MyClass('param1', 'param2');
+            expect(obj.isSuccess()).toBeTruthy();
+        });        
+    });
     describe("extend", function()
     {        
         it("should call a parent class constructor and inherit public properties", function()
@@ -9,11 +53,19 @@ describe("Crystal.Class", function()
             
             ParentClass = function()
             {
-                this.pcPublicProp = 'pcPublicProp test';
+                function initialize()
+                {
+                    this.pcPublicProp = 'pcPublicProp test';
+                }
+                initialize.apply(this, arguments);
             }
             
             ChildClass = function() {
-                ChildClass.superclass.constructor.call(this);
+                function initialize()
+                {
+                    ChildClass.superclass.constructor.call(this);
+                }
+                initialize.apply(this, arguments);
             }
             Crystal.Class.extend(ChildClass, ParentClass);
             
@@ -29,16 +81,28 @@ describe("Crystal.Class", function()
             
             ParentClass = function()
             {
-                this.pcPublicProp = 'pcPublicProp test';
+                function initialize()
+                {
+                    this.pcPublicProp = 'pcPublicProp test';
+                }
+                initialize.apply(this, arguments);
             }
             
             ChildClass = function() {
-                ChildClass.superclass.constructor.call(this);
+                function initialize()
+                {
+                    ChildClass.superclass.constructor.call(this);
+                }
+                initialize.apply(this, arguments);
             }
             Crystal.Class.extend(ChildClass, ParentClass);
             
             SubChildClass = function() {
-                SubChildClass.superclass.constructor.call(this);
+                function initialize()
+                {
+                    SubChildClass.superclass.constructor.call(this);
+                }
+                initialize.apply(this, arguments);
             }
             Crystal.Class.extend(SubChildClass, ChildClass);
             

@@ -95,5 +95,3 @@ Crystal.Utils.Dom.fadeOut = function(element, duration)
         setTimeout(Crystal.Utils.Dom.setOpacity, i * duration, element, (1 - i));
     }
 }
-
-Crystal.Utils.Dom.CLASS_NAME = 'Crystal.Utils.Dom';

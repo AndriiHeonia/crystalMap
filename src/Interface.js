@@ -1,8 +1,8 @@
 /**
  * Provides OOP interface functionaity of the library.
  * @constructor
- * @param {String} name Interface name.
- * @param {Array} methods Interface methods.
+ * @param {String} name Interface name. Required.
+ * @param {Array} methods Interface methods. Required.
  */
 Crystal.Interface = function(name, methods)
 {
@@ -24,10 +24,10 @@ Crystal.Interface = function(name, methods)
 
 /**
  * Ensure that object impements interfaces.
- * @param {Object} object Object to be checked.
- * @param {Array} interfaces Array with Interface instances.
+ * @param {Object} object Object to be checked. Required.
+ * @param {Array} interfaces Array with Interface instances. Required.
  */
-Crystal.Interface.ensureImplements = function(object, interfaces)
+Crystal.Interface.isImplements = function(object, interfaces)
 {
     if(typeof(object) === 'undefined')
     {
@@ -55,5 +55,3 @@ Crystal.Interface.ensureImplements = function(object, interfaces)
         }
     }
 }
-
-Crystal.Interface.prototype.CLASS_NAME = 'Crystal.Interface';

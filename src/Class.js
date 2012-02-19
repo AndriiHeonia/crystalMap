@@ -16,9 +16,14 @@ Crystal.Class.extend = function(child, parent)
     F.prototype = parent.prototype;
     child.prototype = new F();
     child.prototype.constructor = child;
-    
+
     // add superclass access
     child.superclass = parent.prototype;
+    
+    // ensure that the constructor attribute is set correctly on the superclass (even if the superclass is the Object class itself)
+    if(parent.prototype.constructor == Object.prototype.constructor) {
+        parent.prototype.constructor = parent;
+    }
     
 	// inherit parent's statics
 	for (var i in parent)
@@ -29,5 +34,3 @@ Crystal.Class.extend = function(child, parent)
 		}
 	}    
 }
-
-Crystal.Class.CLASS_NAME = 'Crystal.Class';
