@@ -54,7 +54,7 @@ describe("Crystal.Utils.Dom", function()
         {
             var el = document.getElementById('myMap');
             Crystal.Utils.Dom.fadeIn(el, 500);
-        });        
+        });
     });
     
     describe("fadeOut", function()
@@ -64,5 +64,16 @@ describe("Crystal.Utils.Dom", function()
             var el = document.getElementById('myMap');
             Crystal.Utils.Dom.fadeOut(el, 500);
         });        
-    });    
+    });
+    
+    describe("addListener/removeListener", function()
+    {
+        it("addListener/removeListener method should not throw any errors", function()
+        {
+            var el = document.getElementById('myMap');
+            var handler = function(){}
+            Crystal.Utils.Dom.addListener(el, 'click', handler);
+            Crystal.Utils.Dom.removeListener(el, 'click', handler);
+        });        
+    });
 });
