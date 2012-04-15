@@ -48,6 +48,17 @@ Crystal.Utils.Type = {
     },
 
     /**
+     * Checks Function type.
+     * @static
+     * @param {Object} object Any value should be checked. Required.
+     * @return {Boolean}
+     */
+    isFunction: function(object)
+    {
+        return Object.prototype.toString.call(object) === '[object Function]';
+    },
+
+    /**
      * Checks undefined type.
      * @static
      * @param {Object} object Any value should be checked. Required.

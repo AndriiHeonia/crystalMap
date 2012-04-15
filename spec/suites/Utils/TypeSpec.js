@@ -38,6 +38,15 @@ describe("Crystal.Utils.Type", function()
         });        
     });
 
+    describe("isFunction", function()
+    {
+        it("should be checked correct", function()
+        {
+            expect(Crystal.Utils.Type.isFunction(function(){})).toBeTruthy();
+            expect(Crystal.Utils.Type.isFunction({})).toBeFalsy();
+        });        
+    });
+
     describe("isUndefined", function()
     {
         it("should be checked correct", function()

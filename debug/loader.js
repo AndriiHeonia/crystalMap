@@ -26,6 +26,7 @@ var lab = $LAB
 .script('../src/Events/Map.js')
 .script('../src/Events/Mouse.js')
 .script('../src/Layers/Tile.js')
+.script('../src/Validators/Pixel.js')
 .script('../src/Validators/GeoPoint.js').wait();
 
 // 3d level classes
@@ -50,7 +51,8 @@ else if (/.*spec.html/.test(location.href))
     .script('../spec/suites/Layers/TileSpec.js').wait()
     .script('../spec/suites/Events/MapSpec.js').wait()
     .script('../spec/suites/MapSpec.js').wait()
-    .script('../spec/suites/Validators/GeoPointSpec.js')  
+    .script('../spec/suites/Validators/PixelSpec.js').wait()
+    .script('../spec/suites/Validators/GeoPointSpec.js')
     .wait(
     function()
     {

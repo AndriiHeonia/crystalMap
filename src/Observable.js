@@ -25,16 +25,16 @@ Crystal.Observable = function()
      */
     this.registerEvent = function(eventName)
     {
-        if(Object.prototype.toString.call(eventName) != '[object String]' && Object.prototype.toString.call(eventName) != '[object Array]')
+        if(Crystal.Utils.Type.isString(eventName) === false && Crystal.Utils.Type.isArray(eventName) === false)
         {
             throw new TypeError('registerEvent method called with invalid event name(s).');
         }
         
-        if(Object.prototype.toString.call(eventName) == '[object String]')
+        if(Crystal.Utils.Type.isString(eventName) === true)
         {
             this._observers[eventName] = [];
         }
-        else if (Object.prototype.toString.call(eventName) == '[object Array]')
+        else if(Crystal.Utils.Type.isArray(eventName) === true)
         {
             for(var i = 0; i < eventName.length; i++)
             {
@@ -50,12 +50,12 @@ Crystal.Observable = function()
      */
     this.addListener = function(eventName, handler)
     {
-        if(Object.prototype.toString.call(eventName) != '[object String]' || typeof(this._observers[eventName]) == 'undefined')
+        if(Crystal.Utils.Type.isString(eventName) === false || Crystal.Utils.Type.isUndefined(this._observers[eventName]) === true)
         {
             throw new TypeError('addListener method called with invalid event name.');
         }
 
-        if(Object.prototype.toString.call(handler) != '[object Function]')
+        if(Crystal.Utils.Type.isFunction(handler) === false)
         {
             throw new TypeError('addListener method called with invalid handler.');
         }
@@ -70,7 +70,7 @@ Crystal.Observable = function()
      */
     this.removeListener = function(eventName, handler)
     {
-        if(Object.prototype.toString.call(eventName) != '[object String]' || typeof(this._observers[eventName]) == 'undefined')
+        if(Crystal.Utils.Type.isString(eventName) === false || Crystal.Utils.Type.isUndefined(this._observers[eventName]) === true)
         {
             throw new TypeError('removeListener method called with invalid event name.');
         }
@@ -89,7 +89,7 @@ Crystal.Observable = function()
      */
     this.fireEvent = function(eventName)
     {
-        if(typeof(this._observers[eventName]) == 'undefined')
+        if(Crystal.Utils.Type.isUndefined(this._observers[eventName]) === true)
         {
             throw new TypeError('fireEvent method called with invalid event name.');
         }
