@@ -14,7 +14,7 @@ Crystal.Interface = function(name, methods)
     this.methods = [];
     for(var i = 0, len = methods.length; i < len; i++)
     {
-        if(Object.prototype.toString.call(methods[i]) != '[object String]')
+        if(Object.prototype.toString.call(methods[i]) !== '[object String]')
         {
             throw new TypeError('Interface constructor expects method names to be passed in as a string.');
         }
@@ -34,7 +34,7 @@ Crystal.Interface.isImplements = function(object, interfaces)
         throw new ReferenceError('Parameter "object" should be passed.');
     }
 	
-    if(Object.prototype.toString.call(interfaces) != '[object Array]' || interfaces.length < 1)
+    if(Object.prototype.toString.call(interfaces) !== '[object Array]' || interfaces.length < 1)
     {
         throw new TypeError('Parameter "interfaces" is required and should be not empty array.');
     }

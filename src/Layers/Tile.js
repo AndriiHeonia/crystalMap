@@ -81,27 +81,27 @@ Crystal.Layers.Tile = function()
      */
     function _validateConstructorParams(options)
     {
-        if(typeof(options) == 'undefined')
+        if(Crystal.Utils.Type.isUndefined(options) === true)
         {
             throw new ReferenceError('Tile layer constructor called without options.');
         }
         
-        if(Object.prototype.toString.call(options.url) != '[object String]')
+        if(Crystal.Utils.Type.isString(options.url) === false)
         {
             throw new TypeError('Tile layer constructor called with invalid url option.');            
         }
         
-        if(Object.prototype.toString.call(options.subdomains) != '[object Array]' || options.subdomains.length == 0)
+        if(Crystal.Utils.Type.isArray(options.subdomains) === false || options.subdomains.length === 0)
         {
             throw new TypeError('Tile layer constructor called with invalid subdomains option.');            
         }
         
-        if(Object.prototype.toString.call(options.tileSize) != '[object Number]')
+        if(Crystal.Utils.Type.isNumber(options.tileSize) === false)
         {
             throw new TypeError('Tile layer constructor called with invalid tileSize option.');            
         }
 
-        if(Object.prototype.toString.call(options.errorTileUrl) != '[object String]')
+        if(Crystal.Utils.Type.isString(options.errorTileUrl) === false)
         {
             throw new TypeError('Tile layer constructor called with invalid errorTileUrl option.');            
         }
@@ -150,8 +150,8 @@ Crystal.Layers.Tile = function()
         viewPortYTileSize = Math.ceil(_map.getContainer().offsetHeight / _options.tileSize);
         viewPortTileSize = viewPortXTileSize * viewPortYTileSize;
         
-        xCenter = x = _getTileX(_map.getCenter().getLon(), _map.getZoom());
-        yCenter = y = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
+        xCenter = x = _getTileX(_map.getCenter().lon, _map.getZoom());
+        yCenter = y = _getTileY(_map.getCenter().lat, _map.getZoom());        
         
         // show central tile
         _showTile(x, y);
@@ -211,8 +211,8 @@ Crystal.Layers.Tile = function()
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
         
-        xCenter = _getTileX(_map.getCenter().getLon(), _map.getZoom());
-        yCenter = _getTileY(_map.getCenter().getLat(), _map.getZoom());        
+        xCenter = _getTileX(_map.getCenter().lon, _map.getZoom());
+        yCenter = _getTileY(_map.getCenter().lat, _map.getZoom());        
         
         viewPortXCenter = _map.getContainer().offsetWidth / 2;
         viewPortYCenter = _map.getContainer().offsetHeight / 2;

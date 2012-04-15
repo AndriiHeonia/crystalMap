@@ -1,5 +1,9 @@
 (function() {
-    var map = new Crystal.Map('myMap', new Crystal.GeoPoint(55.028936234826, 82.927810142519), 15);
+    var geoPoint = {
+        lat: 55.028936234826,
+        lon: 82.927810142519
+    }
+    var map = new Crystal.Map('myMap', geoPoint, 15);
     var layer = new Crystal.Layers.Tile({
         url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
         subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],

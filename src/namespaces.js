@@ -14,6 +14,17 @@ Crystal.Events = {}
 Crystal.Utils = {}
 
 /**
+ * Crystal.Utils.DomEventConverters namespace.
+ */
+Crystal.Utils.DomEventConverters = {}
+
+/**
  * Crystal.Layers namespace.
  */
 Crystal.Layers = {}
+
+/**
+ * Crystal.Validators namespace.
+ */
+Crystal.Validators = {}
+

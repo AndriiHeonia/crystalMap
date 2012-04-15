@@ -10,10 +10,10 @@ describe("Crystal.Map", function()
             var myMap1 = new Crystal.Map(document.getElementById('myMap'));
             expect(myMap1 instanceof Crystal.Map).toBeTruthy();          
            
-            var myMap2 = new Crystal.Map('myMap', new Crystal.GeoPoint(50, 50));
+            var myMap2 = new Crystal.Map('myMap', {lat: 50, lon: 50});
             expect(myMap2 instanceof Crystal.Map).toBeTruthy();
             
-            var myMap3 = new Crystal.Map('myMap', new Crystal.GeoPoint(50, 50), 5);
+            var myMap3 = new Crystal.Map('myMap', {lat: 50, lon: 50}, 5);
             expect(myMap3 instanceof Crystal.Map).toBeTruthy();           
         });
 
@@ -35,13 +35,13 @@ describe("Crystal.Map", function()
         {
             expect(function(){
                 new Crystal.Map('myMap', {});
-            }).toThrow(new TypeError('Map constructor called with invalid center.'));            
+            }).toThrow(new Error('Geographic point latitude is invalid.'));            
         });
 
         it("should throw an error, because zoom is incorrect", function()
         {
             expect(function(){
-                new Crystal.Map('myMap', new Crystal.GeoPoint(50, 50), '5');
+                new Crystal.Map('myMap', {lat: 50, lon:50}, '5');
             }).toThrow(new TypeError('Map constructor called with invalid zoom.'));            
         });
     });
@@ -197,7 +197,7 @@ describe("Crystal.Map", function()
     {
         it("should return correct center after initialization", function()
         {
-            var center = new Crystal.GeoPoint(50, 50);
+            var center = {lat: 50, lon: 50};
             var myMap = new Crystal.Map('myMap', center);
             expect(myMap.getCenter()).toEqual(center);            
         });
@@ -205,7 +205,7 @@ describe("Crystal.Map", function()
         it("should return correct center after map center setting", function()
         {
             var myMap = new Crystal.Map('myMap');            
-            var center = new Crystal.GeoPoint(50, 50);
+            var center = {lat: 50, lon: 50};
             myMap.setCenter(center);
             expect(myMap.getCenter()).toEqual(center);
         });
@@ -221,7 +221,7 @@ describe("Crystal.Map", function()
             });
             spyOn(layer, 'onMapUpdate');
             myMap.add(layer);
-            myMap.setCenter(new Crystal.GeoPoint(50, 50));
+            myMap.setCenter({lat: 50, lon: 50});
             expect(layer.onMapUpdate).toHaveBeenCalled();
         });
 
@@ -230,7 +230,7 @@ describe("Crystal.Map", function()
             expect(function(){
                 var myMap = new Crystal.Map('myMap');            
                 myMap.setCenter({});
-            }).toThrow(new TypeError('setCenter method called with invalid center.'));            
+            }).toThrow(new Error('Geographic point latitude is invalid.'));            
         });
     });
     
@@ -238,7 +238,7 @@ describe("Crystal.Map", function()
     {
         it("should return correct zoom after initialization", function()
         {
-            var myMap = new Crystal.Map('myMap', new Crystal.GeoPoint(50, 50), 5);
+            var myMap = new Crystal.Map('myMap', {lat: 50, lon: 50}, 5);
             expect(myMap.getZoom()).toEqual(5);            
         });
 

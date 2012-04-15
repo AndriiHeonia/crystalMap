@@ -4,7 +4,7 @@ describe("Crystal.Events.Map", function()
     {        
         it("should be correct initialized", function()
         {
-            var myMap = new Crystal.Map('myMap', new Crystal.GeoPoint(55.028936234826, 82.927810142519), 15);
+            var myMap = new Crystal.Map('myMap', {lat: 55.028936234826, lon: 82.927810142519}, 15);
             new Crystal.Events.Map(myMap);
         });
 
@@ -20,7 +20,7 @@ describe("Crystal.Events.Map", function()
     {        
         it("should return Crystal.Map instance", function()
         {
-            var myMap = new Crystal.Map('myMap', new Crystal.GeoPoint(55.028936234826, 82.927810142519), 15);
+            var myMap = new Crystal.Map('myMap', {lat: 55.028936234826, lon: 82.927810142519}, 15);
             var mapEvent = new Crystal.Events.Map(myMap);
             expect(mapEvent.getMap() instanceof Crystal.Map).toBeTruthy();
         });

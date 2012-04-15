@@ -15,7 +15,7 @@ Crystal.Events.Map = function()
      */
     this.initialize = function(map)
     {
-        if(!(map instanceof Crystal.Map))
+        if((map instanceof Crystal.Map) === false)
         {
             throw new TypeError('Map event constructor called with invalid map object.');
         }

@@ -28,7 +28,7 @@ Crystal.Class.extend = function(child, parent)
 	// inherit parent's statics
 	for (var i in parent)
     {
-		if (parent.hasOwnProperty(i) && i != 'prototype' && i != 'superclass')
+		if (parent.hasOwnProperty(i) && i !== 'prototype' && i !== 'superclass')
         {
 			child[i] = parent[i];
 		}

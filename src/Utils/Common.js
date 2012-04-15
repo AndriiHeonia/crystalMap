@@ -2,18 +2,18 @@
  * Provides a common utilities.
  * @static
  */
-Crystal.Utils.Common = {}
+Crystal.Utils.Common = {
+    /**
+     * Creates an unique id.
+     * @static
+     * @param {String} prefix Id prefix. Optional.
+     * @return {String} Generated id.
+     */
+    createUniqueId: function(prefix)
+    {
+        var date = new Date;
+        var time = date.getTime();
 
-/**
- * Creates an unique id.
- * @static
- * @param {String} prefix Id prefix. Optional.
- * @return {String} Generated id.
- */
-Crystal.Utils.Common.createUniqueId = function(prefix)
-{
-    var date = new Date;
-    var time = date.getTime();
-    
-    return prefix ? prefix + '_' + time : '' + time;    
+        return prefix ? prefix + '_' + time : '' + time;    
+    }
 }

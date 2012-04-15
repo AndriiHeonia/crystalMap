@@ -16,15 +16,19 @@ var lab = $LAB
 
 // 1st level classes
 .script('../src/Observable.js')
-.script('../src/GeoPoint.js')
 .script('../src/Map.js')
-.script('../src/Pixel.js')
 
 // 2nd level classes
 .script('../src/Utils/Common.js')
 .script('../src/Utils/Dom.js')
+.script('../src/Utils/DomEventFactory.js')
+.script('../src/Utils/Type.js')
 .script('../src/Events/Map.js')
-.script('../src/Layers/Tile.js').wait();
+.script('../src/Events/Mouse.js')
+.script('../src/Layers/Tile.js')
+.script('../src/Validators/GeoPoint.js').wait();
+
+// 3d level classes
 
 if (/.*index.html/.test(location.href))
 {
@@ -40,13 +44,13 @@ else if (/.*spec.html/.test(location.href))
      // spec suites
     .script('../spec/suites/ClassSpec.js').wait()
     .script('../spec/suites/InterfaceSpec.js').wait()
-    .script('../spec/suites/GeoPointSpec.js').wait()
-    .script('../spec/suites/PixelSpec.js').wait()
     .script('../spec/suites/Utils/CommonSpec.js').wait()
     .script('../spec/suites/Utils/DomSpec.js').wait()
+    .script('../spec/suites/Utils/TypeSpec.js').wait()    
     .script('../spec/suites/Layers/TileSpec.js').wait()
     .script('../spec/suites/Events/MapSpec.js').wait()
-    .script('../spec/suites/MapSpec.js')
+    .script('../spec/suites/MapSpec.js').wait()
+    .script('../spec/suites/Validators/GeoPointSpec.js')  
     .wait(
     function()
     {

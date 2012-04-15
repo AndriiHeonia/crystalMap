@@ -32,12 +32,13 @@ Crystal.Map = function()
     this.initialize = function(container, center, zoom)
     {
         _validateConstructorParams(container, center, zoom);    
-        _container = Object.prototype.toString.call(container) == '[object String]' ? document.getElementById(container) : container;
+        _container = Crystal.Utils.Type.isString(container) === true ? document.getElementById(container) : container;
         _container.innerHTML = '';
         _container.style.position = 'relative';
         _container.style.backgroundColor = '#F4F2EE';
-        _center = center || new Crystal.GeoPoint(0, 0);
+        _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
+//        _addDomListeners();
         this.registerEvent(['ObserverAdding', 'ObserverRemoving', 'ZoomChanging', 'CenterChanging']); // events, which can be fired by this object
     }
 
@@ -74,10 +75,8 @@ Crystal.Map = function()
      */
     this.setCenter = function(center)
     {
-        if(!(center instanceof Crystal.GeoPoint))
-        {
-            throw new TypeError('setCenter method called with invalid center.');
-        }
+        Crystal.Validators.GeoPoint.validate(center);
+        
         _center = center;
         this.fireEvent('CenterChanging');
     }
@@ -148,7 +147,7 @@ Crystal.Map = function()
         var containerIsStr;
         var containerObj;
         
-        containerIsStr = Object.prototype.toString.call(container) == '[object String]';
+        containerIsStr = Object.prototype.toString.call(container) === '[object String]';
         containerObj = containerIsStr ? document.getElementById(container) : container;
         if(containerIsStr)
         {
@@ -165,16 +164,29 @@ Crystal.Map = function()
             }
         }
         
-        if(center && !(center instanceof Crystal.GeoPoint))
+        if(center)
         {
-            throw new TypeError('Map constructor called with invalid center.')
+            Crystal.Validators.GeoPoint.validate(center);
         }
         
-        if(zoom && Object.prototype.toString.call(zoom) != '[object Number]')
+        if(zoom && Object.prototype.toString.call(zoom) !== '[object Number]')
         {
             throw new TypeError('Map constructor called with invalid zoom.')
         }
     }
+    
+//    function _handleDragging(event)
+//    {
+//        console.log(event);
+//    }
+//    
+//    /**
+//     * 
+//     */
+//    function _addDomListeners()
+//    {
+//        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', _handleDragging);
+//    }
     
     // apply constructor
     this.initialize.apply(this, arguments);
