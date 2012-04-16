@@ -38,8 +38,15 @@ Crystal.Map = function()
         _container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-//        _addDomListeners();
-        this.registerEvent(['ObserverAdding', 'ObserverRemoving', 'ZoomChanging', 'CenterChanging']); // events, which can be fired by this object
+        console.log(this);        
+        _addDomListeners();
+        // events, which can be fired by this object
+        this.registerEvent([
+            'ObserverAdding',
+            'ObserverRemoving',
+            'ZoomChanging',
+            'CenterChanging'
+        ]);
     }
 
     /**
@@ -106,11 +113,11 @@ Crystal.Map = function()
 
     /**
      * Adds an observer to the map.
-     * @param {IMapObserver} observer Observer to listen map events. Required.
+     * @param {Crystal.IMapObserver} observer Observer to listen map events. Required.
      */
     this.add = function(observer)
     {
-        Crystal.Interface.isImplements(observer, [IMapObserver]);
+        Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
         
         // subscribing to the map events
         this.addListener('ObserverAdding', observer.onAddToMap);
@@ -123,7 +130,7 @@ Crystal.Map = function()
 
     /**
      * Removes an observer from the map.
-     * @param {IMapObserver} observer Registered observer. Required.
+     * @param {Crystal.IMapObserver} observer Registered observer. Required.
      */
     this.remove = function(observer)
     {
@@ -169,24 +176,25 @@ Crystal.Map = function()
             Crystal.Validators.GeoPoint.validate(center);
         }
         
-        if(zoom && Object.prototype.toString.call(zoom) !== '[object Number]')
+        if(zoom && Crystal.Utils.Type.isNumber(zoom) === false)
         {
             throw new TypeError('Map constructor called with invalid zoom.')
         }
     }
     
-//    function _handleDragging(event)
-//    {
-//        console.log(event);
-//    }
-//    
-//    /**
-//     * 
-//     */
-//    function _addDomListeners()
-//    {
+    function _handleDragging(event)
+    {
+        console.log(event);
+    }
+    
+    /**
+     * 
+     */
+    function _addDomListeners()
+    {
+        console.log(this);
 //        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', _handleDragging);
-//    }
+    }
     
     // apply constructor
     this.initialize.apply(this, arguments);
