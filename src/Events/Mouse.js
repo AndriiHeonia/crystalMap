@@ -39,3 +39,9 @@ Crystal.Events.Mouse = function()
     // apply constructor
     this.initialize.apply(this, arguments);
 }
+
+/**
+ * @const
+ * @type {String}
+ */
+Crystal.Events.Mouse.CLASS_NAME = 'Crystal.Events.Mouse';

@@ -267,3 +267,9 @@ Crystal.Layers.Tile = function()
     // apply constructor
     this.initialize.apply(this, arguments);    
 }
+
+/**
+ * @const
+ * @type {String}
+ */
+Crystal.Layers.Tile.CLASS_NAME = 'Crystal.Layers.Tile';

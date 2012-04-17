@@ -100,3 +100,9 @@ Crystal.Observable = function()
         }
     }
 }
+
+/**
+ * @const
+ * @type {String}
+ */
+Crystal.Observable.CLASS_NAME = 'Crystal.Observable';

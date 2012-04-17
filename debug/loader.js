@@ -26,8 +26,15 @@ var lab = $LAB
 .script('../src/Events/Map.js')
 .script('../src/Events/Mouse.js')
 .script('../src/Layers/Tile.js')
+.script('../src/Validators/Array.js')
+.script('../src/Validators/Boolean.js')
+.script('../src/Validators/Boolean.js')
+.script('../src/Validators/GeoPoint.js')
+.script('../src/Validators/Instance.js')
+.script('../src/Validators/Number.js')
 .script('../src/Validators/Pixel.js')
-.script('../src/Validators/GeoPoint.js').wait();
+.script('../src/Validators/String.js')
+.wait();
 
 // 3d level classes
 
@@ -43,16 +50,21 @@ else if (/.*spec.html/.test(location.href))
     .script('../lib/jasmine/jasmine-html.js').wait()
     
      // spec suites
-    .script('../spec/suites/ClassSpec.js').wait()
-    .script('../spec/suites/InterfaceSpec.js').wait()
-    .script('../spec/suites/Utils/CommonSpec.js').wait()
-    .script('../spec/suites/Utils/DomSpec.js').wait()
-    .script('../spec/suites/Utils/TypeSpec.js').wait()    
-    .script('../spec/suites/Layers/TileSpec.js').wait()
-    .script('../spec/suites/Events/MapSpec.js').wait()
-    .script('../spec/suites/MapSpec.js').wait()
-    .script('../spec/suites/Validators/PixelSpec.js').wait()
+    .script('../spec/suites/ClassSpec.js')
+    .script('../spec/suites/InterfaceSpec.js')
+    .script('../spec/suites/Utils/CommonSpec.js')
+    .script('../spec/suites/Utils/DomSpec.js')
+    .script('../spec/suites/Utils/TypeSpec.js')    
+    .script('../spec/suites/Layers/TileSpec.js')
+    .script('../spec/suites/Events/MapSpec.js')
+    .script('../spec/suites/MapSpec.js')
+    .script('../spec/suites/Validators/ArraySpec.js')
+    .script('../spec/suites/Validators/BooleanSpec.js')
     .script('../spec/suites/Validators/GeoPointSpec.js')
+    .script('../spec/suites/Validators/InstanceSpec.js')
+    .script('../spec/suites/Validators/NumberSpec.js')    
+    .script('../spec/suites/Validators/PixelSpec.js')
+    .script('../spec/suites/Validators/StringSpec.js')    
     .wait(
     function()
     {

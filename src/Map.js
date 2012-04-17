@@ -38,7 +38,7 @@ Crystal.Map = function()
         _container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-        console.log(this);        
+//        console.log(this);        
         _addDomListeners();
         // events, which can be fired by this object
         this.registerEvent([
@@ -184,7 +184,7 @@ Crystal.Map = function()
     
     function _handleDragging(event)
     {
-        console.log(event);
+//        console.log(event);
     }
     
     /**
@@ -192,7 +192,7 @@ Crystal.Map = function()
      */
     function _addDomListeners()
     {
-        console.log(this);
+//        console.log(this);
 //        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', _handleDragging);
     }
     
@@ -202,3 +202,9 @@ Crystal.Map = function()
 
 // declare inheritance
 Crystal.Class.extend(Crystal.Map, Crystal.Observable);
+
+/**
+ * @const
+ * @type {String}
+ */
+Crystal.Map.CLASS_NAME = 'Crystal.Map';

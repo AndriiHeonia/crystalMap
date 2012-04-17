@@ -34,3 +34,9 @@ Crystal.Events.Map = function()
     // apply constructor
     this.initialize.apply(this, arguments);
 }
+
+/**
+ * @const
+ * @type {String}
+ */
+Crystal.Events.Map.CLASS_NAME = 'Crystal.Events.Map';

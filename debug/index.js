@@ -21,5 +21,7 @@
     
     zoomOutBtn.onclick = function() {
         map.setZoom(map.getZoom() - 1);
-    }    
+    }
+    
+    Crystal.Validators.Instance.validate(layer, Crystal.Map, 'myClass', 'initialize');
 })();
