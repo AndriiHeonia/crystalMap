@@ -15,10 +15,8 @@ Crystal.Events.Map = function()
      */
     this.initialize = function(map)
     {
-        if((map instanceof Crystal.Map) === false)
-        {
-            throw new TypeError('Map event constructor called with invalid map object.');
-        }
+        Crystal.Validators.Instance.validate(map, Crystal.Map, this.constructor.CLASS_NAME, 'initialize');
+
         _map = map;
     }
 

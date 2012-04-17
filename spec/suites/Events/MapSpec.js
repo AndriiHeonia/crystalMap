@@ -12,7 +12,7 @@ describe("Crystal.Events.Map", function()
         {
             expect(function() {
                 new Crystal.Events.Map({});
-            }).toThrow(new TypeError('Map event constructor called with invalid map object.'));            
+            }).toThrow(new TypeError('Object passed to the initialize method of the Crystal.Events.Map class should be an instance of Crystal.Map.'));            
         });        
     });
     
