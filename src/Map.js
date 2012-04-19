@@ -14,7 +14,7 @@ Crystal.Map = function()
     var _container;
     
     /**
-     * @type {Crystal.GeoPoint}
+     * @type {Object}
      */
     var _center;
 
@@ -26,20 +26,39 @@ Crystal.Map = function()
     /**
      * Initialization.
      * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
-     * @param {Crystal.GeoPoint} center Geographic coordinates of the center. Optional.
+     * @param {Object} center Geographic coordinates of the center. Optional.
      * @param {Number} zoom Zoom level. Optional.
      */
     this.initialize = function(container, center, zoom)
     {
-        _validateConstructorParams(container, center, zoom);    
-        _container = Crystal.Utils.Type.isString(container) === true ? document.getElementById(container) : container;
+        var containerIsStr;
+        
+        containerIsStr = Crystal.Utils.Type.isString(container);
+        _container = containerIsStr ? document.getElementById(container) : container;
+        
+        if(containerIsStr)
+        {
+            Crystal.Validators.NotNull.validate(_container, Crystal.Map.CLASS_NAME, 'initialize');
+        }
+        else
+        {
+            Crystal.Validators.DomElement.validate(_container, Crystal.Map.CLASS_NAME, 'initialize');
+        }
+        if(center)
+        {
+            Crystal.Validators.GeoPoint.validate(center);
+        }        
+        if(zoom)
+        {
+            Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'initialize');
+        }
+        
         _container.innerHTML = '';
         _container.style.position = 'relative';
         _container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-//        console.log(this);        
-        _addDomListeners();
+                
         // events, which can be fired by this object
         this.registerEvent([
             'ObserverAdding',
@@ -47,6 +66,8 @@ Crystal.Map = function()
             'ZoomChanging',
             'CenterChanging'
         ]);
+        
+        _addDomListeners.call(this);        
     }
 
     /**
@@ -69,7 +90,7 @@ Crystal.Map = function()
 
     /**
      * Returns geographic coordinates of the center.
-     * @return {Crystal.GeoPoint} Coordinates of the center.
+     * @return {Object} Coordinates of the center.
      */
     this.getCenter = function()
     {
@@ -78,7 +99,7 @@ Crystal.Map = function()
 
     /**
      * Sets geographic coordinates of the center.
-     * @param {Crystal.GeoPoint} center Coordinates of the center. Required.
+     * @param {Object} center Coordinates of the center. Required.
      */
     this.setCenter = function(center)
     {
@@ -142,50 +163,16 @@ Crystal.Map = function()
         this.removeListener('ZoomChanging', observer.onMapUpdate);
         this.removeListener('CenterChanging', observer.onMapUpdate);        
     }
-
-    /**
-     * Validate constructor params.
-     * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
-     * @param {Crystal.GeoPoint} center Geographic coordinates of the center. Optional.
-     * @param {Number} zoom Zoom level. Optional.
-     */
-    function _validateConstructorParams(container, center, zoom)
-    {
-        var containerIsStr;
-        var containerObj;
-        
-        containerIsStr = Crystal.Utils.Type.isString(container);
-        containerObj = containerIsStr ? document.getElementById(container) : container;
-        
-        if(containerIsStr)
-        {
-            if(containerObj === null)
-            {
-                throw new ReferenceError('Map constructor called with invalid container id.');
-            }
-        }
-        else
-        {
-            if(!Crystal.Utils.Dom.isElement(containerObj))
-            {
-                throw new TypeError('Map constructor called with invalid container DOM element.');
-            }
-        }
-        
-        if(center)
-        {
-            Crystal.Validators.GeoPoint.validate(center);
-        }
-        
-        if(zoom && Crystal.Utils.Type.isNumber(zoom) === false)
-        {
-            throw new TypeError('Map constructor called with invalid zoom.')
-        }
-    }
     
     function _handleDragging(event)
     {
-//        console.log(event);
+        // @todo
+        _center = {
+            lat: 55.1,
+            lon: 82.927810142519
+        }
+        this.fireEvent('CenterChanging');
+        console.log(event);
     }
     
     /**
@@ -193,8 +180,7 @@ Crystal.Map = function()
      */
     function _addDomListeners()
     {
-//        console.log(this);
-//        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', _handleDragging);
+        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', Crystal.Utils.Common.bind(this, _handleDragging));
     }
     
     // apply constructor

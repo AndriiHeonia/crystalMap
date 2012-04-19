@@ -21,14 +21,14 @@ describe("Crystal.Map", function()
         {
             expect(function(){
                 new Crystal.Map('incorrectId');
-            }).toThrow(new ReferenceError('Map constructor called with invalid container id.'));            
+            }).toThrow(new ReferenceError('Value passed to initialize method of the Crystal.Map class should not be Null.'));            
         });
         
         it("should throw an error, because DOM element is incorrect", function()
         {
             expect(function(){
-                new Crystal.Map({});
-            }).toThrow(new TypeError('Map constructor called with invalid container DOM element.'));            
+                new Crystal.Map(666);
+            }).toThrow(new TypeError('Value 666 passed to initialize method of the Crystal.Map class should be a DOM element.'));            
         });
         
         it("should throw an error, because center is incorrect", function()
@@ -42,7 +42,7 @@ describe("Crystal.Map", function()
         {
             expect(function(){
                 new Crystal.Map('myMap', {lat: 50, lon:50}, '5');
-            }).toThrow(new TypeError('Map constructor called with invalid zoom.'));            
+            }).toThrow(new TypeError('Value 5 passed to initialize method of the Crystal.Map class should be a Number.'));            
         });
     });
     

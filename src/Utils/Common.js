@@ -15,5 +15,18 @@ Crystal.Utils.Common = {
         var time = date.getTime();
 
         return prefix ? prefix + '_' + time : '' + time;    
+    },
+    
+    /**
+     * Binds scope with a function
+     * @todo to write spec
+     * @param {Object} scope
+     * @param {Function} func
+     */
+    bind: function(scope, func)
+    {
+        return function() {
+            func.apply(scope, arguments);
+        }
     }
 }

@@ -7,8 +7,8 @@ Crystal.Utils.Converter = {
     /**
      * Converts a pixel to geographic point.
      * @static
-     * @param {Crystal.Pixel} pixel Pixel instance.
-     * @return {Crystal.GeoPoint} Geographic point.
+     * @param {Object} pixel Pixel instance.
+     * @return {Object} Geographic point.
      */
     pixelToGeoPoint: function(pixel)
     {
@@ -18,8 +18,8 @@ Crystal.Utils.Converter = {
     /**
      * Converts a geographic point to pixel.
      * @static
-     * @param {Crystal.GeoPoint} geoPoint Geographic point.
-     * @return {Crystal.Pixel} Pixel instance.
+     * @param {Object} geoPoint Geographic point.
+     * @return {Object} Pixel instance.
      */
     geoPointToPixel: function(geoPoint)
     {

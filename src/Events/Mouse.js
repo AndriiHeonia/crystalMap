@@ -25,7 +25,7 @@ Crystal.Events.Mouse = function()
 
     /**
      * Returns a geographic position of the mouse cursor.
-     * @return {Crystal.GeoPoint}
+     * @return {Object}
      */
     this.getGeoPoint = function()
     {
