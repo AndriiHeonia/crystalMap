@@ -14,7 +14,7 @@ Crystal.Validators.Boolean = {
     {
         if(Crystal.Utils.Type.isBoolean(value) === false)
         {
-            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' should be a Boolean.');
+            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a Boolean.');
         }
     }
 }

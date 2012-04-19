@@ -34,7 +34,13 @@ Crystal.Layers.Tile = function()
      */
     this.initialize = function(options)
     {
-        _validateConstructorParams(options);
+        Crystal.Validators.NotUndefined.validate(options, this.constructor.CLASS_NAME, 'initialize');
+        Crystal.Validators.String.validate(options.url, this.constructor.CLASS_NAME, 'initialize');
+        Crystal.Validators.Array.validate(options.subdomains, this.constructor.CLASS_NAME, 'initialize');
+        Crystal.Validators.MoreThan.validate(options.subdomains.length, 0, this.constructor.CLASS_NAME, 'initialize');
+        Crystal.Validators.Number.validate(options.tileSize, this.constructor.CLASS_NAME, 'initialize');
+        Crystal.Validators.String.validate(options.errorTileUrl, this.constructor.CLASS_NAME, 'initialize');        
+        
         _options = options;
     }
 
@@ -68,43 +74,6 @@ Crystal.Layers.Tile = function()
         _map = mapEvent.getMap();
         _destroyContainer();
         _map = null;
-    }
-
-    /**
-     * Validates constructor params.
-     * @param {Object} options Layer options object. Required.
-     * Object params:
-     * - {String} url Tile server url (without "http://"). Required.
-     * - {Array} subdomains Array with tile server subdomains. Required.
-     * - {Number} tileSize Tile size. Required.
-     * - {String} errorTileUrl Tile, should be displayed on error. Required.
-     */
-    function _validateConstructorParams(options)
-    {
-        if(Crystal.Utils.Type.isUndefined(options) === true)
-        {
-            throw new ReferenceError('Tile layer constructor called without options.');
-        }
-        
-        if(Crystal.Utils.Type.isString(options.url) === false)
-        {
-            throw new TypeError('Tile layer constructor called with invalid url option.');            
-        }
-        
-        if(Crystal.Utils.Type.isArray(options.subdomains) === false || options.subdomains.length === 0)
-        {
-            throw new TypeError('Tile layer constructor called with invalid subdomains option.');            
-        }
-        
-        if(Crystal.Utils.Type.isNumber(options.tileSize) === false)
-        {
-            throw new TypeError('Tile layer constructor called with invalid tileSize option.');            
-        }
-
-        if(Crystal.Utils.Type.isString(options.errorTileUrl) === false)
-        {
-            throw new TypeError('Tile layer constructor called with invalid errorTileUrl option.');            
-        }
     }
 
     /**

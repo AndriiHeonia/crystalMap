@@ -10,7 +10,7 @@ describe("Crystal.Validators.Boolean", function()
 
             expect(function(){
                 Crystal.Validators.Boolean.validate(value, callerClass, callerMethod);
-            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' should be a Boolean.'));            
+            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a Boolean.'));            
         });
     });
 });

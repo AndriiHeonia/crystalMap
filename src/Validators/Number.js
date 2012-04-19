@@ -14,7 +14,7 @@ Crystal.Validators.Number = {
     {
         if(Crystal.Utils.Type.isNumber(value) === false)
         {
-            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' should be a Number.');
+            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a Number.');
         }
     }
 }

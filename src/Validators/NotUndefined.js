@@ -1,10 +1,10 @@
 /**
- * Provides a string validator.
+ * Provides an undefined validator.
  * @static
  */
-Crystal.Validators.String = {
+Crystal.Validators.NotUndefined = {
     /**
-     * Checks or value is a string.
+     * Checks or value is not undefined.
      * @static
      * @param {Object} value Value should be validated. Required.
      * @param {String} callerClass Caller class name. Required.
@@ -12,9 +12,9 @@ Crystal.Validators.String = {
      */
     validate: function(value, callerClass, callerMethod)
     {
-        if(Crystal.Utils.Type.isString(value) === false)
+        if(typeof(value) === 'undefined')
         {
-            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a String.');
+            throw new ReferenceError('Value passed to ' + callerMethod + ' method of the ' + callerClass + ' class should not be Undefined.');
         }
     }
 }

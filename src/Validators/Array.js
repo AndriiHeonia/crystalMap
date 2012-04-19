@@ -14,7 +14,7 @@ Crystal.Validators.Array = {
     {
         if(Crystal.Utils.Type.isArray(value) === false)
         {
-            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' should be an Array.');
+            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be an Array.');
         }
     }
 }

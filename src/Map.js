@@ -154,8 +154,9 @@ Crystal.Map = function()
         var containerIsStr;
         var containerObj;
         
-        containerIsStr = Object.prototype.toString.call(container) === '[object String]';
+        containerIsStr = Crystal.Utils.Type.isString(container);
         containerObj = containerIsStr ? document.getElementById(container) : container;
+        
         if(containerIsStr)
         {
             if(containerObj === null)

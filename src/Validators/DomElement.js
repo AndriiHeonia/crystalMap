@@ -1,10 +1,10 @@
 /**
- * Provides a string validator.
+ * Provides a DOM element validator.
  * @static
  */
-Crystal.Validators.String = {
+Crystal.Validators.DomElement = {
     /**
-     * Checks or value is a string.
+     * Checks or value is a DOM element.
      * @static
      * @param {Object} value Value should be validated. Required.
      * @param {String} callerClass Caller class name. Required.
@@ -12,9 +12,9 @@ Crystal.Validators.String = {
      */
     validate: function(value, callerClass, callerMethod)
     {
-        if(Crystal.Utils.Type.isString(value) === false)
+        if(Crystal.Utils.Dom.isElement(value) === false)
         {
-            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a String.');
+            throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a DOM element.');
         }
     }
 }
