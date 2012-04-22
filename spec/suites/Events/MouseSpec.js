@@ -2,6 +2,7 @@ describe("Crystal.Events.Mouse", function()
 {
     var myMap = new Crystal.Map('myMap', {lat: 55.028936234826, lon: 82.927810142519}, 15);
     var bowserEventStub = {
+        type: 'mousemove',
         target: myMap.getContainer(),
         button: 0,
         screenX: 10,
