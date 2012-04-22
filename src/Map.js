@@ -58,7 +58,9 @@ Crystal.Map = function()
         _container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-                
+        
+        Crystal.MapRegister.add(this);
+        
         // events, which can be fired by this object
         this.registerEvent([
             'ObserverAdding',
@@ -167,12 +169,10 @@ Crystal.Map = function()
     function _handleDragging(event)
     {
         // @todo
-        _center = {
-            lat: 55.1,
-            lon: 82.927810142519
-        }
+//        _center = event.getGeoPoint();
+        
         this.fireEvent('CenterChanging');
-        console.log(event);
+        console.log(event.getMap());
     }
     
     /**

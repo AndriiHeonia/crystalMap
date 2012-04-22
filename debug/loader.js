@@ -17,15 +17,18 @@ var lab = $LAB
 // 1st level classes
 .script('../src/Observable.js')
 .script('../src/Map.js')
+.script('../src/MapRegister.js')
 
 // 2nd level classes
 .script('../src/Utils/Common.js')
 .script('../src/Utils/Dom.js')
 .script('../src/Utils/DomEventFactory.js')
+.script('../src/Utils/Math.js')
 .script('../src/Utils/Type.js')
 .script('../src/Events/Map.js')
 .script('../src/Events/Mouse.js')
 .script('../src/Layers/Tile.js')
+.script('../src/Projections/SphericalMercator.js')
 .script('../src/Validators/Array.js')
 .script('../src/Validators/Boolean.js')
 .script('../src/Validators/DomElement.js')
@@ -38,9 +41,9 @@ var lab = $LAB
 .script('../src/Validators/Number.js')
 .script('../src/Validators/Pixel.js')
 .script('../src/Validators/String.js')
-.wait();
 
 // 3d level classes
+.wait();
 
 if (/.*index.html/.test(location.href))
 {
@@ -61,6 +64,7 @@ else if (/.*spec.html/.test(location.href))
     .script('../spec/suites/Utils/TypeSpec.js')    
     .script('../spec/suites/Layers/TileSpec.js')
     .script('../spec/suites/Events/MapSpec.js')
+    .script('../spec/suites/Events/MouseSpec.js')    
     .script('../spec/suites/MapSpec.js')
     .script('../spec/suites/Validators/ArraySpec.js')
     .script('../spec/suites/Validators/BooleanSpec.js')

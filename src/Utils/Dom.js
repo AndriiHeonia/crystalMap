@@ -104,10 +104,14 @@ Crystal.Utils.Dom = {
      */
     addListener: function(element, eventName, handler)
     {
+        var parentMap
+        
+        parentMap = Crystal.MapRegister.getItemByDomElement(element);
+        
         // handles browser event, creates one of Crystal.Events.* event and calls an user handler.
         var metaHandler = function(event)
         {
-            handler.call(this, Crystal.Utils.DomEventFactory.create(event));
+            handler.call(this, Crystal.Utils.DomEventFactory.create(event, parentMap));
         }
 
         if(element.addEventListener)
@@ -137,5 +141,23 @@ Crystal.Utils.Dom = {
         {
             element.detachEvent('on' + eventName, handler);
         }
-    }    
+    },
+    
+    /**
+     * Checks or child DOM element is descendant of the parent DOM element.
+     * @static
+     * @param {Object} parent Parent DOM element. Required.
+     * @param {Object} child Child DOM element. Required.
+     * @return {Boolean}
+     */
+    isDescendant: function(parent, child) {
+        var node = child.parentNode;
+        while(node !== null) {
+            if (node === parent) {
+                return true;
+            }
+            node = node.parentNode;
+        }
+        return false;
+    }
 }
