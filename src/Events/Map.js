@@ -5,9 +5,10 @@
 Crystal.Events.Map = function()
 {
     /**
+     * Map instance that has been raised an event.
      * @type {Crystal.Map}
      */
-    var _map;
+    this.map = null;
 
     /**
      * Initialization.
@@ -17,16 +18,7 @@ Crystal.Events.Map = function()
     {
         Crystal.Validators.Instance.validate(map, Crystal.Map, this.constructor.CLASS_NAME, 'initialize');
 
-        _map = map;
-    }
-
-    /**
-     * Returns map instance that has been raised an event.
-     * @return {Crystal.Map}
-     */
-    this.getMap = function()
-    {
-        return _map;
+        this.map = map;
     }
 
     // apply constructor

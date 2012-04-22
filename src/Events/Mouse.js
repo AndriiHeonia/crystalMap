@@ -70,22 +70,6 @@ Crystal.Events.Mouse = function()
         
         this.map = map;
     }
-
-    /**
-     * Returns a geographic position of the mouse cursor.
-     * @return {Object}
-     */
-    this.getGeoPoint = function()
-    {
-        var pixel;
-        
-        pixel = {
-            x: this.clientX,
-            y: this.clientY
-        }
-        
-        return Crystal.Utils.Converters.Mercator.pixelToGeoPoint(pixel);
-    }
     
     /**
      * Stops propagation
@@ -101,6 +85,19 @@ Crystal.Events.Mouse = function()
     this.preventDefault = function()
     {
         _browserEvent.preventDefault();
+    }
+    
+    /**
+     * Returns a geographic coordinates by mouse cursor position.
+     * @return {Object}
+     */
+    this.getGeoPoint = function()
+    {
+        // @todo
+//        return Crystal.Utils.Converters.Mercator.pixelToGeoPoint({
+//            x: this.clientX,
+//            y: this.clientY
+//        });
     }
 
     // apply constructor

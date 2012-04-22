@@ -76,4 +76,34 @@ describe("Crystal.Utils.Dom", function()
             Crystal.Utils.Dom.removeListener(el, 'click', handler);
         });        
     });
+    
+    describe("isDescendant", function()
+    {
+        it("should return true", function()
+        {
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            var span = document.createElement("span");
+            
+            document.body.appendChild(div);
+            div.appendChild(p);
+            p.appendChild(span);
+            
+            expect(Crystal.Utils.Dom.isDescendant(div, span)).toBeTruthy();            
+        });
+
+        it("should return false", function()
+        {
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            var span = document.createElement("span");
+            
+            document.body.appendChild(div);
+            div.appendChild(p);
+            p.appendChild(span);
+            
+            expect(Crystal.Utils.Dom.isDescendant(div, div)).toBeFalsy();
+            expect(Crystal.Utils.Dom.isDescendant(span, div)).toBeFalsy();            
+        });
+    });    
 });

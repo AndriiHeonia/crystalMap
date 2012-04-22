@@ -8,7 +8,8 @@
         url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
         subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
         tileSize: 255,
-        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg',
+        projection: Crystal.Projections.SphericalMercator
     });
     map.add(layer);
     

@@ -22,14 +22,20 @@ Crystal.Map = function()
      * @type {Number}
      */
     var _zoom;
-        
+
+    /**
+     * @type {Object}
+     */
+    var _projection;
+
     /**
      * Initialization.
      * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
      * @param {Object} center Geographic coordinates of the center. Optional.
      * @param {Number} zoom Zoom level. Optional.
+     * @param {String} projection Projection. Optional.
      */
-    this.initialize = function(container, center, zoom)
+    this.initialize = function(container, center, zoom, projection)
     {
         var containerIsStr;
         
@@ -58,6 +64,7 @@ Crystal.Map = function()
         _container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
+        _projection = projection || Crystal.Projections.SphericalMercator;
         
         Crystal.MapRegister.add(this);
         
@@ -135,6 +142,15 @@ Crystal.Map = function()
     }
 
     /**
+     * Returns a projection of the map.
+     * @return {Object}
+     */
+    this.getProjection = function()
+    {
+        return _projection;
+    }
+
+    /**
      * Adds an observer to the map.
      * @param {Crystal.IMapObserver} observer Observer to listen map events. Required.
      */
@@ -172,7 +188,7 @@ Crystal.Map = function()
 //        _center = event.getGeoPoint();
         
         this.fireEvent('CenterChanging');
-        console.log(event.getMap());
+        console.log(event.map);
     }
     
     /**

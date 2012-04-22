@@ -29,6 +29,11 @@ Crystal.Utils.Converters = {}
 Crystal.Layers = {}
 
 /**
+ * Crystal.Projections namespace.
+ */
+Crystal.Projections = {}
+
+/**
  * Crystal.Validators namespace.
  */
 Crystal.Validators = {}

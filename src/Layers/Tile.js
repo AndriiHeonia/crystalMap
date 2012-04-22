@@ -2,6 +2,7 @@
  * Provides a XYZ tile layer functionaity.
  * @see http://politerm.com.ru/zuludoc/tile_servers.htm
  * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+ * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
  * @constructor
  * @implements {IMapObserver}
  */
@@ -24,9 +25,7 @@ Crystal.Layers.Tile = function()
 
     /**
      * Initialization.
-     * @todo validate params.
-     * @param {Object} options Layer options object. Required.
-     * Object params:
+     * @param {Object} options Layer options object. Required. Structure:
      * - {String} url Tile server url (without "http://"). Required.
      * - {Array} subdomains Array with tile server subdomains. Required.
      * - {Number} tileSize Tile size. Required.
@@ -50,7 +49,7 @@ Crystal.Layers.Tile = function()
      */
     this.onAddToMap = function(mapEvent)
     {
-        _map = mapEvent.getMap();
+        _map = mapEvent.map;
         _initContainer();
         _redraw();
     }
@@ -61,7 +60,7 @@ Crystal.Layers.Tile = function()
     */
     this.onMapUpdate = function(mapEvent)
     {
-        _map = mapEvent.getMap();
+        _map = mapEvent.map;
         _redraw();
     }
     
@@ -71,7 +70,7 @@ Crystal.Layers.Tile = function()
     */
     this.onRemoveFromMap = function(mapEvent)
     {
-        _map = mapEvent.getMap();
+        _map = mapEvent.map;
         _destroyContainer();
         _map = null;
     }

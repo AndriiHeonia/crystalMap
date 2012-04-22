@@ -78,5 +78,5 @@ describe("Crystal.Layers.Tile", function()
                 }); 
             }).toThrow(new TypeError('Value 666 passed to initialize method of the Crystal.Layers.Tile class should be a String.'));            
         });        
-    });
+    });    
 });

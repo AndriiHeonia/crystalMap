@@ -16,8 +16,8 @@ Crystal.Projections.SphericalMercator = {
     project: function(geoPoint) 
     {
         return {
-            x: Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Crystal.Math.degreesToRadians(geoPoint.lon),
-            y: Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Math.log(Math.tan(Math.PI / 4 + Crystal.Math.degreesToRadians(geoPoint.lat) / 2))
+            x: 1 * (Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Crystal.Utils.Math.degreesToRadians(geoPoint.lon)).toFixed(5),
+            y: 1 * (Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Math.log(Math.tan(Math.PI / 4 + Crystal.Utils.Math.degreesToRadians(geoPoint.lat) / 2))).toFixed(5)
         }        
     },
 
@@ -33,8 +33,8 @@ Crystal.Projections.SphericalMercator = {
 	unproject: function(point) 
     {
         return {
-            lat: Crystal.Math.radiansToDegrees(2 * Math.atan(Math.exp(point.y / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)) - Math.PI / 2),
-            lon: Crystal.Math.radiansToDegrees(point.x / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)
+            lat: 1 * (Crystal.Utils.Math.radiansToDegrees(2 * Math.atan(Math.exp(point.y / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)) - Math.PI / 2)).toFixed(5),
+            lon: 1 * (Crystal.Utils.Math.radiansToDegrees(point.x / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)).toFixed(5)
         }
 	},
 
