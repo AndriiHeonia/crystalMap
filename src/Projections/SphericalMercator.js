@@ -38,5 +38,10 @@ Crystal.Projections.SphericalMercator = {
         }
 	},
 
-    ELLIPSOID_AXIS: 6378137.0
+    /**
+     * Ellipsoid axis.
+     * @const
+     * @type {Number}
+     */
+    ELLIPSOID_AXIS: 6378137
 }

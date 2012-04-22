@@ -26,7 +26,7 @@ Crystal.Utils.Common = {
     bind: function(scope, func)
     {
         return function() {
-            func.apply(scope, arguments);
+            return func.apply(scope, arguments);
         }
     }
 }

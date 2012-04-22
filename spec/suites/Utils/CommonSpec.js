@@ -14,4 +14,21 @@ describe("Crystal.Utils.Common", function()
             expect(id).toContain('myPrefix_');
         });
     });
+    
+    describe("bind", function()
+    {
+        it("should bind function to the object", function()
+        {
+            var dog = {
+                noise: "Ruff!"
+            };
+
+            function makeNoise() {
+                return this.noise;
+            }
+
+            expect(makeNoise()).toEqual(undefined);
+            expect(Crystal.Utils.Common.bind(dog, makeNoise)()).toEqual("Ruff!");
+        });
+    });    
 });

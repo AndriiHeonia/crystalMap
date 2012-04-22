@@ -7,7 +7,9 @@ Crystal.Map = function()
 {
     // apply inheritance
     Crystal.Map.superclass.constructor.call(this);
-        
+
+    // @todo should be a public props
+
     /**
      * @type {Object}
      */
