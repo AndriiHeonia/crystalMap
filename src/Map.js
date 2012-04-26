@@ -159,13 +159,15 @@ Crystal.Map = function()
     this.add = function(observer)
     {
         Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
-        
+
+        // @todo should be moved to observers
         // subscribing to the map events
         this.addListener('ObserverAdding', observer.onAddToMap);
-        this.addListener('ObserverRemoving', observer.onRemoveFromMap);
+        this.addListener('ObserverRemoving', observer.onRemoveFromMap);        
         this.addListener('ZoomChanging', observer.onMapUpdate);
         this.addListener('CenterChanging', observer.onMapUpdate);
 
+        // @todo should be called directly only for the one observer
         this.fireEvent('ObserverAdding');
     }
 
@@ -175,13 +177,23 @@ Crystal.Map = function()
      */
     this.remove = function(observer)
     {
+        // @todo should be called directly only for the one observer
         this.fireEvent('ObserverRemoving');
-        
+
+        // @todo should be moved to observers
         // unsubscribing from the map events
         this.removeListener('ObserverAdding', observer.onAddToMap);
         this.removeListener('ObserverRemoving', observer.onRemoveFromMap);
         this.removeListener('ZoomChanging', observer.onMapUpdate);
         this.removeListener('CenterChanging', observer.onMapUpdate);        
+    }
+    
+    /**
+     * Destructor
+     */
+    this.destroy = function() {
+        Crystal.MapRegister.remove(this.getContainer().id);
+        // @todo fire observers
     }
     
     function _handleDragging(event)

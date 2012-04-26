@@ -10,8 +10,8 @@ describe("Crystal.Projections.SphericalMercator", function()
             }
             var point = Crystal.Projections.SphericalMercator.project(geoPoint);
             
-            expect(point.x).toEqual(4187591.89173);
-            expect(point.y).toEqual(7509137.5811);   
+            expect(point.x).toEqual(4187591.8918346255);
+            expect(point.y).toEqual(7509137.580813028);   
         });
     });
     
@@ -25,8 +25,8 @@ describe("Crystal.Projections.SphericalMercator", function()
             }
             var geoPoint = Crystal.Projections.SphericalMercator.unproject(point);
             
-            expect(geoPoint.lat).toEqual(55.75167);
-            expect(geoPoint.lon).toEqual(37.61778);   
+            expect(geoPoint.lat).toEqual(55.751667);
+            expect(geoPoint.lon).toEqual(37.617778);   
         });
     });    
 });

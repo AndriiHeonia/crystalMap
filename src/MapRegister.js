@@ -64,7 +64,7 @@ Crystal.MapRegister = {
      * Returns map, element belongs to.
      * @static
      * @param {Object} element Any DOM element in any map on the page. Required.
-     * @return {Crystal.Map|null} Map object, element belongs to or null.
+     * @return {Crystal.Map|null} Map object, element belongs to, or null.
      */
     getItemByDomElement: function(element)
     {

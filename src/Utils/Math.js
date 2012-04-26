@@ -10,7 +10,7 @@ Crystal.Utils.Math = {
      */
     degreesToRadians: function(degrees)
     {
-        return degrees * (Math.PI / 180);
+        return 1 * (degrees * (Math.PI / 180)).toFixed(10);
     },
     
     /**
@@ -20,6 +20,6 @@ Crystal.Utils.Math = {
      */
     radiansToDegrees: function(radians)
     {
-        return radians * (180 / Math.PI);
+        return 1 * (radians * (180 / Math.PI)).toFixed(10);
     }
 }

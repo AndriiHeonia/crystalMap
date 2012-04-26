@@ -19,7 +19,6 @@ Crystal.Utils.Common = {
     
     /**
      * Binds scope with a function
-     * @todo to write spec
      * @param {Object} scope
      * @param {Function} func
      */
