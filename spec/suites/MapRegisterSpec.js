@@ -33,7 +33,7 @@ describe("Crystal.MapRegister", function()
         it("should return map instance, because DOM element is map container", function()
         {
             var myMap = new Crystal.Map('myMap');
-            var mapContainer = myMap.getContainer();
+            var mapContainer = myMap.container;
             
             expect(Crystal.MapRegister.getItemByDomElement(mapContainer)).toEqual(myMap);
         });
@@ -43,7 +43,7 @@ describe("Crystal.MapRegister", function()
             var myMap = new Crystal.Map('myMap');
             var myChild = document.createElement('div');
             
-            myMap.getContainer().appendChild(myChild);
+            myMap.container.appendChild(myChild);
             
             expect(Crystal.MapRegister.getItemByDomElement(myChild)).toEqual(myMap);
         });

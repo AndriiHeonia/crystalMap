@@ -1,5 +1,10 @@
 /**
- * Provides a Map functionaity.
+ * Provides a map functionaity.
+ * Map fires the next events:
+ * - MapUpdating - when any object added to the map or removed from the map;
+ * - ZoomChanging - when map zoom changed;
+ * - CenterChanging - when map center changed.
+ *
  * @constructor
  * @extends {Crystal.Observable}
  */
@@ -8,12 +13,11 @@ Crystal.Map = function()
     // apply inheritance
     Crystal.Map.superclass.constructor.call(this);
 
-    // @todo should be a public props
-
     /**
+     * DOM element, which contains this map.
      * @type {Object}
      */
-    var _container;
+    this.container = null;
     
     /**
      * @type {Object}
@@ -42,15 +46,15 @@ Crystal.Map = function()
         var containerIsStr;
         
         containerIsStr = Crystal.Utils.Type.isString(container);
-        _container = containerIsStr ? document.getElementById(container) : container;
+        this.container = containerIsStr ? document.getElementById(container) : container;
         
         if(containerIsStr)
         {
-            Crystal.Validators.NotNull.validate(_container, Crystal.Map.CLASS_NAME, 'initialize');
+            Crystal.Validators.NotNull.validate(this.container, Crystal.Map.CLASS_NAME, 'initialize');
         }
         else
         {
-            Crystal.Validators.DomElement.validate(_container, Crystal.Map.CLASS_NAME, 'initialize');
+            Crystal.Validators.DomElement.validate(this.container, Crystal.Map.CLASS_NAME, 'initialize');
         }
         if(center)
         {
@@ -61,9 +65,9 @@ Crystal.Map = function()
             Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'initialize');
         }
         
-        _container.innerHTML = '';
-        _container.style.position = 'relative';
-        _container.style.backgroundColor = '#F4F2EE';
+        this.container.innerHTML = '';
+        this.container.style.position = 'relative';
+        this.container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
         _projection = projection || Crystal.Projections.SphericalMercator;
@@ -72,8 +76,7 @@ Crystal.Map = function()
         
         // events, which can be fired by this object
         this.registerEvent([
-            'ObserverAdding',
-            'ObserverRemoving',
+            'MapUpdating',
             'ZoomChanging',
             'CenterChanging'
         ]);
@@ -88,15 +91,6 @@ Crystal.Map = function()
     this.getEventObject = function()
     {
         return new Crystal.Events.Map(this);
-    }
-
-    /**
-     * Returns DOM element, which contains this map.
-     * @return {Object}
-     */
-    this.getContainer = function()
-    {
-        return _container;
     }
 
     /**
@@ -135,10 +129,7 @@ Crystal.Map = function()
      */
     this.setZoom = function(zoom)
     {
-        if(Object.prototype.toString.call(zoom) != '[object Number]')
-        {
-            throw new TypeError('setZoom method called with invalid zoom.')
-        }
+        Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'setZoom');
         _zoom = zoom;
         this.fireEvent('ZoomChanging');
     }
@@ -159,16 +150,9 @@ Crystal.Map = function()
     this.add = function(observer)
     {
         Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
-
-        // @todo should be moved to observers
-        // subscribing to the map events
-        this.addListener('ObserverAdding', observer.onAddToMap);
-        this.addListener('ObserverRemoving', observer.onRemoveFromMap);        
-        this.addListener('ZoomChanging', observer.onMapUpdate);
-        this.addListener('CenterChanging', observer.onMapUpdate);
-
-        // @todo should be called directly only for the one observer
-        this.fireEvent('ObserverAdding');
+        
+        observer.onAddToMap(this.getEventObject());
+        this.fireEvent('MapUpdating');
     }
 
     /**
@@ -177,22 +161,17 @@ Crystal.Map = function()
      */
     this.remove = function(observer)
     {
-        // @todo should be called directly only for the one observer
-        this.fireEvent('ObserverRemoving');
+        Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
 
-        // @todo should be moved to observers
-        // unsubscribing from the map events
-        this.removeListener('ObserverAdding', observer.onAddToMap);
-        this.removeListener('ObserverRemoving', observer.onRemoveFromMap);
-        this.removeListener('ZoomChanging', observer.onMapUpdate);
-        this.removeListener('CenterChanging', observer.onMapUpdate);        
+        observer.onRemoveFromMap(this.getEventObject());
+        this.fireEvent('MapUpdating');
     }
     
     /**
      * Destructor
      */
     this.destroy = function() {
-        Crystal.MapRegister.remove(this.getContainer().id);
+        Crystal.MapRegister.remove(this.container.id);
         // @todo fire observers
     }
     
@@ -210,7 +189,7 @@ Crystal.Map = function()
      */
     function _addDomListeners()
     {
-        Crystal.Utils.Dom.addListener(this.getContainer(), 'mousemove', Crystal.Utils.Common.bind(this, _handleDragging));
+        Crystal.Utils.Dom.addListener(this.container, 'mousemove', Crystal.Utils.Common.bind(this, _handleDragging));
     }
     
     // apply constructor

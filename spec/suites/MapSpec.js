@@ -181,15 +181,15 @@ describe("Crystal.Map", function()
         });        
     });
 
-    describe("getContainer", function()
+    describe("container", function()
     {
         it("should return correct DOM element", function()
         {
             var myMap = new Crystal.Map('myMap');
-            expect(myMap.getContainer().nodeType).toEqual(1);
+            expect(myMap.container.nodeType).toEqual(1);
             
             var myMap1 = new Crystal.Map(document.getElementById('myMap'));
-            expect(myMap1.getContainer().nodeType).toEqual(1);            
+            expect(myMap1.container.nodeType).toEqual(1);            
         });
     });
     
@@ -212,17 +212,22 @@ describe("Crystal.Map", function()
 
         it("should notify observers about map center changing", function()
         {
+            function MyObserver() {
+                this.onAddToMap = function() {}
+                this.onRemoveFromMap = function() {}
+                this.onZoomChanging = function() {}
+                this.onCenterChanging = function() {}
+            }
+            var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            spyOn(layer, 'onMapUpdate');
-            myMap.add(layer);
+            
+            spyOn(myObserver, 'onCenterChanging');
+            
+            myMap.add(myObserver);
+            myMap.addListener('CenterChanging', myObserver.onCenterChanging);
+
             myMap.setCenter({lat: 50, lon: 50});
-            expect(layer.onMapUpdate).toHaveBeenCalled();
+            expect(myObserver.onCenterChanging).toHaveBeenCalled();
         });
 
         it("should throw an error, because center is incorrect", function()
@@ -251,17 +256,22 @@ describe("Crystal.Map", function()
 
         it("should notify observers about map zoom changing", function()
         {
+            function MyObserver() {
+                this.onAddToMap = function() {}
+                this.onRemoveFromMap = function() {}
+                this.onZoomChanging = function() {}
+                this.onCenterChanging = function() {}
+            }
+            var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            spyOn(layer, 'onMapUpdate');
-            myMap.add(layer);
+            
+            spyOn(myObserver, 'onZoomChanging');
+            
+            myMap.add(myObserver);
+            myMap.addListener('ZoomChanging', myObserver.onZoomChanging);
+
             myMap.setZoom(5);
-            expect(layer.onMapUpdate).toHaveBeenCalled();
+            expect(myObserver.onZoomChanging).toHaveBeenCalled();
         });
 
         it("should throw an error, because zoom is incorrect", function()
@@ -269,7 +279,7 @@ describe("Crystal.Map", function()
             expect(function(){
                 var myMap = new Crystal.Map('myMap');            
                 myMap.setZoom('5');
-            }).toThrow(new TypeError('setZoom method called with invalid zoom.'));            
+            }).toThrow(new TypeError('Value 5 passed to setZoom method of the Crystal.Map class should be a Number.'));            
         });
     });
     
@@ -294,7 +304,7 @@ describe("Crystal.Map", function()
             expect(function(){
                 var myMap = new Crystal.Map('myMap');            
                 myMap.add({});
-            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onMapUpdate" was not found.');            
+            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');            
         });    
     });
     

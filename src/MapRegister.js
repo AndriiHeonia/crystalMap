@@ -15,7 +15,7 @@ Crystal.MapRegister = {
      */
     add: function(map)
     {
-        Crystal.MapRegister._items[map.getContainer().id] = map;
+        Crystal.MapRegister._items[map.container.id] = map;
     },
     
     /**
@@ -74,12 +74,12 @@ Crystal.MapRegister = {
         {
             map = Crystal.MapRegister._items[containerId];
             
-            if(element === map.getContainer())
+            if(element === map.container)
             {
                 return map;
             }
             
-            if(Crystal.Utils.Dom.isDescendant(map.getContainer(), element) === true)
+            if(Crystal.Utils.Dom.isDescendant(map.container, element) === true)
             {
                 return map;
             }

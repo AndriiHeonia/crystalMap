@@ -52,16 +52,9 @@ Crystal.Layers.Tile = function()
         _map = mapEvent.map;
         _initContainer();
         _redraw();
-    }
-    
-   /**
-    * Handles and process map update notification.
-    * @param {Crystal.Events.Map} mapEvent Incapsulates information about the map that has been updated.
-    */
-    this.onMapUpdate = function(mapEvent)
-    {
-        _map = mapEvent.map;
-        _redraw();
+
+        _map.addListener('ZoomChanging', _redraw);
+        _map.addListener('CenterChanging', _redraw);        
     }
     
    /**
@@ -70,7 +63,9 @@ Crystal.Layers.Tile = function()
     */
     this.onRemoveFromMap = function(mapEvent)
     {
-        _map = mapEvent.map;
+        _map.removeListener('ZoomChanging', _redraw);
+        _map.removeListener('CenterChanging', _redraw);
+        
         _destroyContainer();
         _map = null;
     }
@@ -84,7 +79,7 @@ Crystal.Layers.Tile = function()
             'div',
             Crystal.Utils.Common.createUniqueId('Crystal.Layers.Tile'),
             'crystal-layer',
-            _map.getContainer()
+            _map.container
         );
     }
 
@@ -93,7 +88,7 @@ Crystal.Layers.Tile = function()
      */
     function _destroyContainer()
     {
-        _map.getContainer().removeChild(_container);
+        _map.container.removeChild(_container);
         _container = null;
     }
 
@@ -114,8 +109,8 @@ Crystal.Layers.Tile = function()
         
         _container.innerHTML = '';
         
-        viewPortXTileSize = Math.ceil(_map.getContainer().offsetWidth / _options.tileSize);
-        viewPortYTileSize = Math.ceil(_map.getContainer().offsetHeight / _options.tileSize);
+        viewPortXTileSize = Math.ceil(_map.container.offsetWidth / _options.tileSize);
+        viewPortYTileSize = Math.ceil(_map.container.offsetHeight / _options.tileSize);
         viewPortTileSize = viewPortXTileSize * viewPortYTileSize;
         
         xCenter = x = _getTileX(_map.getCenter().lon, _map.getZoom());
@@ -182,8 +177,8 @@ Crystal.Layers.Tile = function()
         xCenter = _getTileX(_map.getCenter().lon, _map.getZoom());
         yCenter = _getTileY(_map.getCenter().lat, _map.getZoom());        
         
-        viewPortXCenter = _map.getContainer().offsetWidth / 2;
-        viewPortYCenter = _map.getContainer().offsetHeight / 2;
+        viewPortXCenter = _map.container.offsetWidth / 2;
+        viewPortYCenter = _map.container.offsetHeight / 2;
                 
         xPixelCenter = Math.floor(viewPortXCenter - _options.tileSize / 2);
         yPixelCenter = Math.floor(viewPortYCenter - _options.tileSize / 2);

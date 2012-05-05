@@ -7,7 +7,7 @@ describe("Crystal.Utils.DomEventFactory", function()
             var myMap = new Crystal.Map('myMap');
             var bowserEventStub = {
                 type: 'mousemove',
-                target: myMap.getContainer(),
+                target: myMap.container,
                 button: 0,
                 screenX: 10,
                 screenY: 10,
