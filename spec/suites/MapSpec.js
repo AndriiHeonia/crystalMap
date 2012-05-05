@@ -324,5 +324,13 @@ describe("Crystal.Map", function()
             myMap.remove(layer);
             expect(layer.onRemoveFromMap).toHaveBeenCalled();
         });
+
+        it("should throw an error, because observer is incorrect", function()
+        {
+            expect(function(){
+                var myMap = new Crystal.Map('myMap');            
+                myMap.remove({});
+            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');            
+        });        
     });
 });
