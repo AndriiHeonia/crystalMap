@@ -35,6 +35,11 @@ Crystal.Map = function()
     var _projection;
 
     /**
+     * @type {Array}
+     */
+    var _userObservers = [];
+
+    /**
      * Initialization.
      * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
      * @param {Object} center Geographic coordinates of the center. Optional.
@@ -151,6 +156,7 @@ Crystal.Map = function()
     {
         Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
         
+        _userObservers.push(observer);
         observer.onAddToMap(this.getEventObject());
         this.fireEvent('MapUpdating');
     }
@@ -164,6 +170,7 @@ Crystal.Map = function()
         Crystal.Interface.isImplements(observer, [Crystal.IMapObserver]);
 
         observer.onRemoveFromMap(this.getEventObject());
+        _userObservers.splice(_userObservers.indexOf(observer), 1);
         this.fireEvent('MapUpdating');
     }
     
@@ -171,15 +178,20 @@ Crystal.Map = function()
      * Destructor
      */
     this.destroy = function() {
-        Crystal.MapRegister.remove(this.container.id);
-        // @todo fire observers
+        // Calls onRemoveFromMap method to each user added observer and clears _userObservers array
+        for(var i = 0; i < _userObservers.length; i++)
+        {
+            _userObservers[i].onRemoveFromMap(this.getEventObject);
+        }
+        _userObservers = [];
+
+        Crystal.MapRegister.remove(this.container.id);        
     }
     
     function _handleDragging(event)
     {
         // @todo
 //        _center = event.getGeoPoint();
-        
         this.fireEvent('CenterChanging');
         console.log(event.map);
     }

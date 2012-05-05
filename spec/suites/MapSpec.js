@@ -225,8 +225,8 @@ describe("Crystal.Map", function()
             
             myMap.add(myObserver);
             myMap.addListener('CenterChanging', myObserver.onCenterChanging);
-
             myMap.setCenter({lat: 50, lon: 50});
+
             expect(myObserver.onCenterChanging).toHaveBeenCalled();
         });
 
@@ -269,8 +269,8 @@ describe("Crystal.Map", function()
             
             myMap.add(myObserver);
             myMap.addListener('ZoomChanging', myObserver.onZoomChanging);
-
             myMap.setZoom(5);
+
             expect(myObserver.onZoomChanging).toHaveBeenCalled();
         });
 
@@ -287,16 +287,20 @@ describe("Crystal.Map", function()
     {
         it("should notify observers about addition to the map", function()
         {
+            function MyObserver() {
+                this.onAddToMap = function() {}
+                this.onRemoveFromMap = function() {}
+                this.onZoomChanging = function() {}
+                this.onCenterChanging = function() {}
+            }
+            var myObserver = new MyObserver();            
             var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            spyOn(layer, 'onAddToMap');            
-            myMap.add(layer);
-            expect(layer.onAddToMap).toHaveBeenCalled();
+            
+            spyOn(myObserver, 'onAddToMap');
+
+            myMap.add(myObserver);
+
+            expect(myObserver.onAddToMap).toHaveBeenCalled();
         });
         
         it("should throw an error, because observer is incorrect", function()
@@ -312,17 +316,21 @@ describe("Crystal.Map", function()
     {
         it("should notify observers about removing from the map", function()
         {
+            function MyObserver() {
+                this.onAddToMap = function() {}
+                this.onRemoveFromMap = function() {}
+                this.onZoomChanging = function() {}
+                this.onCenterChanging = function() {}
+            }
+            var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
-            var layer = new Crystal.Layers.Tile({
-                url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-                subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-                tileSize: 255,
-                errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
-            });
-            spyOn(layer, 'onRemoveFromMap');
-            myMap.add(layer);
-            myMap.remove(layer);
-            expect(layer.onRemoveFromMap).toHaveBeenCalled();
+            
+            spyOn(myObserver, 'onRemoveFromMap');
+
+            myMap.add(myObserver);
+            myMap.remove(myObserver);
+            
+            expect(myObserver.onRemoveFromMap).toHaveBeenCalled();
         });
 
         it("should throw an error, because observer is incorrect", function()
@@ -332,5 +340,32 @@ describe("Crystal.Map", function()
                 myMap.remove({});
             }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');            
         });        
+    });
+
+    describe("destroy", function()
+    {
+        it("should notify observers about removing from the map", function()
+        {
+            function MyObserver() {
+                this.onAddToMap = function() {}
+                this.onRemoveFromMap = function() {}
+                this.onZoomChanging = function() {}
+                this.onCenterChanging = function() {}
+            }
+            var myObserver1 = new MyObserver();
+            var myObserver2 = new MyObserver();
+            var myMap = new Crystal.Map('myMap');
+
+            spyOn(myObserver1, 'onRemoveFromMap');
+            spyOn(myObserver2, 'onRemoveFromMap');
+
+            myMap.add(myObserver1);
+            myMap.add(myObserver2);
+
+            myMap.destroy();
+
+            expect(myObserver1.onRemoveFromMap).toHaveBeenCalled();
+            expect(myObserver2.onRemoveFromMap).toHaveBeenCalled();
+        });
     });
 });
