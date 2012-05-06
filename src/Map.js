@@ -191,9 +191,16 @@ Crystal.Map = function()
     function _handleDragging(event)
     {
         // @todo
-//        _center = event.getGeoPoint();
-        this.fireEvent('CenterChanging');
-        console.log(event.map);
+//        console.log('src:');
+        console.log(event.getPixel());
+//        console.log(event.getGeoPoint());
+
+//        console.log('converted:');
+        console.log(Crystal.Projections.SphericalMercator.getPixelByGeoPoint(event.getGeoPoint(), 10, 256));
+//        console.log(Crystal.Projections.SphericalMercator.getGeoPointByPixel(event.getPixel(), 10, 256));
+
+        /*_center = event.getGeoPoint();
+        this.fireEvent('CenterChanging');*/
     }
     
     /**
@@ -201,7 +208,7 @@ Crystal.Map = function()
      */
     function _addDomListeners()
     {
-        Crystal.Utils.Dom.addListener(this.container, 'mousemove', Crystal.Utils.Common.bind(this, _handleDragging));
+        Crystal.Utils.Dom.addListener(this.container, 'click', Crystal.Utils.Common.bind(this, _handleDragging));
     }
     
     // apply constructor

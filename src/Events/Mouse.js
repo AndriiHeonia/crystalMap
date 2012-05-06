@@ -87,17 +87,49 @@ Crystal.Events.Mouse = function()
         _browserEvent.preventDefault();
     }
     
+    // experimental code:
+
     /**
      * Returns a geographic coordinates by mouse cursor position.
      * @return {Object}
      */
     this.getGeoPoint = function()
     {
-        // @todo
-//        return Crystal.Utils.Converters.Mercator.pixelToGeoPoint({
-//            x: this.clientX,
-//            y: this.clientY
-//        });
+        var pixel;
+        var mapSize;
+        var zoomLevel = 10;
+        var tileSize = 256;
+        var mapCenterPixel;
+
+        zoomLevel = this.map.getZoom();
+        mapSize = Crystal.Projections.SphericalMercator.getMapSize(tileSize, zoomLevel);
+
+        mapCenterPixel = Crystal.Projections.SphericalMercator.getPixelByGeoPoint(this.map.getCenter(), zoomLevel, tileSize);
+        pixel = {
+            x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
+            y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
+        }
+
+        return Crystal.Projections.SphericalMercator.getGeoPointByPixel(pixel, zoomLevel, tileSize);
+    },
+
+    this.getPixel = function()
+    {
+        var pixel;
+        var mapSize;
+        var zoomLevel = 10;
+        var tileSize = 256;
+        var mapCenterPixel;
+
+        zoomLevel = this.map.getZoom();
+        mapSize = Crystal.Projections.SphericalMercator.getMapSize(tileSize, zoomLevel);
+
+        mapCenterPixel = Crystal.Projections.SphericalMercator.getPixelByGeoPoint(this.map.getCenter(), zoomLevel, tileSize);
+        
+        return {
+            x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
+            y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
+        }
     }
 
     // apply constructor

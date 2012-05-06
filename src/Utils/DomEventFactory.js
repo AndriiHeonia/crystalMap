@@ -18,6 +18,9 @@ Crystal.Utils.DomEventFactory = {
             case 'mousemove':
                 customEvent = new Crystal.Events.Mouse(event, map);
                 break;
+            case 'click': // @todo test it
+                customEvent = new Crystal.Events.Mouse(event, map);
+                break;
         }
         return customEvent;
     }    
