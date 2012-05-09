@@ -8,21 +8,22 @@
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html
  * @todo add clipping and tests
  */
-Crystal.Projections.SphericalMercator = function(map)
+Crystal.Projections.SphericalMercator = function(layer)
 {
     /**
-     * Map instance projection belongs to.
-     * @type {Crystal.Map}
+     * Layer instance projection belongs to.
+     * @type {}
      */
-    var _map = null;
+    var _layer = null;
 
     /**
      * Initialization.
-     * @param {Crystal.Map} map Map instance.
+     * @todo
+     * @param {} layer Layer instance projection belongs to.
      */
-    this.initialize = function(map)
+    this.initialize = function(layer)
     {
-        _map = map;
+        _layer = layer;
     }
 
     /**
@@ -66,7 +67,7 @@ Crystal.Projections.SphericalMercator = function(map)
      */
     this.getMapSize = function(tileSize)
     {
-        return tileSize * Math.pow(2, _map.getZoom());
+        return tileSize * Math.pow(2, _layer.map.getZoom());
     }
 
     /**
@@ -83,7 +84,7 @@ Crystal.Projections.SphericalMercator = function(map)
         var mapSize;
 
         latInRadians = Crystal.Utils.Math.degreesToRadians(lat);
-        mapSize = this.getMapSize(tileSize, _map.getZoom());
+        mapSize = this.getMapSize(tileSize, _layer.map.getZoom());
 
         // ground resolution = cos(latitude * pi/180) * earth circumference / map width
         return Math.cos(latInRadians) * (2 * Math.PI * Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS) / mapSize;        
@@ -100,7 +101,7 @@ Crystal.Projections.SphericalMercator = function(map)
     this.getMapScale = function(lat, screenDpi)
     {
         // map scale = 1 : ground resolution * screen dpi / 0.0254 meters/inch
-        return this.getGroundResolution(lat, _map.getZoom()) * screenDpi / 0.0254;
+        return this.getGroundResolution(lat, _layer.map.getZoom()) * screenDpi / 0.0254;
     }
 
     this.projectToViewPort = function(geoPoint, tileSize)
@@ -124,14 +125,14 @@ Crystal.Projections.SphericalMercator = function(map)
         var groundResolution;
 
         viewPortSize = {
-            width: _map.container.clientWidth,
-            height: _map.container.clientHeight
+            width: _layer.map.container.clientWidth,
+            height: _layer.map.container.clientHeight
         }
 
         groundResolution = this.getGroundResolution(geoPoint.lat, tileSize);
 
         geoPointInGlobalMeters = this.project(geoPoint);
-        mapCenterInGlobalMeters = this.project(_map.getCenter());
+        mapCenterInGlobalMeters = this.project(_layer.map.getCenter());
 
         geoPointInGlobalPixel = {
             x: geoPointInGlobalMeters.x / groundResolution,

@@ -9,12 +9,7 @@
  * @todo setCenter() should be fixed
  */
 Crystal.Layers.Tile = function()
-{
-    /**
-     * @type {Crystal.Map} Map instance, layer belongs to.
-     */
-    var _map;
-    
+{   
     /**
      * @type {Object} Container of the layer.
      */
@@ -24,6 +19,13 @@ Crystal.Layers.Tile = function()
      * @type {Object}
      */
     var _options;
+
+    /**
+     * @type {Crystal.Map} Map instance, layer belongs to.
+     */
+    this.map = null,
+
+    _projection = null,
 
     /**
      * Initialization.
@@ -51,12 +53,15 @@ Crystal.Layers.Tile = function()
      */
     this.onAddToMap = function(mapEvent)
     {
-        _map = mapEvent.map;
-        _initContainer();
-        _redraw();
+        this.map = mapEvent.map;
+        // @todo check interface and add test
+        _projection = Crystal.Utils.Type.isFunction(_options.projection) ? new _options.projection(this) : new Crystal.Projections.SphericalMercator(this);
 
-        _map.addListener('ZoomChanging', _redraw);
-        _map.addListener('CenterChanging', _redraw);        
+        _initContainer.call(this);
+        _redraw.call(this);
+
+        this.map.addListener('ZoomChanging', _redraw);
+        this.map.addListener('CenterChanging', _redraw);        
     }
     
    /**
@@ -65,11 +70,19 @@ Crystal.Layers.Tile = function()
     */
     this.onRemoveFromMap = function(mapEvent)
     {
-        _map.removeListener('ZoomChanging', _redraw);
-        _map.removeListener('CenterChanging', _redraw);
+        this.map.removeListener('ZoomChanging', _redraw);
+        this.map.removeListener('CenterChanging', _redraw);
         
-        _destroyContainer();
-        _map = null;
+        _destroyContainer.call(this);
+        this.map = null;
+    }
+
+    /**
+     * @todo should be tested
+     */
+    this.getProjection = function()
+    {
+        return _projection;
     }
 
     /**
@@ -81,7 +94,7 @@ Crystal.Layers.Tile = function()
             'div',
             Crystal.Utils.Common.createUniqueId('Crystal.Layers.Tile'),
             'crystal-layer',
-            _map.container
+            this.map.container
         );
     }
 
@@ -90,7 +103,7 @@ Crystal.Layers.Tile = function()
      */
     function _destroyContainer()
     {
-        _map.container.removeChild(_container);
+        this.map.container.removeChild(_container);
         _container = null;
     }
 
@@ -111,15 +124,15 @@ Crystal.Layers.Tile = function()
         
         _container.innerHTML = '';
         
-        viewPortXTileSize = Math.ceil(_map.container.offsetWidth / _options.tileSize);
-        viewPortYTileSize = Math.ceil(_map.container.offsetHeight / _options.tileSize);
+        viewPortXTileSize = Math.ceil(this.map.container.offsetWidth / _options.tileSize);
+        viewPortYTileSize = Math.ceil(this.map.container.offsetHeight / _options.tileSize);
         viewPortTileSize = viewPortXTileSize * viewPortYTileSize;
         
-        xCenter = x = _getTileX(_map.getCenter().lon, _map.getZoom());
-        yCenter = y = _getTileY(_map.getCenter().lat, _map.getZoom());        
+        xCenter = x = _getTileX.apply(this, [this.map.getCenter().lon, this.map.getZoom()]);
+        yCenter = y = _getTileY.apply(this, [this.map.getCenter().lat, this.map.getZoom()]);        
         
         // show central tile
-        _showTile(x, y);
+        _showTile.apply(this, [x, y]);
         showed++;
         
         // show another tiles by spiral from the center
@@ -128,28 +141,28 @@ Crystal.Layers.Tile = function()
             while(x < xCenter + spiral) // move >
             {
                 x++;
-                _showTile(x, y);
+                _showTile.apply(this, [x, y]);
                 showed++;
             }
             
             while(y < yCenter + spiral) // move v
             {
                 y++;
-                _showTile(x, y);
+                _showTile.apply(this, [x, y]);
                 showed++;
             }
 
             while(x > xCenter - spiral) // move <
             {
                 x--;
-                _showTile(x, y);
+                _showTile.apply(this, [x, y]);
                 showed++;
             }
 
             while(y > yCenter - spiral && y != 0) // move ^
             {
                 y--;
-                _showTile(x, y);
+                _showTile.apply(this, [x, y]);
                 showed++;
             }
             
@@ -176,11 +189,11 @@ Crystal.Layers.Tile = function()
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
         
-        xCenter = _getTileX(_map.getCenter().lon, _map.getZoom());
-        yCenter = _getTileY(_map.getCenter().lat, _map.getZoom());        
+        xCenter = _getTileX.apply(this, [this.map.getCenter().lon, this.map.getZoom()]);
+        yCenter = _getTileY.apply(this, [this.map.getCenter().lat, this.map.getZoom()]);        
         
-        viewPortXCenter = _map.container.offsetWidth / 2;
-        viewPortYCenter = _map.container.offsetHeight / 2;
+        viewPortXCenter = this.map.container.offsetWidth / 2;
+        viewPortYCenter = this.map.container.offsetHeight / 2;
                 
         xPixelCenter = Math.floor(viewPortXCenter - _options.tileSize / 2);
         yPixelCenter = Math.floor(viewPortYCenter - _options.tileSize / 2);
@@ -192,7 +205,7 @@ Crystal.Layers.Tile = function()
         url = _options.url;
         url = url.replace("{x}", x);
         url = url.replace("{y}", y);
-        url = url.replace("{z}", _map.getZoom());
+        url = url.replace("{z}", this.map.getZoom());
 
         img = Crystal.Utils.Dom.create('img');
         Crystal.Utils.Dom.setOpacity(img, 0);

@@ -30,11 +30,6 @@ Crystal.Map = function()
     var _zoom;
 
     /**
-     * @type {Object}
-     */
-    var _projection;
-
-    /**
      * @type {Array}
      */
     var _userObservers = [];
@@ -44,9 +39,8 @@ Crystal.Map = function()
      * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
      * @param {Object} center Geographic coordinates of the center. Optional.
      * @param {Number} zoom Zoom level. Optional.
-     * @param {String} projectionClass Projection class. Optional. Crystal.Projections.SphericalMercator by default.
      */
-    this.initialize = function(container, center, zoom, projectionClass)
+    this.initialize = function(container, center, zoom)
     {
         var containerIsStr;
         
@@ -75,8 +69,6 @@ Crystal.Map = function()
         this.container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-        // @todo check interface and add test
-        _projection = Crystal.Utils.Type.isFunction(projectionClass) ? new projectionClass(this) : new Crystal.Projections.SphericalMercator(this);
 
         Crystal.MapRegister.add(this);
         
@@ -138,15 +130,6 @@ Crystal.Map = function()
         Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'setZoom');
         _zoom = zoom;
         this.fireEvent('ZoomChanging');
-    }
-
-    /**
-     * Returns a projection of the map.
-     * @return {Object}
-     */
-    this.getProjection = function()
-    {
-        return _projection;
     }
 
     /**

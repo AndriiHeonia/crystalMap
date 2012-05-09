@@ -3,12 +3,14 @@
         lat: 55.028,
         lon: 82.927
     }
-    var map = new Crystal.Map('myMap', geoPoint, 10, Crystal.Projections.SphericalMercator);
+    
+    var map = new Crystal.Map('myMap', geoPoint, 10);
     var layer = new Crystal.Layers.Tile({
         url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
         subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
         tileSize: 255,
-        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg'
+        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg',
+        projection: Crystal.Projections.SphericalMercator
     });
     map.add(layer);
     
@@ -17,7 +19,8 @@
     
     drawMarker();
     function drawMarker() {
-        var pixel = map.getProjection().projectToViewPort(geoPoint, 256);
+        // map should contain getBaseLayer() method
+        var pixel = layer.getProjection().projectToViewPort(geoPoint, 256);
 
         if(document.getElementById('m1')) {
             map.container.removeChild(document.getElementById('m1'));
