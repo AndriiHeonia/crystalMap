@@ -5,6 +5,8 @@
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
  * @constructor
  * @implements {IMapObserver}
+ * @todo should use project and unproject methods from SphericalMercator class
+ * @todo setCenter() should be fixed
  */
 Crystal.Layers.Tile = function()
 {

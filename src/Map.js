@@ -44,9 +44,9 @@ Crystal.Map = function()
      * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
      * @param {Object} center Geographic coordinates of the center. Optional.
      * @param {Number} zoom Zoom level. Optional.
-     * @param {String} projection Projection. Optional.
+     * @param {String} projectionClass Projection class. Optional. Crystal.Projections.SphericalMercator by default.
      */
-    this.initialize = function(container, center, zoom, projection)
+    this.initialize = function(container, center, zoom, projectionClass)
     {
         var containerIsStr;
         
@@ -75,8 +75,9 @@ Crystal.Map = function()
         this.container.style.backgroundColor = '#F4F2EE';
         _center = center || {lat: 0, lon: 0};
         _zoom = zoom || 0;
-        _projection = projection || Crystal.Projections.SphericalMercator;
-        
+        // @todo check interface and add test
+        _projection = Crystal.Utils.Type.isFunction(projectionClass) ? new projectionClass(this) : new Crystal.Projections.SphericalMercator(this);
+
         Crystal.MapRegister.add(this);
         
         // events, which can be fired by this object
@@ -192,11 +193,11 @@ Crystal.Map = function()
     {
         // @todo
 //        console.log('src:');
-        console.log(event.getPixel());
+//        console.log(event.getPixel());
 //        console.log(event.getGeoPoint());
 
 //        console.log('converted:');
-        console.log(Crystal.Projections.SphericalMercator.getPixelByGeoPoint(event.getGeoPoint(), 10, 256));
+//        console.log(Crystal.Projections.SphericalMercator.getPixelByGeoPoint(event.getGeoPoint(), 10, 256));
 //        console.log(Crystal.Projections.SphericalMercator.getGeoPointByPixel(event.getPixel(), 10, 256));
 
         /*_center = event.getGeoPoint();

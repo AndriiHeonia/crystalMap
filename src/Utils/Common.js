@@ -27,5 +27,18 @@ Crystal.Utils.Common = {
         return function() {
             return func.apply(scope, arguments);
         }
-    }
+    },
+
+    /**
+     * @todo test should be
+     * Clips a number to the specified minimum and maximum values.
+     * @param {Number} number The number to clip.
+     * @param {Number} minValue Minimum allowable value. 
+     * @param {Number} maxValue Maximum allowable value.
+     * @return {Number}
+     */
+    clip: function(number, minValue, maxValue)
+    {
+        return Math.min(Math.max(number, minValue), maxValue);
+    }    
 }
