@@ -20,7 +20,7 @@
     drawMarker();
     function drawMarker() {
         // map should contain getBaseLayer() method
-        var pixel = layer.getProjection().projectToViewPort(geoPoint, 256);
+        var pixel = layer.projectToViewPort(geoPoint, 256);
 
         if(document.getElementById('m1')) {
             map.container.removeChild(document.getElementById('m1'));

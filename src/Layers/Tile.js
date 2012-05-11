@@ -7,9 +7,15 @@
  * @implements {IMapObserver}
  * @todo should use project and unproject methods from SphericalMercator class
  * @todo setCenter() should be fixed
+ * @todo add clipping for projection
  */
 Crystal.Layers.Tile = function()
 {   
+    /**
+     * @type {Crystal.Map} Map instance, layer belongs to.
+     */
+    this.map = null;
+
     /**
      * @type {Object} Container of the layer.
      */
@@ -21,11 +27,9 @@ Crystal.Layers.Tile = function()
     var _options;
 
     /**
-     * @type {Crystal.Map} Map instance, layer belongs to.
+     * @type {Crystal.IProjection} Projection of this layer.
      */
-    this.map = null,
-
-    _projection = null,
+    var _projection;
 
     /**
      * Initialization.
@@ -34,6 +38,7 @@ Crystal.Layers.Tile = function()
      * - {Array} subdomains Array with tile server subdomains. Required.
      * - {Number} tileSize Tile size. Required.
      * - {String} errorTileUrl Tile, should be displayed on error. Required.
+     * - {Crystal.IProjection} projection Projection of this layer. Optional.Crystal.Projections.SphericalMercator by default.
      */
     this.initialize = function(options)
     {
@@ -43,6 +48,14 @@ Crystal.Layers.Tile = function()
         Crystal.Validators.MoreThan.validate(options.subdomains.length, 0, this.constructor.CLASS_NAME, 'initialize');
         Crystal.Validators.Number.validate(options.tileSize, this.constructor.CLASS_NAME, 'initialize');
         Crystal.Validators.String.validate(options.errorTileUrl, this.constructor.CLASS_NAME, 'initialize');        
+        if(Crystal.Utils.Type.isUndefined(options.projection) === false)  // @todo to add test
+        {
+            Crystal.Interface.isImplements(options.projection, [Crystal.IProjection]);
+        }
+        else
+        {
+            options.projection = Crystal.Projections.SphericalMercator;
+        }
         
         _options = options;
     }
@@ -54,8 +67,6 @@ Crystal.Layers.Tile = function()
     this.onAddToMap = function(mapEvent)
     {
         this.map = mapEvent.map;
-        // @todo check interface and add test
-        _projection = Crystal.Utils.Type.isFunction(_options.projection) ? new _options.projection(this) : new Crystal.Projections.SphericalMercator(this);
 
         _initContainer.call(this);
         _redraw.call(this);
@@ -78,11 +89,93 @@ Crystal.Layers.Tile = function()
     }
 
     /**
-     * @todo should be tested
+     * Determines the layer width and height (in pixels) at a specified zoom level.
+     * @return {Number}
      */
-    this.getProjection = function()
+    this.getSize = function()
     {
-        return _projection;
+        return _options.tileSize * Math.pow(2, this.map.getZoom());
+    }
+
+    /**
+     * Returns ground reolution of the layer.
+     * The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
+     * For example, at a ground resolution of 10 meters/pixel, each pixel represents a ground distance of 10 meters.
+     * @param {Number} lat Latitude (in degrees) at which to measure the ground resolution.
+     * @return {Number} The ground resolution, in meters per pixel.
+     */
+    this.getGroundResolution = function(lat)
+    {
+        var size;
+
+        size = this.getSize(_options.tileSize, this.map.getZoom());
+
+        return _projection.getGroundResolution(lat, size);
+    }
+
+    /**
+     * Returns layer scale.
+     * The scale indicates the ratio between map distance and ground distance, when measured in the same units.
+     * For instance, at a map scale of 1 : 100,000, each inch on the map represents a ground distance of 100,000 inches.
+     * @param {Number} lat Latitude (in degrees) at which to measure the map scale.
+     * @param {Number} screenDpi Resolution of the screen, in dots per inch.
+     * @return {Number} The map scale, expressed as the denominator N of the ratio 1 : N
+     */
+    this.getScale = function(lat, screenDpi)
+    {
+        // map scale = 1 : ground resolution * screen dpi / 0.0254 meters/inch
+        return this.getGroundResolution(lat) * screenDpi / 0.0254;
+    }
+
+    /**
+     * Returns point in view port Cartesian coordinate system by geographic point.
+     * @param {Object} geoPoint Geographic point. Structure:
+     * - {Number} lat Latitude.
+     * - {Number} lon Longitude.
+     * @return {Object} Structure:
+     * - {Number} x X coordinate (in meters).
+     * - {Number} y Y coordinate (in meters).
+     */   
+    this.projectToViewPort = function(geoPoint)
+    {
+        var geoPointInGlobalMeters;
+        var mapCenterInGlobalMeters;
+        var geoPointInGlobalPixel;
+        var mapCenterInGlobalPixel;        
+        var viewPortStartInGlobalPixel;
+        var geoPointInViewPortPixel;
+        var viewPortSize;
+        var groundResolution;
+
+        viewPortSize = {
+            width: this.map.container.clientWidth,
+            height: this.map.container.clientHeight
+        }
+
+        groundResolution = this.getGroundResolution(geoPoint.lat, _options.tileSize);
+
+        geoPointInGlobalMeters = _projection.project(geoPoint);
+        mapCenterInGlobalMeters = _projection.project(this.map.getCenter());
+
+        geoPointInGlobalPixel = {
+            x: geoPointInGlobalMeters.x / groundResolution,
+            y: geoPointInGlobalMeters.y / groundResolution
+        }
+
+        mapCenterInGlobalPixel = {
+            x: mapCenterInGlobalMeters.x / groundResolution,
+            y: mapCenterInGlobalMeters.y / groundResolution           
+        }
+
+        viewPortStartInGlobalPixel = {
+            x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
+            y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
+        }
+
+        return {
+            x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
+            y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
+        }
     }
 
     /**
