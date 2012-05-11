@@ -27,11 +27,6 @@ Crystal.Layers.Tile = function()
     var _options;
 
     /**
-     * @type {Crystal.IProjection} Projection of this layer.
-     */
-    var _projection;
-
-    /**
      * Initialization.
      * @param {Object} options Layer options object. Required. Structure:
      * - {String} url Tile server url (without "http://"). Required.
@@ -110,7 +105,7 @@ Crystal.Layers.Tile = function()
 
         size = this.getSize(_options.tileSize, this.map.getZoom());
 
-        return _projection.getGroundResolution(lat, size);
+        return _options.projection.getGroundResolution(lat, size);
     }
 
     /**
@@ -152,10 +147,10 @@ Crystal.Layers.Tile = function()
             height: this.map.container.clientHeight
         }
 
-        groundResolution = this.getGroundResolution(geoPoint.lat, _options.tileSize);
+        groundResolution = this.getGroundResolution(geoPoint.lat);
 
-        geoPointInGlobalMeters = _projection.project(geoPoint);
-        mapCenterInGlobalMeters = _projection.project(this.map.getCenter());
+        geoPointInGlobalMeters = _options.projection.project(geoPoint);
+        mapCenterInGlobalMeters = _options.projection.project(this.map.getCenter());
 
         geoPointInGlobalPixel = {
             x: geoPointInGlobalMeters.x / groundResolution,

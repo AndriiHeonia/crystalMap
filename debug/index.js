@@ -19,6 +19,7 @@
     
     drawMarker();
     function drawMarker() {
+
         // map should contain getBaseLayer() method
         var pixel = layer.projectToViewPort(geoPoint, 256);
 
