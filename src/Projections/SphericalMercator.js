@@ -6,7 +6,6 @@
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
  * @see http://wiki.openstreetmap.org/wiki/Mercator#Spherical_Mercator
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html
- * @todo add clipping and tests
  */
 Crystal.Projections.SphericalMercator = {
     /**
