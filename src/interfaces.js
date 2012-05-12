@@ -8,7 +8,7 @@ Crystal.IMapObserver = new Crystal.Interface('IMapObserver', ['onAddToMap', 'onR
  * Defines a projection interface.
  * @interface
  */
-Crystal.IProjection = new Crystal.Interface('IProjection', ['project', 'unproject']);
+Crystal.IProjection = new Crystal.Interface('IProjection', ['project', 'unproject', 'getGroundResolution']);
 
 /**
  * Defines a layer interface.
