@@ -30,5 +30,18 @@ describe("Crystal.Utils.Common", function()
             expect(makeNoise()).toEqual(undefined);
             expect(Crystal.Utils.Common.bind(dog, makeNoise)()).toEqual("Ruff!");
         });
-    });    
+    });
+
+    describe("clip", function()
+    {
+        it("should clip number by min value", function()
+        {
+            expect(Crystal.Utils.Common.clip(-90, -85, 85)).toEqual(-85);
+        });
+
+        it("should clip number by max value", function()
+        {
+            expect(Crystal.Utils.Common.clip(90, -85, 85)).toEqual(85);
+        });        
+    });
 });

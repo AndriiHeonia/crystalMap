@@ -30,7 +30,6 @@ Crystal.Utils.Common = {
     },
 
     /**
-     * @todo test should be
      * Clips a number to the specified minimum and maximum values.
      * @param {Number} number The number to clip.
      * @param {Number} minValue Minimum allowable value. 
