@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Crystal Map test page</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="../src/style.css" />
+<head>
+    <title>Crystal Map test page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../src/style.css" />
 
-        <script type="text/javascript" src="http://maps.api.2gis.ru/1.0"></script>
-        <script type="text/javascript" src="../lib/lab-js/LAB.min.js"></script>
-        <script type="text/javascript" src="loader.js"></script>
-	</head>
-	<body>
-        <div style="width: 1200px; height: 650px; border: 1px solid black; margin: auto" id="myMap"></div>
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;<input id="zoomin" type="button" value="Zoom In" /> | <input id="zoomout" type="button" value="Zoom Out" />
+    <script type="text/javascript" src="http://maps.api.2gis.ru/1.0"></script>
+    
+    <link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
 
-        <br /><br />
-        <div style="width: 1200px; height: 650px; border: 1px solid black; margin: auto" id="2gisMap"></div>
-	</body>
+    <script type="text/javascript" src="../lib/lab-js/LAB.min.js"></script>
+    <script type="text/javascript" src="loader.js"></script>
+</head>
+
+<body>
+    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto" id="myMap"></div>
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;<input id="zoomin" type="button" value="Zoom In" /> | <input id="zoomout" type="button" value="Zoom Out" />
+    <br /><br />
+    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto" id="2gisMap"></div>
+    <br /><br />
+    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto" id="lMap"></div>
+</body>
 </html>

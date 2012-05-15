@@ -27,7 +27,7 @@ Crystal.Projections.SphericalMercator = {
 
     /**
      * Returns geographic point by point in global Cartesian coordinate system.
-     * @param {Object} Point point in Cartesian coordinate system. Structure:
+     * @param {Object} point Point in Cartesian coordinate system. Structure:
      * - {Number} x X coordinate (in meters).
      * - {Number} y Y coordinate (in meters).
      * @return {Object} Structure:

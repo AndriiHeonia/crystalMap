@@ -21,5 +21,12 @@ Crystal.Utils.Math = {
     radiansToDegrees: function(radians)
     {
         return 1 * (radians * (180 / Math.PI)).toFixed(10);
+    },
+    
+    // @todo test it
+    div: function(val, by)
+    {
+        return (val - val % by) / by;
     }
+    
 }

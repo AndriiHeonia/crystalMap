@@ -8,6 +8,7 @@
  * @todo should use project and unproject methods from SphericalMercator class
  * @todo setCenter() should be fixed
  * @todo add clipping for projection
+ * @todo draw strategy should be configurable
  */
 Crystal.Layers.Tile = function()
 {   
@@ -93,7 +94,7 @@ Crystal.Layers.Tile = function()
     }
 
     /**
-     * Returns ground reolution of the layer.
+     * Returns ground resolution of the layer.
      * The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
      * For example, at a ground resolution of 10 meters/pixel, each pixel represents a ground distance of 10 meters.
      * @param {Number} lat Latitude (in degrees) at which to measure the ground resolution.
@@ -109,20 +110,6 @@ Crystal.Layers.Tile = function()
     }
 
     /**
-     * Returns layer scale.
-     * The scale indicates the ratio between map distance and ground distance, when measured in the same units.
-     * For instance, at a map scale of 1 : 100,000, each inch on the map represents a ground distance of 100,000 inches.
-     * @param {Number} lat Latitude (in degrees) at which to measure the map scale.
-     * @param {Number} screenDpi Resolution of the screen, in dots per inch.
-     * @return {Number} The map scale, expressed as the denominator N of the ratio 1 : N
-     */
-    this.getScale = function(lat, screenDpi)
-    {
-        // map scale = 1 : ground resolution * screen dpi / 0.0254 meters/inch
-        return this.getGroundResolution(lat) * screenDpi / 0.0254;
-    }
-
-    /**
      * Returns point in view port Cartesian coordinate system by geographic point.
      * @param {Object} geoPoint Geographic point. Structure:
      * - {Number} lat Latitude.
@@ -133,43 +120,58 @@ Crystal.Layers.Tile = function()
      */   
     this.projectToViewPort = function(geoPoint)
     {
-        var geoPointInGlobalMeters;
-        var mapCenterInGlobalMeters;
         var geoPointInGlobalPixel;
-        var mapCenterInGlobalPixel;        
         var viewPortStartInGlobalPixel;
-        var geoPointInViewPortPixel;
+
+        geoPointInGlobalPixel = this.getGeoPointInGlobalPixel(geoPoint);
+        viewPortStartInGlobalPixel = this.getViewPortStartInGlobalPixel();
+
+        return {
+            x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
+            y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
+        }
+    }
+
+    this.getGeoPointInGlobalPixel = function(geoPoint) {
+//        var groundResolution;
+//        var geoPointInGlobalMeters;
+//        
+//        groundResolution = this.getGroundResolution(geoPoint.lat);
+//        geoPointInGlobalMeters = _options.projection.project(geoPoint);
+//        
+//        return {
+//            x: geoPointInGlobalMeters.x / groundResolution,
+//            y: geoPointInGlobalMeters.y / groundResolution
+//        }
+
+        var lat = Crystal.Utils.Common.clip(geoPoint.lat, _options.projection.MIN_LAT, _options.projection.MAX_LAT);
+        var lon = Crystal.Utils.Common.clip(geoPoint.lon, _options.projection.MIN_LON, _options.projection.MAX_LON);
+        
+        var x = (lon + 180) / 360;
+        var sinLat = Math.sin(lat * Math.PI / 180);
+        var y = 0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI);
+        var mapSize = this.getSize();
+        
+        return {
+            x: Crystal.Utils.Common.clip(x * mapSize + 0.5, 0, mapSize - 1),
+            y: Crystal.Utils.Common.clip(y * mapSize + 0.5, 0, mapSize - 1)
+        }
+    }
+    
+    this.getViewPortStartInGlobalPixel = function() {
+        var mapCenterInGlobalPixel;
         var viewPortSize;
-        var groundResolution;
 
         viewPortSize = {
             width: this.map.container.clientWidth,
             height: this.map.container.clientHeight
         }
-
-        groundResolution = this.getGroundResolution(geoPoint.lat);
-
-        geoPointInGlobalMeters = _options.projection.project(geoPoint);
-        mapCenterInGlobalMeters = _options.projection.project(this.map.getCenter());
-
-        geoPointInGlobalPixel = {
-            x: geoPointInGlobalMeters.x / groundResolution,
-            y: geoPointInGlobalMeters.y / groundResolution
-        }
-
-        mapCenterInGlobalPixel = {
-            x: mapCenterInGlobalMeters.x / groundResolution,
-            y: mapCenterInGlobalMeters.y / groundResolution           
-        }
-
-        viewPortStartInGlobalPixel = {
+        
+        mapCenterInGlobalPixel = this.getGeoPointInGlobalPixel(this.map.getCenter());
+        
+        return {
             x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
             y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
-        }
-
-        return {
-            x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
-            y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
         }
     }
 
@@ -200,57 +202,66 @@ Crystal.Layers.Tile = function()
      */
     function _redraw()
     {
-        var xCenter; // x position of the central tile in a tile grid
-        var yCenter; // y position of the central tile in a tile grid
-        var x; // x position of the current tile in a tile grid
-        var y; // y position of the current tile in a tile grid
+        var centralTileXY = { // position of the central tile in a tile grid
+            x: null,
+            y: null
+        }
+        var currentTileXY = { // position of the current tile in a tile grid
+            x: null,
+            y: null
+        }
+        var viewPortWidthAndHeight = { // max count of the tiles, view port can contains by x and y
+            width: null,
+            height: null
+        }
+        var viewPortTileSize; // max count of the tiles, view port can contains        
         var spiral = 1; // spiral number        
         var showed = 0; // tiles showed count
-        var viewPortXTileSize; // max count of the tiles, view port can contains by x
-        var viewPortYTileSize; // max count of the tiles, view port can contains by y
-        var viewPortTileSize; // max count of the tiles, view port can contains
-        
+
         _container.innerHTML = '';
         
-        viewPortXTileSize = Math.ceil(this.map.container.offsetWidth / _options.tileSize);
-        viewPortYTileSize = Math.ceil(this.map.container.offsetHeight / _options.tileSize);
-        viewPortTileSize = viewPortXTileSize * viewPortYTileSize;
+        viewPortWidthAndHeight.width = Math.ceil(this.map.container.offsetWidth / _options.tileSize);
+        viewPortWidthAndHeight.height = Math.ceil(this.map.container.offsetHeight / _options.tileSize);
+        viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
         
-        xCenter = x = _getTileX.apply(this, [this.map.getCenter().lon, this.map.getZoom()]);
-        yCenter = y = _getTileY.apply(this, [this.map.getCenter().lat, this.map.getZoom()]);        
-        
+        centralTileXY = _getTileXY.apply(this, [this.map.getCenter()]);
+        var centralTileShift = {
+            x: this.getGeoPointInGlobalPixel(this.map.getCenter()).x - centralTileXY.x * 256,
+            y: this.getGeoPointInGlobalPixel(this.map.getCenter()).y - centralTileXY.y * 256
+        }        
+
         // show central tile
-        _showTile.apply(this, [x, y]);
+        _showTile.apply(this, [centralTileXY.x, centralTileXY.y, centralTileXY, centralTileShift]);
         showed++;
         
         // show another tiles by spiral from the center
         while(showed < viewPortTileSize)
         {
-            while(x < xCenter + spiral) // move >
+            while(currentTileXY.x < centralTileXY.x + spiral) // move >
             {
-                x++;
-                _showTile.apply(this, [x, y]);
+                currentTileXY.x++;
+                _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                 showed++;
             }
             
-            while(y < yCenter + spiral) // move v
+            while(currentTileXY.y < centralTileXY.y + spiral) // move v
             {
-                y++;
-                _showTile.apply(this, [x, y]);
+                currentTileXY.y++;
+                _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                 showed++;
             }
 
-            while(x > xCenter - spiral) // move <
+            while(currentTileXY.x > centralTileXY.x - spiral) // move <
             {
-                x--;
-                _showTile.apply(this, [x, y]);
+                currentTileXY.x--;
+                _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                 showed++;
             }
 
-            while(y > yCenter - spiral && y != 0) // move ^
+            while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y != 0) // move ^
             {
-                y--;
-                _showTile.apply(this, [x, y]);
+                currentTileXY.y--;
+                _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                 showed++;
             }
             
@@ -262,31 +273,34 @@ Crystal.Layers.Tile = function()
      * Displays tile.
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
+     * @param {Object} centralTileXY Position of the central tile in a tile grid. Structure:
+     * - {Number} x Offset by x.
+     * - {Number} y Offset by y.
      */
-    function _showTile(x, y)
+    function _showTile(x, y, centralTileXY, centralTileShift)
     {
-        var viewPortXCenter;
-        var viewPortYCenter;
+        var viewPortCenter = {
+            x: null,
+            y: null
+        }
+        var centralTilePixel = { // position of the central tile in view port
+            x: null,
+            y: null
+        }
+
         var img;
         var url;
-        var xCenter; // x position of the central tile in a tile grid
-        var yCenter; // y position of the central tile in a tile grid
-        var xPixelCenter; // x position of the central tile on the screen
-        var yPixelCenter; // y position of the central tile on the screen
         var xPixel; // x position on the screen
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
         
-        xCenter = _getTileX.apply(this, [this.map.getCenter().lon, this.map.getZoom()]);
-        yCenter = _getTileY.apply(this, [this.map.getCenter().lat, this.map.getZoom()]);        
-        
-        viewPortXCenter = this.map.container.offsetWidth / 2;
-        viewPortYCenter = this.map.container.offsetHeight / 2;
-                
-        xPixelCenter = Math.floor(viewPortXCenter - _options.tileSize / 2);
-        yPixelCenter = Math.floor(viewPortYCenter - _options.tileSize / 2);
-        xPixel = xPixelCenter + ((x - xCenter) * _options.tileSize);
-        yPixel = yPixelCenter + ((y - yCenter) * _options.tileSize);
+        viewPortCenter.x = this.map.container.offsetWidth / 2;
+        viewPortCenter.y = this.map.container.offsetHeight / 2;
+
+        centralTilePixel.x = Math.floor(viewPortCenter.x - centralTileShift.x);
+        centralTilePixel.y = Math.floor(viewPortCenter.y - centralTileShift.y);
+        xPixel = centralTilePixel.x + ((x - centralTileXY.x) * _options.tileSize);
+        yPixel = centralTilePixel.y + ((y - centralTileXY.y) * _options.tileSize);
         
         subdomain = _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)];
         
@@ -309,25 +323,19 @@ Crystal.Layers.Tile = function()
     }
 
     /**
-     * Returns X position of the tile in a tile server.
-     * @param {Number} lon Longitude.
-     * @param {Number} zoom Zoom level.
-     * @return {Number}
+     * Returns x and y position of the tile in a tile server.
+     * @param {Object} geoPoint Geographic point. Structure:
+     * - {Number} lat Latitude.
+     * - {Number} lon Longitude.
+     * @return {Object} Structure:
+     * - {Number} x Row number.
+     * - {Number} y Col number.
      */
-    function _getTileX(lon, zoom)
-    {
-        return Math.floor((lon + 180) / 360 * Math.pow(2, zoom));        
-    }
-
-    /**
-     * Returns Y position of the tile in a tile server.
-     * @param {Number} lat Latitude.
-     * @param {Number} zoom Zoom level.
-     * @return {Number} 
-     */
-    function _getTileY(lat, zoom)
-    {
-        return Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+    function _getTileXY(geoPoint) {
+        return {
+            x: Math.floor((geoPoint.lon + 180) / 360 * Math.pow(2, this.map.getZoom())),
+            y: Math.floor((1 - Math.log(Math.tan(geoPoint.lat * Math.PI / 180) + 1 / Math.cos(geoPoint.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, this.map.getZoom()))
+        }
     }
     
     // apply constructor
