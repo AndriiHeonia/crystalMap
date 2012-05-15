@@ -225,6 +225,8 @@ Crystal.Layers.Tile = function()
         viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
         
         centralTileXY = _getTileXY.apply(this, [this.map.getCenter()]);
+        currentTileXY = _getTileXY.apply(this, [this.map.getCenter()]);
+        
         var centralTileShift = {
             x: this.getGeoPointInGlobalPixel(this.map.getCenter()).x - centralTileXY.x * 256,
             y: this.getGeoPointInGlobalPixel(this.map.getCenter()).y - centralTileXY.y * 256
@@ -276,6 +278,7 @@ Crystal.Layers.Tile = function()
      * @param {Object} centralTileXY Position of the central tile in a tile grid. Structure:
      * - {Number} x Offset by x.
      * - {Number} y Offset by y.
+     * @param {Object} centralTileShift
      */
     function _showTile(x, y, centralTileXY, centralTileShift)
     {

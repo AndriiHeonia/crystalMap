@@ -52,15 +52,15 @@
 
 
     // 2GIS
-//    DG.autoload(function() {
-//        var myMap = new DG.Map('2gisMap');
-//        myMap.setCenter(new DG.GeoPoint(82.927, 55.028), 10);
-//        var myMarker = new DG.Markers.Common({
-//            geoPoint: new DG.GeoPoint(82.927, 55.028)
-//        });
-//        myMap.controls.add(new DG.Controls.Zoom());
-//        myMap.markers.add(myMarker); 
-//    });
+    DG.autoload(function() {
+        var myMap = new DG.Map('2gisMap');
+        myMap.setCenter(new DG.GeoPoint(82.927, 55.028), 10);
+        var myMarker = new DG.Markers.Common({
+            geoPoint: new DG.GeoPoint(82.927, 55.028)
+        });
+        myMap.controls.add(new DG.Controls.Zoom());
+        myMap.markers.add(myMarker); 
+    });
 
     // LeafLet
     var lMap = new L.Map('lMap', {'crs': L.CRS.EPSG3857});    
