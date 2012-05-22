@@ -15,10 +15,10 @@ describe("Crystal.Events.Mouse", function()
         preventDefault: function()
         {
         }
-    }
+    };
     
     describe("initialize", function()
-    {        
+    {
         it("should be correct initialized", function()
         {
             new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -27,11 +27,11 @@ describe("Crystal.Events.Mouse", function()
         it("should be correct initialized with null second param", function()
         {
             new Crystal.Events.Mouse(bowserEventStub, null);
-        });        
+        });
     });
     
     describe("map", function()
-    {        
+    {
         it("should return Crystal.Map instance", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -46,7 +46,7 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("target", function()
-    {        
+    {
         it("should return map container", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -56,7 +56,7 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("button", function()
-    {        
+    {
         it("should return 0", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -66,7 +66,7 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("screenX", function()
-    {        
+    {
         it("should return 10", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -76,17 +76,17 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("screenY", function()
-    {        
+    {
         it("should return 10", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
             
             expect(mouseEvent.screenY).toEqual(bowserEventStub.screenY);
         });
-    });    
+    });
     
     describe("clientX", function()
-    {        
+    {
         it("should return 5", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -96,7 +96,7 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("clientY", function()
-    {        
+    {
         it("should return 5", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -106,7 +106,7 @@ describe("Crystal.Events.Mouse", function()
     });
     
     describe("stopPropagation", function()
-    {        
+    {
         it("should call stopPropagation browser event method", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -115,12 +115,12 @@ describe("Crystal.Events.Mouse", function()
             
             mouseEvent.stopPropagation();
 
-            expect(bowserEventStub.stopPropagation).toHaveBeenCalled();            
+            expect(bowserEventStub.stopPropagation).toHaveBeenCalled();
         });
     });
     
     describe("preventDefault", function()
-    {        
+    {
         it("should call preventDefault browser event method", function()
         {
             var mouseEvent = new Crystal.Events.Mouse(bowserEventStub, myMap);
@@ -129,7 +129,7 @@ describe("Crystal.Events.Mouse", function()
             
             mouseEvent.preventDefault();
 
-            expect(bowserEventStub.preventDefault).toHaveBeenCalled();            
+            expect(bowserEventStub.preventDefault).toHaveBeenCalled();
         });
-    });        
+    });
 });
