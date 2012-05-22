@@ -23,5 +23,5 @@ Crystal.Utils.DomEventFactory = {
                 break;
         }
         return customEvent;
-    }    
-}
+    }
+};

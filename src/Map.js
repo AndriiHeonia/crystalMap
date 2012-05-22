@@ -58,7 +58,7 @@ Crystal.Map = function()
         if(center)
         {
             Crystal.Validators.GeoPoint.validate(center);
-        }        
+        }
         if(zoom)
         {
             Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'initialize');
@@ -79,8 +79,8 @@ Crystal.Map = function()
             'CenterChanging'
         ]);
         
-        _addDomListeners.call(this);        
-    }
+        _addDomListeners.call(this);
+    };
 
     /**
      * Returns an event object with information about the map.
@@ -89,7 +89,7 @@ Crystal.Map = function()
     this.getEventObject = function()
     {
         return new Crystal.Events.Map(this);
-    }
+    };
 
     /**
      * Returns geographic coordinates of the center.
@@ -98,7 +98,7 @@ Crystal.Map = function()
     this.getCenter = function()
     {
         return _center;
-    }
+    };
 
     /**
      * Sets geographic coordinates of the center.
@@ -110,7 +110,7 @@ Crystal.Map = function()
         
         _center = center;
         this.fireEvent('CenterChanging');
-    }
+    };
 
     /**
      * Returns zoom level of the map.
@@ -119,7 +119,7 @@ Crystal.Map = function()
     this.getZoom = function()
     {
         return _zoom;
-    }
+    };
 
     /**
      * Sets zoom level of the map.
@@ -130,7 +130,7 @@ Crystal.Map = function()
         Crystal.Validators.Number.validate(zoom, Crystal.Map.CLASS_NAME, 'setZoom');
         _zoom = zoom;
         this.fireEvent('ZoomChanging');
-    }
+    };
 
     /**
      * Adds an observer to the map.
@@ -143,7 +143,7 @@ Crystal.Map = function()
         _userObservers.push(observer);
         observer.onAddToMap(this.getEventObject());
         this.fireEvent('MapUpdating');
-    }
+    };
 
     /**
      * Removes an observer from the map.
@@ -156,7 +156,7 @@ Crystal.Map = function()
         observer.onRemoveFromMap(this.getEventObject());
         _userObservers.splice(_userObservers.indexOf(observer), 1);
         this.fireEvent('MapUpdating');
-    }
+    };
     
     /**
      * Destructor
@@ -169,8 +169,8 @@ Crystal.Map = function()
         }
         _userObservers = [];
 
-        Crystal.MapRegister.remove(this.container.id);        
-    }
+        Crystal.MapRegister.remove(this.container.id);
+    };
     
     function _handleDragging(event)
     {
@@ -188,7 +188,7 @@ Crystal.Map = function()
     }
     
     /**
-     * 
+     *
      */
     function _addDomListeners()
     {
@@ -197,7 +197,7 @@ Crystal.Map = function()
     
     // apply constructor
     this.initialize.apply(this, arguments);
-}
+};
 
 // declare inheritance
 Crystal.Class.extend(Crystal.Map, Crystal.Observable);

@@ -17,4 +17,4 @@ Crystal.Validators.String = {
             throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a String.');
         }
     }
-}
+};

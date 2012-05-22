@@ -18,5 +18,5 @@ Crystal.Validators.GeoPoint = {
         {
             throw new Error('Geographic point longitude is invalid.');
         }
-    }    
-}
+    }
+};

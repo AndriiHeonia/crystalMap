@@ -1,6 +1,6 @@
 /**
- * Provides a functionality to project geographic coordinates to 
- * coordinates in Cartesian coordinate system via Spherical Mercator 
+ * Provides a functionality to project geographic coordinates to
+ * coordinates in Cartesian coordinate system via Spherical Mercator
  * projection (WGS-84) and inverse transformations.
  *
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
@@ -16,13 +16,13 @@ Crystal.Projections.SphericalMercator = {
      * @return {Object} Structure:
      * - {Number} x X coordinate (in meters).
      * - {Number} y Y coordinate (in meters).
-     */    
-    project: function(geoPoint) 
+     */
+    project: function(geoPoint)
     {
         return {
             x: 1 * (Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Crystal.Utils.Math.degreesToRadians(geoPoint.lon)).toFixed(10),
             y: 1 * (Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS * Math.log(Math.tan(Math.PI / 4 + Crystal.Utils.Math.degreesToRadians(Crystal.Utils.Common.clip(geoPoint.lat, Crystal.Projections.SphericalMercator.MIN_LAT, Crystal.Projections.SphericalMercator.MAX_LAT)) / 2))).toFixed(10)
-        }
+        };
     },
 
     /**
@@ -34,12 +34,12 @@ Crystal.Projections.SphericalMercator = {
      * - {Number} lat Latitude.
      * - {Number} lon Longitude.
      */
-	unproject: function(point) 
+	unproject: function(point)
     {
         return {
             lat: 1 * (Crystal.Utils.Math.radiansToDegrees(2 * Math.atan(Math.exp(point.y / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)) - Math.PI / 2)).toFixed(10),
             lon: 1 * (Crystal.Utils.Math.radiansToDegrees(point.x / Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS)).toFixed(10)
-        }
+        };
 	},
 
     /**
@@ -59,9 +59,9 @@ Crystal.Projections.SphericalMercator = {
         latInRadians = Crystal.Utils.Math.degreesToRadians(clippedLat);
 
         // ground resolution = cos(latitude * pi/180) * earth circumference / map width
-        return 1 * (Math.cos(latInRadians) * (2 * Math.PI * Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS) / size).toFixed(10);        
+        return 1 * (Math.cos(latInRadians) * (2 * Math.PI * Crystal.Projections.SphericalMercator.ELLIPSOID_AXIS) / size).toFixed(10);
     }
-}
+};
 
 /**
  * @const
@@ -87,7 +87,7 @@ Crystal.Projections.SphericalMercator.MIN_LAT = -85.05112878;
  * Maximum latitude.
  * @const
  * @type {Number}
- */    
+ */
 Crystal.Projections.SphericalMercator.MAX_LAT = 85.05112878;
 
 /**
@@ -101,5 +101,5 @@ Crystal.Projections.SphericalMercator.MIN_LON = -180;
  * Maximum longitude.
  * @const
  * @type {Number}
- */    
+ */
 Crystal.Projections.SphericalMercator.MAX_LON = 180;

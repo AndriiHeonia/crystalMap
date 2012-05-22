@@ -29,7 +29,7 @@ Crystal.MapRegister = {
         
         if(typeof(Crystal.MapRegister._items[containerId]) !== 'undefined')
         {
-            result = Crystal.MapRegister._items[containerId]; 
+            result = Crystal.MapRegister._items[containerId];
         }
         else
         {
@@ -47,7 +47,7 @@ Crystal.MapRegister = {
     {
         if(typeof(Crystal.MapRegister._items[containerId]) !== 'undefined')
         {
-            delete Crystal.MapRegister._items[containerId];            
+            delete Crystal.MapRegister._items[containerId];
         }
     },
     
@@ -86,5 +86,5 @@ Crystal.MapRegister = {
         }
         
         return null;
-    }    
-}
+    }
+};

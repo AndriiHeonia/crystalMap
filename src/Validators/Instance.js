@@ -16,6 +16,6 @@ Crystal.Validators.Instance = {
         if((instance instanceof functionConstructor) === false)
         {
             throw new TypeError('Object passed to the ' + callerMethod + ' method of the ' + callerClass + ' class should be an instance of ' + functionConstructor.CLASS_NAME + '.');
-        }        
+        }
     }
-}
+};

@@ -28,5 +28,4 @@ Crystal.Utils.Math = {
     {
         return (val - val % by) / by;
     }
-    
-}
+};

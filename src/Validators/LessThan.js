@@ -18,4 +18,4 @@ Crystal.Validators.LessThan = {
             throw new RangeError('Number ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be less than ' + lessThan + '.');
         }
     }
-}
+};

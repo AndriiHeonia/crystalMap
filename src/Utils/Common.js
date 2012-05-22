@@ -11,10 +11,10 @@ Crystal.Utils.Common = {
      */
     createUniqueId: function(prefix)
     {
-        var date = new Date;
+        var date = new Date();
         var time = date.getTime();
 
-        return prefix ? prefix + '_' + time : '' + time;    
+        return prefix ? prefix + '_' + time : '' + time;
     },
     
     /**
@@ -26,18 +26,18 @@ Crystal.Utils.Common = {
     {
         return function() {
             return func.apply(scope, arguments);
-        }
+        };
     },
 
     /**
      * Clips a number to the specified minimum and maximum values.
      * @param {Number} number The number to clip.
-     * @param {Number} minValue Minimum allowable value. 
+     * @param {Number} minValue Minimum allowable value.
      * @param {Number} maxValue Maximum allowable value.
      * @return {Number}
      */
     clip: function(number, minValue, maxValue)
     {
         return Math.min(Math.max(number, minValue), maxValue);
-    }    
-}
+    }
+};

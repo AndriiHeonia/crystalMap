@@ -67,5 +67,5 @@ Crystal.Utils.Type = {
     isUndefined: function(object)
     {
         return typeof(object) === 'undefined';
-    }    
-}
+    }
+};

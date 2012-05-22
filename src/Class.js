@@ -5,14 +5,14 @@ Crystal.Class = {};
 
 /**
  * Provides an inheritance.
- * 
+ *
  * @param {String} child Child object.
  * @param {String} parent Parent object.
  */
 Crystal.Class.extend = function(child, parent)
 {
     // instantiate class without calling constructor
-    var F = function() {}
+    var F = function() {};
     F.prototype = parent.prototype;
     child.prototype = new F();
     child.prototype.constructor = child;
@@ -32,5 +32,5 @@ Crystal.Class.extend = function(child, parent)
         {
 			child[i] = parent[i];
 		}
-	}    
-}
+	}
+};

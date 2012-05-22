@@ -3,7 +3,7 @@
  * @constructor
  */
 Crystal.Events.Mouse = function()
-{    
+{
     /**
      * Map, event has been raised in.
      * @type {Crystal.Map|null}
@@ -55,7 +55,7 @@ Crystal.Events.Mouse = function()
     /**
      * Initialization.
      * @param {Object} event Browser event.
-     * @param {Crystal.Map|null} map Map, event has been raised in. 
+     * @param {Crystal.Map|null} map Map, event has been raised in.
      */
     this.initialize = function(event, map)
     {
@@ -69,7 +69,7 @@ Crystal.Events.Mouse = function()
         this.button = event.button; // @todo should be normalized for IE, @see http://www.w3schools.com/jsref/event_button.asp
         
         this.map = map;
-    }
+    };
     
     /**
      * Stops propagation
@@ -77,7 +77,7 @@ Crystal.Events.Mouse = function()
     this.stopPropagation = function()
     {
         _browserEvent.stopPropagation();
-    }
+    };
 
     /**
      * Prevents default action
@@ -85,7 +85,7 @@ Crystal.Events.Mouse = function()
     this.preventDefault = function()
     {
         _browserEvent.preventDefault();
-    }
+    };
     
     // experimental code:
 
@@ -108,7 +108,7 @@ Crystal.Events.Mouse = function()
         pixel = {
             x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
             y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
-        }
+        };
 
         return Crystal.Projections.SphericalMercator.getGeoPointByPixel(pixel, zoomLevel, tileSize);
     },
@@ -129,12 +129,12 @@ Crystal.Events.Mouse = function()
         return {
             x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
             y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
-        }
-    }
+        };
+    };
 
     // apply constructor
     this.initialize.apply(this, arguments);
-}
+};
 
 /**
  * @const

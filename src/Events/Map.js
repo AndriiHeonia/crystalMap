@@ -19,11 +19,11 @@ Crystal.Events.Map = function()
         Crystal.Validators.Instance.validate(map, Crystal.Map, this.constructor.CLASS_NAME, 'initialize');
 
         this.map = map;
-    }
+    };
 
     // apply constructor
     this.initialize.apply(this, arguments);
-}
+};
 
 /**
  * @const

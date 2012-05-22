@@ -21,7 +21,7 @@ Crystal.Utils.Dom = {
         }
         if(className)
         {
-            el.className = className;        
+            el.className = className;
         }
         if (container)
         {
@@ -64,7 +64,7 @@ Crystal.Utils.Dom = {
         element.style.opacity = opacity;
         element.style.MozOpacity = opacity;
         element.style.KhtmlOpacity = opacity;
-        element.style.filter = 'alpha(opacity=' + (opacity * 100) + ');';    
+        element.style.filter = 'alpha(opacity=' + (opacity * 100) + ');';
     },
 
     /**
@@ -104,7 +104,7 @@ Crystal.Utils.Dom = {
      */
     addListener: function(element, eventName, handler)
     {
-        var parentMap
+        var parentMap;
         
         parentMap = Crystal.MapRegister.getItemByDomElement(element);
         
@@ -112,7 +112,7 @@ Crystal.Utils.Dom = {
         var metaHandler = function(event)
         {
             handler.call(this, Crystal.Utils.DomEventFactory.create(event, parentMap));
-        }
+        };
 
         if(element.addEventListener)
         {
@@ -160,4 +160,4 @@ Crystal.Utils.Dom = {
         }
         return false;
     }
-}
+};

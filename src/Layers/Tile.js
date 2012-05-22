@@ -11,7 +11,7 @@
  * @todo draw strategy should be configurable
  */
 Crystal.Layers.Tile = function()
-{   
+{
     /**
      * @type {Crystal.Map} Map instance, layer belongs to.
      */
@@ -43,7 +43,7 @@ Crystal.Layers.Tile = function()
         Crystal.Validators.Array.validate(options.subdomains, this.constructor.CLASS_NAME, 'initialize');
         Crystal.Validators.MoreThan.validate(options.subdomains.length, 0, this.constructor.CLASS_NAME, 'initialize');
         Crystal.Validators.Number.validate(options.tileSize, this.constructor.CLASS_NAME, 'initialize');
-        Crystal.Validators.String.validate(options.errorTileUrl, this.constructor.CLASS_NAME, 'initialize');        
+        Crystal.Validators.String.validate(options.errorTileUrl, this.constructor.CLASS_NAME, 'initialize');
         if(Crystal.Utils.Type.isUndefined(options.projection) === false)  // @todo to add test
         {
             Crystal.Interface.isImplements(options.projection, [Crystal.IProjection]);
@@ -54,7 +54,7 @@ Crystal.Layers.Tile = function()
         }
         
         _options = options;
-    }
+    };
 
     /**
      * Handles and process addition to the map notification.
@@ -68,8 +68,8 @@ Crystal.Layers.Tile = function()
         _redraw.call(this);
 
         this.map.addListener('ZoomChanging', _redraw);
-        this.map.addListener('CenterChanging', _redraw);        
-    }
+        this.map.addListener('CenterChanging', _redraw);
+    };
     
    /**
     * Handles and process removal from the map notification.
@@ -82,7 +82,7 @@ Crystal.Layers.Tile = function()
         
         _destroyContainer.call(this);
         this.map = null;
-    }
+    };
 
     /**
      * Determines the layer width and height (in pixels) at a specified zoom level.
@@ -91,7 +91,7 @@ Crystal.Layers.Tile = function()
     this.getSize = function()
     {
         return _options.tileSize * Math.pow(2, this.map.getZoom());
-    }
+    };
 
     /**
      * Returns ground resolution of the layer.
@@ -107,7 +107,7 @@ Crystal.Layers.Tile = function()
         size = this.getSize(_options.tileSize, this.map.getZoom());
 
         return _options.projection.getGroundResolution(lat, size);
-    }
+    };
 
     /**
      * Returns point in view port Cartesian coordinate system by geographic point.
@@ -117,7 +117,7 @@ Crystal.Layers.Tile = function()
      * @return {Object} Structure:
      * - {Number} x X coordinate (in meters).
      * - {Number} y Y coordinate (in meters).
-     */   
+     */
     this.projectToViewPort = function(geoPoint)
     {
         var geoPointInGlobalPixel;
@@ -129,21 +129,10 @@ Crystal.Layers.Tile = function()
         return {
             x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
             y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
-        }
-    }
+        };
+    };
 
     this.getGeoPointInGlobalPixel = function(geoPoint) {
-//        var groundResolution;
-//        var geoPointInGlobalMeters;
-//        
-//        groundResolution = this.getGroundResolution(geoPoint.lat);
-//        geoPointInGlobalMeters = _options.projection.project(geoPoint);
-//        
-//        return {
-//            x: geoPointInGlobalMeters.x / groundResolution,
-//            y: geoPointInGlobalMeters.y / groundResolution
-//        }
-
         var lat = Crystal.Utils.Common.clip(geoPoint.lat, _options.projection.MIN_LAT, _options.projection.MAX_LAT);
         var lon = Crystal.Utils.Common.clip(geoPoint.lon, _options.projection.MIN_LON, _options.projection.MAX_LON);
         
@@ -155,8 +144,8 @@ Crystal.Layers.Tile = function()
         return {
             x: Crystal.Utils.Common.clip(x * mapSize + 0.5, 0, mapSize - 1),
             y: Crystal.Utils.Common.clip(y * mapSize + 0.5, 0, mapSize - 1)
-        }
-    }
+        };
+    };
     
     this.getViewPortStartInGlobalPixel = function() {
         var mapCenterInGlobalPixel;
@@ -165,15 +154,15 @@ Crystal.Layers.Tile = function()
         viewPortSize = {
             width: this.map.container.clientWidth,
             height: this.map.container.clientHeight
-        }
+        };
         
         mapCenterInGlobalPixel = this.getGeoPointInGlobalPixel(this.map.getCenter());
         
         return {
             x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
             y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
-        }
-    }
+        };
+    };
 
     /**
      * Initializes a tile container.
@@ -205,17 +194,17 @@ Crystal.Layers.Tile = function()
         var centralTileXY = { // position of the central tile in a tile grid
             x: null,
             y: null
-        }
+        };
         var currentTileXY = { // position of the current tile in a tile grid
             x: null,
             y: null
-        }
+        };
         var viewPortWidthAndHeight = { // max count of the tiles, view port can contains by x and y
             width: null,
             height: null
-        }
-        var viewPortTileSize; // max count of the tiles, view port can contains        
-        var spiral = 1; // spiral number        
+        };
+        var viewPortTileSize; // max count of the tiles, view port can contains
+        var spiral = 1; // spiral number
         var showed = 0; // tiles showed count
 
         _container.innerHTML = '';
@@ -230,7 +219,7 @@ Crystal.Layers.Tile = function()
         var centralTileShift = {
             x: this.getGeoPointInGlobalPixel(this.map.getCenter()).x - centralTileXY.x * 256,
             y: this.getGeoPointInGlobalPixel(this.map.getCenter()).y - centralTileXY.y * 256
-        }        
+        };
 
         // show central tile
         _showTile.apply(this, [centralTileXY.x, centralTileXY.y, centralTileXY, centralTileShift]);
@@ -260,7 +249,7 @@ Crystal.Layers.Tile = function()
                 showed++;
             }
 
-            while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y != 0) // move ^
+            while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) // move ^
             {
                 currentTileXY.y--;
                 _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
@@ -285,11 +274,11 @@ Crystal.Layers.Tile = function()
         var viewPortCenter = {
             x: null,
             y: null
-        }
+        };
         var centralTilePixel = { // position of the central tile in view port
             x: null,
             y: null
-        }
+        };
 
         var img;
         var url;
@@ -338,12 +327,12 @@ Crystal.Layers.Tile = function()
         return {
             x: Math.floor((geoPoint.lon + 180) / 360 * Math.pow(2, this.map.getZoom())),
             y: Math.floor((1 - Math.log(Math.tan(geoPoint.lat * Math.PI / 180) + 1 / Math.cos(geoPoint.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, this.map.getZoom()))
-        }
+        };
     }
     
     // apply constructor
-    this.initialize.apply(this, arguments);    
-}
+    this.initialize.apply(this, arguments);
+};
 
 /**
  * @const

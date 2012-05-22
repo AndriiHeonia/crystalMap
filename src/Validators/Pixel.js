@@ -18,5 +18,5 @@ Crystal.Validators.Pixel = {
         {
             throw new TypeError('Pixel y coordinate is invalid.');
         }
-    }    
-}
+    }
+};

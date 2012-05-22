@@ -2,7 +2,7 @@
     var geoPoint = {
         lat: 55.028,
         lon: 82.927
-    }
+    };
     
     var map = new Crystal.Map('myMap', geoPoint, 10);
     var layer = new Crystal.Layers.Tile({
@@ -43,12 +43,12 @@
     zoomInBtn.onclick = function() {
         map.setZoom(map.getZoom() + 1);
         drawMarker();
-    }
+    };
     
     zoomOutBtn.onclick = function() {
         map.setZoom(map.getZoom() - 1);
-        drawMarker();          
-    }  
+        drawMarker();
+    };
 
 
     // 2GIS
@@ -59,15 +59,15 @@
             geoPoint: new DG.GeoPoint(82.927, 55.028)
         });
         myMap.controls.add(new DG.Controls.Zoom());
-        myMap.markers.add(myMarker); 
+        myMap.markers.add(myMarker);
     });
 
     // LeafLet
-    var lMap = new L.Map('lMap', {'crs': L.CRS.EPSG3857});    
+    var lMap = new L.Map('lMap', {'crs': L.CRS.EPSG3857});
     var doubleGisUrl = 'http://tile0.maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
         doubleGisAttribution = '&copy; ООО «ДубльГИС», 2011',
         doubleGisLayer = new L.TileLayer(doubleGisUrl, {maxZoom: 17, attribution: doubleGisAttribution});
-    lMap.setView(new L.LatLng(55.028, 82.927), 10).addLayer(doubleGisLayer);        
+    lMap.setView(new L.LatLng(55.028, 82.927), 10).addLayer(doubleGisLayer);
     var marker = new L.Marker(new L.LatLng(55.028, 82.927));
     lMap.addLayer(marker);
 })();

@@ -17,4 +17,4 @@ Crystal.Validators.NotUndefined = {
             throw new ReferenceError('Value passed to ' + callerMethod + ' method of the ' + callerClass + ' class should not be Undefined.');
         }
     }
-}
+};

@@ -20,7 +20,7 @@ Crystal.Interface = function(name, methods)
         }
         this.methods.push(methods[i]);
     }
-}
+};
 
 /**
  * Ensure that object impements interfaces.
@@ -54,4 +54,4 @@ Crystal.Interface.isImplements = function(object, interfaces)
             }
         }
     }
-}
+};

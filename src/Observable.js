@@ -17,7 +17,7 @@ Crystal.Observable = function()
     this.getEventObject = function()
     {
         throw new Error('getEventObject method should be implemented.');
-    }
+    };
     
     /**
      * Registers the specified event(s) to the list of events which this Observable may fire.
@@ -41,7 +41,7 @@ Crystal.Observable = function()
                 this._observers[eventName[i]] = [];
             }
         }
-    }
+    };
     
     /**
      * Appends an event handler to this object.
@@ -61,7 +61,7 @@ Crystal.Observable = function()
         }
 
         this._observers[eventName].push(handler);
-    }
+    };
     
     /**
      * Removes an event handler.
@@ -81,7 +81,7 @@ Crystal.Observable = function()
         }
         
         this._observers[eventName].splice(this._observers[eventName].indexOf(handler), 1);
-    }
+    };
     
     /**
      * Fires the event.
@@ -98,8 +98,8 @@ Crystal.Observable = function()
         {
             this._observers[eventName][i].call(this, this.getEventObject());
         }
-    }
-}
+    };
+};
 
 /**
  * @const
