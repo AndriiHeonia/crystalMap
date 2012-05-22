@@ -1,7 +1,7 @@
 describe("Crystal.Events.Map", function()
 {
     describe("initialize", function()
-    {        
+    {
         it("should be correct initialized", function()
         {
             var myMap = new Crystal.Map('myMap', {lat: 55.028936234826, lon: 82.927810142519}, 15);
@@ -12,12 +12,12 @@ describe("Crystal.Events.Map", function()
         {
             expect(function() {
                 new Crystal.Events.Map({});
-            }).toThrow(new TypeError('Object passed to the initialize method of the Crystal.Events.Map class should be an instance of Crystal.Map.'));            
-        });        
+            }).toThrow(new TypeError('Object passed to the initialize method of the Crystal.Events.Map class should be an instance of Crystal.Map.'));
+        });
     });
     
     describe("map", function()
-    {        
+    {
         it("should return Crystal.Map instance", function()
         {
             var myMap = new Crystal.Map('myMap', {lat: 55.028936234826, lon: 82.927810142519}, 15);
