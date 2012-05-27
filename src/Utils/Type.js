@@ -1,8 +1,8 @@
 /**
+ * Type module.
  * Provides a type checking utilities.
- * @static
  */
-Crystal.Utils.Type = {
+define({
     /**
      * Checks String type.
      * @static
@@ -68,4 +68,4 @@ Crystal.Utils.Type = {
     {
         return typeof(object) === 'undefined';
     }
-};
+});
