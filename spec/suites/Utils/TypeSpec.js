@@ -5,8 +5,8 @@ describe("Crystal.Utils.Type", function()
         it("should be checked correct", function()
         {
             expect(Crystal.Utils.Type.isString('123')).toBeTruthy();
-            expect(Crystal.Utils.Type.isString(123)).toBeFalsy();            
-        });        
+            expect(Crystal.Utils.Type.isString(123)).toBeFalsy();
+        });
     });
 
     describe("isNumber", function()
@@ -15,8 +15,8 @@ describe("Crystal.Utils.Type", function()
         {
             expect(Crystal.Utils.Type.isNumber(123.5)).toBeTruthy();
             expect(Crystal.Utils.Type.isNumber(123)).toBeTruthy();
-            expect(Crystal.Utils.Type.isNumber('123')).toBeFalsy();            
-        });        
+            expect(Crystal.Utils.Type.isNumber('123')).toBeFalsy();
+        });
     });
 
     describe("isBoolean", function()
@@ -26,7 +26,7 @@ describe("Crystal.Utils.Type", function()
             expect(Crystal.Utils.Type.isBoolean(true)).toBeTruthy();
             expect(Crystal.Utils.Type.isBoolean(false)).toBeTruthy();
             expect(Crystal.Utils.Type.isBoolean('true')).toBeFalsy();
-        });        
+        });
     });
 
     describe("isArray", function()
@@ -35,7 +35,7 @@ describe("Crystal.Utils.Type", function()
         {
             expect(Crystal.Utils.Type.isArray([1, 2, 3])).toBeTruthy();
             expect(Crystal.Utils.Type.isArray('1, 2, 3')).toBeFalsy();
-        });        
+        });
     });
 
     describe("isFunction", function()
@@ -44,7 +44,7 @@ describe("Crystal.Utils.Type", function()
         {
             expect(Crystal.Utils.Type.isFunction(function(){})).toBeTruthy();
             expect(Crystal.Utils.Type.isFunction({})).toBeFalsy();
-        });        
+        });
     });
 
     describe("isUndefined", function()
@@ -55,6 +55,6 @@ describe("Crystal.Utils.Type", function()
             expect(Crystal.Utils.Type.isUndefined('undefined')).toBeFalsy();
             expect(Crystal.Utils.Type.isUndefined(null)).toBeFalsy();
             expect(Crystal.Utils.Type.isUndefined('')).toBeFalsy();
-        });        
-    });    
+        });
+    });
 });

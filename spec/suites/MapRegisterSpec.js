@@ -56,6 +56,6 @@ describe("Crystal.MapRegister", function()
             document.getElementById('myMap1').appendChild(myNotChild);
             
             expect(Crystal.MapRegister.getItemByDomElement(myNotChild)).toEqual(null);
-        });        
+        });
     });
 });

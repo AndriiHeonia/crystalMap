@@ -1,48 +1,48 @@
 describe("Crystal.Map", function()
 {
     describe("initialize", function()
-    {        
+    {
         it("should be correct initialized", function()
         {
             var myMap = new Crystal.Map('myMap');
             expect(myMap instanceof Crystal.Map).toBeTruthy();
           
             var myMap1 = new Crystal.Map(document.getElementById('myMap'));
-            expect(myMap1 instanceof Crystal.Map).toBeTruthy();          
+            expect(myMap1 instanceof Crystal.Map).toBeTruthy();
            
             var myMap2 = new Crystal.Map('myMap', {lat: 50, lon: 50});
             expect(myMap2 instanceof Crystal.Map).toBeTruthy();
             
             var myMap3 = new Crystal.Map('myMap', {lat: 50, lon: 50}, 5);
-            expect(myMap3 instanceof Crystal.Map).toBeTruthy();           
+            expect(myMap3 instanceof Crystal.Map).toBeTruthy();
         });
 
         it("should throw an error, because container id is incorrect", function()
         {
             expect(function(){
                 new Crystal.Map('incorrectId');
-            }).toThrow(new ReferenceError('Value passed to initialize method of the Crystal.Map class should not be Null.'));            
+            }).toThrow(new ReferenceError('Value passed to initialize method of the Crystal.Map class should not be Null.'));
         });
         
         it("should throw an error, because DOM element is incorrect", function()
         {
             expect(function(){
                 new Crystal.Map(666);
-            }).toThrow(new TypeError('Value 666 passed to initialize method of the Crystal.Map class should be a DOM element.'));            
+            }).toThrow(new TypeError('Value 666 passed to initialize method of the Crystal.Map class should be a DOM element.'));
         });
         
         it("should throw an error, because center is incorrect", function()
         {
             expect(function(){
                 new Crystal.Map('myMap', {});
-            }).toThrow(new Error('Geographic point latitude is invalid.'));            
+            }).toThrow(new Error('Geographic point latitude is invalid.'));
         });
 
         it("should throw an error, because zoom is incorrect", function()
         {
             expect(function(){
                 new Crystal.Map('myMap', {lat: 50, lon:50}, '5');
-            }).toThrow(new TypeError('Value 5 passed to initialize method of the Crystal.Map class should be a Number.'));            
+            }).toThrow(new TypeError('Value 5 passed to initialize method of the Crystal.Map class should be a Number.'));
         });
     });
     
@@ -69,8 +69,8 @@ describe("Crystal.Map", function()
             var myMap = new Crystal.Map('myMap');
             expect(function(){
                 myMap.registerEvent({});
-            }).toThrow(new TypeError('registerEvent method called with invalid event name(s).'));  
-        });        
+            }).toThrow(new TypeError('registerEvent method called with invalid event name(s).'));
+        });
     });
 
     describe("addListener", function()
@@ -88,7 +88,7 @@ describe("Crystal.Map", function()
             myMap.registerEvent('MyEvent');
             expect(function(){
                 myMap.addListener({}, function() {});
-            }).toThrow(new TypeError('addListener method called with invalid event name.'));  
+            }).toThrow(new TypeError('addListener method called with invalid event name.'));
         });
 
         it("should throw an error, because event hasn't been registered", function()
@@ -97,7 +97,7 @@ describe("Crystal.Map", function()
             myMap.registerEvent('MyEvent');
             expect(function(){
                 myMap.addListener('MyEvent1', function(){});
-            }).toThrow(new TypeError('addListener method called with invalid event name.'));  
+            }).toThrow(new TypeError('addListener method called with invalid event name.'));
         });
 
         it("should throw an error, because handler is incorrect", function()
@@ -106,7 +106,7 @@ describe("Crystal.Map", function()
             myMap.registerEvent('MyEvent');
             expect(function(){
                 myMap.addListener('MyEvent', {});
-            }).toThrow(new TypeError('addListener method called with invalid handler.'));  
+            }).toThrow(new TypeError('addListener method called with invalid handler.'));
         });
     });
 
@@ -116,7 +116,7 @@ describe("Crystal.Map", function()
         {
             var myMap = new Crystal.Map('myMap');
             myMap.registerEvent('MyEvent');
-            var myHandler = function(){}
+            var myHandler = function(){};
             myMap.addListener('MyEvent', myHandler);
             myMap.removeListener('MyEvent', myHandler);
         });
@@ -128,7 +128,7 @@ describe("Crystal.Map", function()
             myMap.addListener('MyEvent', function(){});
             expect(function(){
                 myMap.removeListener({}, function(){});
-            }).toThrow(new TypeError('removeListener method called with invalid event name.'));  
+            }).toThrow(new TypeError('removeListener method called with invalid event name.'));
         });
 
         it("should throw an error, because event hasn't been registered", function()
@@ -138,20 +138,20 @@ describe("Crystal.Map", function()
             myMap.addListener('MyEvent', function(){});
             expect(function(){
                 myMap.removeListener('MyEvent1', function(){});
-            }).toThrow(new TypeError('removeListener method called with invalid event name.'));  
+            }).toThrow(new TypeError('removeListener method called with invalid event name.'));
         });
         
         it("should throw an error, because handler hasn't been registered", function()
         {
             var myMap = new Crystal.Map('myMap');
             myMap.registerEvent('MyEvent');
-            var myHandler = function(){}
-            var myHandler1 = function(){}
+            var myHandler = function(){};
+            var myHandler1 = function(){};
             myMap.addListener('MyEvent', myHandler);
             expect(function(){
                 myMap.removeListener('MyEvent', myHandler1);
-            }).toThrow(new TypeError('removeListener method called with invalid handler.'));  
-        });        
+            }).toThrow(new TypeError('removeListener method called with invalid handler.'));
+        });
     });
 
     describe("fireEvent", function()
@@ -177,8 +177,8 @@ describe("Crystal.Map", function()
             myMap.registerEvent('MyEvent');
             expect(function(){
                 myMap.fireEvent('MyUnregisteredEvent');
-            }).toThrow(new TypeError('fireEvent method called with invalid event name.'));  
-        });        
+            }).toThrow(new TypeError('fireEvent method called with invalid event name.'));
+        });
     });
 
     describe("container", function()
@@ -189,7 +189,7 @@ describe("Crystal.Map", function()
             expect(myMap.container.nodeType).toEqual(1);
             
             var myMap1 = new Crystal.Map(document.getElementById('myMap'));
-            expect(myMap1.container.nodeType).toEqual(1);            
+            expect(myMap1.container.nodeType).toEqual(1);
         });
     });
     
@@ -199,12 +199,12 @@ describe("Crystal.Map", function()
         {
             var center = {lat: 50, lon: 50};
             var myMap = new Crystal.Map('myMap', center);
-            expect(myMap.getCenter()).toEqual(center);            
+            expect(myMap.getCenter()).toEqual(center);
         });
 
         it("should return correct center after map center setting", function()
         {
-            var myMap = new Crystal.Map('myMap');            
+            var myMap = new Crystal.Map('myMap');
             var center = {lat: 50, lon: 50};
             myMap.setCenter(center);
             expect(myMap.getCenter()).toEqual(center);
@@ -213,10 +213,10 @@ describe("Crystal.Map", function()
         it("should notify observers about map center changing", function()
         {
             function MyObserver() {
-                this.onAddToMap = function() {}
-                this.onRemoveFromMap = function() {}
-                this.onZoomChanging = function() {}
-                this.onCenterChanging = function() {}
+                this.onAddToMap = function() {};
+                this.onRemoveFromMap = function() {};
+                this.onZoomChanging = function() {};
+                this.onCenterChanging = function() {};
             }
             var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
@@ -233,9 +233,9 @@ describe("Crystal.Map", function()
         it("should throw an error, because center is incorrect", function()
         {
             expect(function(){
-                var myMap = new Crystal.Map('myMap');            
+                var myMap = new Crystal.Map('myMap');
                 myMap.setCenter({});
-            }).toThrow(new Error('Geographic point latitude is invalid.'));            
+            }).toThrow(new Error('Geographic point latitude is invalid.'));
         });
     });
     
@@ -244,12 +244,12 @@ describe("Crystal.Map", function()
         it("should return correct zoom after initialization", function()
         {
             var myMap = new Crystal.Map('myMap', {lat: 50, lon: 50}, 5);
-            expect(myMap.getZoom()).toEqual(5);            
+            expect(myMap.getZoom()).toEqual(5);
         });
 
         it("should return correct zoom after map zoom setting", function()
         {
-            var myMap = new Crystal.Map('myMap');            
+            var myMap = new Crystal.Map('myMap');
             myMap.setZoom(5);
             expect(myMap.getZoom()).toEqual(5);
         });
@@ -257,10 +257,10 @@ describe("Crystal.Map", function()
         it("should notify observers about map zoom changing", function()
         {
             function MyObserver() {
-                this.onAddToMap = function() {}
-                this.onRemoveFromMap = function() {}
-                this.onZoomChanging = function() {}
-                this.onCenterChanging = function() {}
+                this.onAddToMap = function() {};
+                this.onRemoveFromMap = function() {};
+                this.onZoomChanging = function() {};
+                this.onCenterChanging = function() {};
             }
             var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
@@ -277,9 +277,9 @@ describe("Crystal.Map", function()
         it("should throw an error, because zoom is incorrect", function()
         {
             expect(function(){
-                var myMap = new Crystal.Map('myMap');            
+                var myMap = new Crystal.Map('myMap');
                 myMap.setZoom('5');
-            }).toThrow(new TypeError('Value 5 passed to setZoom method of the Crystal.Map class should be a Number.'));            
+            }).toThrow(new TypeError('Value 5 passed to setZoom method of the Crystal.Map class should be a Number.'));
         });
     });
     
@@ -288,12 +288,12 @@ describe("Crystal.Map", function()
         it("should notify observers about addition to the map", function()
         {
             function MyObserver() {
-                this.onAddToMap = function() {}
-                this.onRemoveFromMap = function() {}
-                this.onZoomChanging = function() {}
-                this.onCenterChanging = function() {}
+                this.onAddToMap = function() {};
+                this.onRemoveFromMap = function() {};
+                this.onZoomChanging = function() {};
+                this.onCenterChanging = function() {};
             }
-            var myObserver = new MyObserver();            
+            var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
             
             spyOn(myObserver, 'onAddToMap');
@@ -306,10 +306,10 @@ describe("Crystal.Map", function()
         it("should throw an error, because observer is incorrect", function()
         {
             expect(function(){
-                var myMap = new Crystal.Map('myMap');            
+                var myMap = new Crystal.Map('myMap');
                 myMap.add({});
-            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');            
-        });    
+            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');
+        });
     });
     
     describe("remove", function()
@@ -317,10 +317,10 @@ describe("Crystal.Map", function()
         it("should notify observers about removing from the map", function()
         {
             function MyObserver() {
-                this.onAddToMap = function() {}
-                this.onRemoveFromMap = function() {}
-                this.onZoomChanging = function() {}
-                this.onCenterChanging = function() {}
+                this.onAddToMap = function() {};
+                this.onRemoveFromMap = function() {};
+                this.onZoomChanging = function() {};
+                this.onCenterChanging = function() {};
             }
             var myObserver = new MyObserver();
             var myMap = new Crystal.Map('myMap');
@@ -336,10 +336,10 @@ describe("Crystal.Map", function()
         it("should throw an error, because observer is incorrect", function()
         {
             expect(function(){
-                var myMap = new Crystal.Map('myMap');            
+                var myMap = new Crystal.Map('myMap');
                 myMap.remove({});
-            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');            
-        });        
+            }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');
+        });
     });
 
     describe("destroy", function()
@@ -347,10 +347,10 @@ describe("Crystal.Map", function()
         it("should notify observers about removing from the map", function()
         {
             function MyObserver() {
-                this.onAddToMap = function() {}
-                this.onRemoveFromMap = function() {}
-                this.onZoomChanging = function() {}
-                this.onCenterChanging = function() {}
+                this.onAddToMap = function() {};
+                this.onRemoveFromMap = function() {};
+                this.onZoomChanging = function() {};
+                this.onCenterChanging = function() {};
             }
             var myObserver1 = new MyObserver();
             var myObserver2 = new MyObserver();

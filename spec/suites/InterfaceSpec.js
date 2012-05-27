@@ -1,5 +1,5 @@
 describe("Crystal.Interface", function()
-{	
+{
     describe("initialize", function()
     {
         it("should be initialized correct", function()
@@ -15,7 +15,7 @@ describe("Crystal.Interface", function()
             }).toThrow(new ReferenceError('Interface constructor called with 1 argument(s), but expected exactly 2.'));
             expect(function(){
                 new Crystal.Interface('myInterface', [], []);
-            }).toThrow(new ReferenceError('Interface constructor called with 3 argument(s), but expected exactly 2.'));            
+            }).toThrow(new ReferenceError('Interface constructor called with 3 argument(s), but expected exactly 2.'));
         });
         
         it("should throw an error, because constructor accept method names not as a string", function()
@@ -40,17 +40,17 @@ describe("Crystal.Interface", function()
             MyInterface1 = new Crystal.Interface('myInterface1', ['method1', 'method2']);
             MyInterface2 = new Crystal.Interface('myInterface2', ['method3', 'method4']);
             
-            ParentClass = function() {}
-            ParentClass.prototype.method1 = function() {}
+            ParentClass = function() {};
+            ParentClass.prototype.method1 = function() {};
             
-            ChildClass = function() {}
+            ChildClass = function() {};
             Crystal.Class.extend(ChildClass, ParentClass);
-            ChildClass.prototype.method2 = function() {}
+            ChildClass.prototype.method2 = function() {};
 
-            SubChildClass = function() {}
+            SubChildClass = function() {};
             Crystal.Class.extend(SubChildClass, ChildClass);
-            SubChildClass.prototype.method3 = function() {}
-            SubChildClass.prototype.method4 = function() {}
+            SubChildClass.prototype.method3 = function() {};
+            SubChildClass.prototype.method4 = function() {};
 
             obj = new SubChildClass();
 
@@ -87,11 +87,11 @@ describe("Crystal.Interface", function()
             MyInterface1 = new Crystal.Interface('myInterface1', ['method1', 'method2']);
             MyInterface2 = new Crystal.Interface('myInterface2', ['method3', 'method4']);
 
-            MyClass = function() {}
-            MyClass.prototype.method1 = function() {}
-            MyClass.prototype.method2 = function() {}
-            MyClass.prototype.method3 = function() {}
-            MyClass.prototype.method4 = function() {}
+            MyClass = function() {};
+            MyClass.prototype.method1 = function() {};
+            MyClass.prototype.method2 = function() {};
+            MyClass.prototype.method3 = function() {};
+            MyClass.prototype.method4 = function() {};
             
             obj = new MyClass();
 
@@ -111,10 +111,10 @@ describe("Crystal.Interface", function()
             MyInterface1 = new Crystal.Interface('myInterface1', ['method1', 'method2']);
             MyInterface2 = new Crystal.Interface('myInterface2', ['method3', 'method4']);
 
-            MyClass = function() {}
-            MyClass.prototype.method1 = function() {}
-            MyClass.prototype.method2 = function() {}
-            MyClass.prototype.method3 = function() {}
+            MyClass = function() {};
+            MyClass.prototype.method1 = function() {};
+            MyClass.prototype.method2 = function() {};
+            MyClass.prototype.method3 = function() {};
             
             obj = new MyClass();
 
@@ -123,5 +123,5 @@ describe("Crystal.Interface", function()
                 Crystal.Interface.isImplements(obj, [MyInterface1, MyInterface2]);
             }).toThrow(new TypeError('Object does not implement the "myInterface2" interface. Method "method4" was not found.'));
         });
-    });    
+    });
 });

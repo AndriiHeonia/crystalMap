@@ -10,7 +10,7 @@ describe("Crystal.Validators.Array", function()
 
             expect(function(){
                 Crystal.Validators.Array.validate(value, callerClass, callerMethod);
-            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be an Array.'));            
+            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be an Array.'));
         });
     });
 });

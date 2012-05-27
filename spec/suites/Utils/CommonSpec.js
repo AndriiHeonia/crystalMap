@@ -42,6 +42,6 @@ describe("Crystal.Utils.Common", function()
         it("should clip number by max value", function()
         {
             expect(Crystal.Utils.Common.clip(90, -85, 85)).toEqual(85);
-        });        
+        });
     });
 });

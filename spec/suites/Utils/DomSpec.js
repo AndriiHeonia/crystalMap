@@ -15,7 +15,7 @@ describe("Crystal.Utils.Dom", function()
             
             Crystal.Utils.Dom.create('div', 'myId', 'myClass', document.getElementById('myMap'));
             expect(document.getElementById('myId').className).toEqual('myClass');
-        });        
+        });
     });
     
     describe("isNode", function()
@@ -24,7 +24,7 @@ describe("Crystal.Utils.Dom", function()
         {
             expect(Crystal.Utils.Dom.isNode(document.createElement('div'))).toBeTruthy();
             expect(Crystal.Utils.Dom.isNode(document.createTextNode('text'))).toBeTruthy();
-        });        
+        });
     });
     
     describe("isElement", function()
@@ -33,7 +33,7 @@ describe("Crystal.Utils.Dom", function()
         {
             expect(Crystal.Utils.Dom.isElement(document.createElement('div'))).toBeTruthy();
             expect(Crystal.Utils.Dom.isElement(document.createTextNode('text'))).toBeFalsy();
-        });        
+        });
     });
     
     describe("setOpacity", function()
@@ -45,7 +45,7 @@ describe("Crystal.Utils.Dom", function()
             Crystal.Utils.Dom.setOpacity(el, 0.5);
             var opacity = el.style.opacity || el.style.MozOpacity || el.style.KhtmlOpacity || el.style.filter;
             expect(opacity).toBeTruthy();
-        });        
+        });
     });
     
     describe("fadeIn", function()
@@ -63,7 +63,7 @@ describe("Crystal.Utils.Dom", function()
         {
             var el = document.getElementById('myMap');
             Crystal.Utils.Dom.fadeOut(el, 500);
-        });        
+        });
     });
     
     describe("addListener/removeListener", function()
@@ -71,10 +71,10 @@ describe("Crystal.Utils.Dom", function()
         it("addListener/removeListener method should not throw any errors", function()
         {
             var el = document.getElementById('myMap');
-            var handler = function(){}
+            var handler = function(){};
             Crystal.Utils.Dom.addListener(el, 'click', handler);
             Crystal.Utils.Dom.removeListener(el, 'click', handler);
-        });        
+        });
     });
     
     describe("isDescendant", function()
@@ -89,7 +89,7 @@ describe("Crystal.Utils.Dom", function()
             div.appendChild(p);
             p.appendChild(span);
             
-            expect(Crystal.Utils.Dom.isDescendant(div, span)).toBeTruthy();            
+            expect(Crystal.Utils.Dom.isDescendant(div, span)).toBeTruthy();
         });
 
         it("should return false", function()
@@ -103,7 +103,7 @@ describe("Crystal.Utils.Dom", function()
             p.appendChild(span);
             
             expect(Crystal.Utils.Dom.isDescendant(div, div)).toBeFalsy();
-            expect(Crystal.Utils.Dom.isDescendant(span, div)).toBeFalsy();            
+            expect(Crystal.Utils.Dom.isDescendant(span, div)).toBeFalsy();
         });
-    });    
+    });
 });

@@ -11,7 +11,7 @@ describe("Crystal.Validators.MoreThan", function()
 
             expect(function(){
                 Crystal.Validators.MoreThan.validate(value, moreThan, callerClass, callerMethod);
-            }).toThrow(new RangeError('Number ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be more than ' + moreThan + '.'));            
+            }).toThrow(new RangeError('Number ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be more than ' + moreThan + '.'));
         });
     });
 });

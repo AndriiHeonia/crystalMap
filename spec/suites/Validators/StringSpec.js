@@ -10,7 +10,7 @@ describe("Crystal.Validators.String", function()
 
             expect(function(){
                 Crystal.Validators.String.validate(value, callerClass, callerMethod);
-            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a String.'));            
+            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a String.'));
         });
     });
 });

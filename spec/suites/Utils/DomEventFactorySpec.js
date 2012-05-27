@@ -19,8 +19,8 @@ describe("Crystal.Utils.DomEventFactory", function()
                 preventDefault: function()
                 {
                 }
-            }
+            };
             expect(Crystal.Utils.DomEventFactory.create(bowserEventStub, myMap) instanceof Crystal.Events.Mouse).toBeTruthy();
-        });        
+        });
     });
 });

@@ -6,21 +6,21 @@ describe("Crystal.Validators.Pixel", function()
         {
             expect(function(){
                 Crystal.Validators.Pixel.validate({});
-            }).toThrow(new TypeError('Pixel x coordinate is invalid.'));            
+            }).toThrow(new TypeError('Pixel x coordinate is invalid.'));
         });
         
         it("should throw an error, because x is not a number", function()
         {
             expect(function(){
                 Crystal.Validators.Pixel.validate({x: '50', y: 50});
-            }).toThrow(new TypeError('Pixel x coordinate is invalid.'));            
-        });        
+            }).toThrow(new TypeError('Pixel x coordinate is invalid.'));
+        });
         
         it("should throw an error, because y is not a number", function()
         {
             expect(function(){
                 Crystal.Validators.Pixel.validate({x: 50, y: '50'});
-            }).toThrow(new TypeError('Pixel y coordinate is invalid.'));            
-        });        
+            }).toThrow(new TypeError('Pixel y coordinate is invalid.'));
+        });
     });
 });

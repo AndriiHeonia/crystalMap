@@ -10,7 +10,7 @@ describe("Crystal.Validators.DomElement", function()
 
             expect(function(){
                 Crystal.Validators.DomElement.validate(value, callerClass, callerMethod);
-            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a DOM element.'));            
+            }).toThrow(new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a DOM element.'));
         });
     });
 });

@@ -10,7 +10,7 @@ describe("Crystal.Validators.NotNullSpec", function()
 
             expect(function(){
                 Crystal.Validators.NotNull.validate(value, callerClass, callerMethod);
-            }).toThrow(new ReferenceError('Value passed to ' + callerMethod + ' method of the ' + callerClass + ' class should not be Null.'));            
+            }).toThrow(new ReferenceError('Value passed to ' + callerMethod + ' method of the ' + callerClass + ' class should not be Null.'));
         });
     });
 });

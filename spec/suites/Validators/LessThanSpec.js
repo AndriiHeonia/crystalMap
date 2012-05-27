@@ -11,7 +11,7 @@ describe("Crystal.Validators.LessThan", function()
 
             expect(function(){
                 Crystal.Validators.LessThan.validate(value, lessThan, callerClass, callerMethod);
-            }).toThrow(new RangeError('Number ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be less than ' + lessThan + '.'));            
+            }).toThrow(new RangeError('Number ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be less than ' + lessThan + '.'));
         });
     });
 });
