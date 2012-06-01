@@ -1,32 +1,33 @@
 /**
+ * Map event module.
  * Incapsulates information about the map that has been raised an event.
- * @constructor
  */
-Crystal.Events.Map = function()
-{
-    /**
-     * Map instance that has been raised an event.
-     * @type {Crystal.Map}
-     */
-    this.map = null;
+define([
+        'Map',
+        'Validators/Instance'
+    ],
+    function(
+        Map,
+        Validators_Instance
+    ) {
+        /**
+         * @constructor
+         */
+        return function(){
+            /**
+             * Map instance that has been raised an event.
+             * @type {Map}
+             */
+            this.map = null;
 
-    /**
-     * Initialization.
-     * @param {Crystal.Map} map Map instance.
-     */
-    this.initialize = function(map)
-    {
-        Crystal.Validators.Instance.validate(map, Crystal.Map, this.constructor.CLASS_NAME, 'initialize');
-
-        this.map = map;
-    };
-
-    // apply constructor
-    this.initialize.apply(this, arguments);
-};
-
-/**
- * @const
- * @type {String}
- */
-Crystal.Events.Map.CLASS_NAME = 'Crystal.Events.Map';
+            /**
+             * Initialization.
+             * @param {Map} map Map instance.
+             */
+            (function(map){
+                Validators_Instance.validate(map, Map, 'Events/Map');
+                this.map = map;
+            })();
+        };
+    }
+);
