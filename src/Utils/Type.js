@@ -9,8 +9,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isString: function(object)
-    {
+    isString: function(object) {
         return Object.prototype.toString.call(object) === '[object String]';
     },
 
@@ -20,8 +19,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isNumber: function(object)
-    {
+    isNumber: function(object) {
         return Object.prototype.toString.call(object) === '[object Number]';
     },
 
@@ -31,8 +29,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isBoolean: function(object)
-    {
+    isBoolean: function(object) {
         return Object.prototype.toString.call(object) === '[object Boolean]';
     },
 
@@ -42,8 +39,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isArray: function(object)
-    {
+    isArray: function(object) {
         return Object.prototype.toString.call(object) === '[object Array]';
     },
 
@@ -53,8 +49,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isFunction: function(object)
-    {
+    isFunction: function(object) {
         return Object.prototype.toString.call(object) === '[object Function]';
     },
 
@@ -64,8 +59,7 @@ define({
      * @param {Object} object Any value should be checked. Required.
      * @return {Boolean}
      */
-    isUndefined: function(object)
-    {
+    isUndefined: function(object) {
         return typeof(object) === 'undefined';
     }
 });

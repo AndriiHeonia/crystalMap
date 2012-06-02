@@ -1,16 +1,14 @@
 /**
- * Provides a common utilities.
- * @static
+ * Common utils module.
+ * Provides a common utilities
  */
-Crystal.Utils.Common = {
+define({
     /**
      * Creates an unique id.
-     * @static
      * @param {String} prefix Id prefix. Optional.
      * @return {String} Generated id.
      */
-    createUniqueId: function(prefix)
-    {
+    createUniqueId: function(prefix) {
         var date = new Date();
         var time = date.getTime();
 
@@ -22,8 +20,7 @@ Crystal.Utils.Common = {
      * @param {Object} scope
      * @param {Function} func
      */
-    bind: function(scope, func)
-    {
+    bind: function(scope, func) {
         return function() {
             return func.apply(scope, arguments);
         };
@@ -36,8 +33,7 @@ Crystal.Utils.Common = {
      * @param {Number} maxValue Maximum allowable value.
      * @return {Number}
      */
-    clip: function(number, minValue, maxValue)
-    {
+    clip: function(number, minValue, maxValue) {
         return Math.min(Math.max(number, minValue), maxValue);
     }
-};
+});

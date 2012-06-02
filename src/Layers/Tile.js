@@ -20,7 +20,7 @@ define([
         'Utils/Dom',
         'Projections/SphericalMercator',
         'Interfaces/Projection',
-        'Interface'
+        'InterfaceChecker'
     ],
     function(
         Validators_NotUndefined,
@@ -33,7 +33,7 @@ define([
         Utils_Dom,
         Projections_SphericalMercator,
         Interfaces_Projection,
-        Interface
+        InterfaceChecker
     ) {
         /**
          * @type {Object} Container of the layer.
@@ -53,8 +53,7 @@ define([
         /**
          * Initializes a tile container.
          */
-        function _initContainer()
-        {
+        function _initContainer() {
             _container = Utils_Dom.create(
                 'div',
                 Utils_Common.createUniqueId('Layers/Tile'),
@@ -66,8 +65,7 @@ define([
         /**
          * Destroys a tile container.
          */
-        function _destroyContainer()
-        {
+        function _destroyContainer() {
             _map.container.removeChild(_container);
             _container = null;
         }
@@ -75,8 +73,7 @@ define([
         /**
          * Displays tiles.
          */
-        function _redraw()
-        {
+        function _redraw() {
             var centralTileXY = { // position of the central tile in a tile grid
                 x: null,
                 y: null
@@ -112,31 +109,26 @@ define([
             showed++;
             
             // show another tiles by spiral from the center
-            while(showed < viewPortTileSize)
-            {
-                while(currentTileXY.x < centralTileXY.x + spiral) // move >
-                {
+            while(showed < viewPortTileSize) {
+                while(currentTileXY.x < centralTileXY.x + spiral) { // move >
                     currentTileXY.x++;
                     _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                     showed++;
                 }
                 
-                while(currentTileXY.y < centralTileXY.y + spiral) // move v
-                {
+                while(currentTileXY.y < centralTileXY.y + spiral) { // move v
                     currentTileXY.y++;
                     _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                     showed++;
                 }
 
-                while(currentTileXY.x > centralTileXY.x - spiral) // move <
-                {
+                while(currentTileXY.x > centralTileXY.x - spiral) { // move <
                     currentTileXY.x--;
                     _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                     showed++;
                 }
 
-                while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) // move ^
-                {
+                while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) { // move ^
                     currentTileXY.y--;
                     _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
                     showed++;
@@ -155,8 +147,7 @@ define([
          * - {Number} y Offset by y.
          * @param {Object} centralTileShift
          */
-        function _showTile(x, y, centralTileXY, centralTileShift)
-        {
+        function _showTile(x, y, centralTileXY, centralTileShift) {
             var viewPortCenter = {
                 x: null,
                 y: null
@@ -235,24 +226,22 @@ define([
              * - {String} errorTileUrl Tile, should be displayed on error. Required.
              * - {Interfaces/Projection} projection Projection of this layer. Optional. Projections/SphericalMercator by default.
              */
-            (function() {
+            (function(options) {
                 Validators_NotUndefined.validate(options, 'Layers/Tile', 'initialize');
                 Validators_String.validate(options.url, 'Layers/Tile', 'initialize');
                 Validators_Array.validate(options.subdomains, 'Layers/Tile', 'initialize');
                 Validators_MoreThan.validate(options.subdomains.length, 0, 'Layers/Tile', 'initialize');
                 Validators_Number.validate(options.tileSize, 'Layers/Tile', 'initialize');
                 Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'initialize');
-                if(Utils_Type.isUndefined(options.projection) === false)  // @todo to add test
-                {
-                    Interface.isImplements(options.projection, [Interfaces_Projection]);
+                if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
+                    InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
                 }
-                else
-                {
+                else {
                     options.projection = Projections_SphericalMercator;
                 }
                 
                 _options = options;
-            })();
+            })(arguments[0]);
 
             /**
              * Handles and process addition to the map notification.

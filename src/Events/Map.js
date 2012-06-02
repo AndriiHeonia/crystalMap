@@ -1,33 +1,20 @@
 /**
- * Map event module.
  * Incapsulates information about the map that has been raised an event.
  */
-define([
-        'Map',
-        'Validators/Instance'
-    ],
-    function(
-        Map,
-        Validators_Instance
-    ) {
+define(['Map', 'Validators/Instance'], function(Map, Validators_Instance) {
+    return function() {
         /**
-         * @constructor
+         * Map instance that has been raised an event.
+         * @type {Map}
          */
-        return function(){
-            /**
-             * Map instance that has been raised an event.
-             * @type {Map}
-             */
-            this.map = null;
+        this.map = null;
 
-            /**
-             * Initialization.
-             * @param {Map} map Map instance.
-             */
-            (function(map){
-                Validators_Instance.validate(map, Map, 'Events/Map');
-                this.map = map;
-            })();
-        };
-    }
-);
+         /**
+          * @param {Map} map Map instance.
+          */
+        (function(map){
+            Validators_Instance.validate(map, Map, 'Events/Map');
+            this.map = map;
+        })(arguments[0]);
+    };
+});

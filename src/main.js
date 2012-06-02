@@ -1,22 +1,29 @@
-require(["Map"], function(Map)
-{
-    var geoPoint = {
-        lat: 55.028,
-        lon: 82.927
-    };
-    
-    map = new Map('myMap', geoPoint, 10);
-    map.getEventObject();
-    /*var map = new Crystal.Map('myMap', geoPoint, 10);
-    var layer = new Crystal.Layers.Tile({
-        url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
-        subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
-        tileSize: 256,
-        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg',
-        projection: Crystal.Projections.SphericalMercator
-    });
-    map.add(layer);
-    
+require([
+        'Map',
+        'Layers/Tile',
+        'Projections/SphericalMercator'
+    ],
+    function(
+        Map,
+        Layers_Tile,
+        Projections_SphericalMercator
+    ) {
+        var geoPoint = {
+            lat: 55.028,
+            lon: 82.927
+        };
+        
+        map = new Map('myMap', geoPoint, 10);
+        var map = new Map('myMap', geoPoint, 10);
+        var layer = new Layers_Tile({
+            url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+            subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+            tileSize: 256,
+            errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg',
+            projection: Projections_SphericalMercator
+        });
+        map.add(layer);
+    /*
     //console.log(Crystal.Projections.SphericalMercator.project(geoPoint));
     //console.log(Crystal.Projections.SphericalMercator.unproject({x: 9231481.597949006, y: 7367484.0730569875}))
     
