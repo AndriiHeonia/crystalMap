@@ -13,9 +13,9 @@ define(function() {
          * @param {String} name Interface name. Required.
          * @param {Array} methods Interface methods. Required.
          */
-        (function(name, methods) {
-            if(arguments.length != 2) {
-                throw new ReferenceError('Interface constructor called with ' + arguments.length + ' argument(s), but expected exactly 2.');
+        (function(name, methods, argumentsLength) {
+            if(argumentsLength != 2) {
+                throw new ReferenceError('Interface constructor called with ' + argumentsLength + ' argument(s), but expected exactly 2.');
             }
             self.name = name;
             self.methods = [];
@@ -25,7 +25,7 @@ define(function() {
                 }
                 self.methods.push(methods[i]);
             }
-        })(arguments[0], arguments[1]);
+        })(arguments[0], arguments[1], arguments.length);
     };
 
     return constructor;

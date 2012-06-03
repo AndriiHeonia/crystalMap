@@ -187,8 +187,7 @@ define([
              */
             this.destroy = function() {
                 // Calls onRemoveFromMap method to each user added observer and clears _userObservers array
-                for(var i = 0; i < _userObservers.length; i++)
-                {
+                for(var i = 0; i < _userObservers.length; i++) {
                     _userObservers[i].onRemoveFromMap(this.getEventObject);
                 }
                 _userObservers = [];
