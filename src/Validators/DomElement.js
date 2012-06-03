@@ -6,14 +6,14 @@ define(['Utils/Dom'], function(Utils_Dom) {
         /**
          * Checks or value is a DOM element.
          * @param {Object} value Value should be validated. Required.
-         * @param {String} callerClass Caller class name. Required.
+         * @param {String} callerObject Caller object name. Required.
          * @param {String} callerMethod Caller method name. Required.
          */
-        validate: function(value, callerClass, callerMethod)
+        validate: function(value, callerObject, callerMethod)
         {
             if(Utils_Dom.isElement(value) === false)
             {
-                throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a DOM element.');
+                throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerObject + ' should be a DOM element.');
             }
         }
     };

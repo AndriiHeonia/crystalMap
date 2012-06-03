@@ -227,12 +227,12 @@ define([
              * - {Interfaces/Projection} projection Projection of this layer. Optional. Projections/SphericalMercator by default.
              */
             (function(options) {
-                Validators_NotUndefined.validate(options, 'Layers/Tile', 'initialize');
-                Validators_String.validate(options.url, 'Layers/Tile', 'initialize');
-                Validators_Array.validate(options.subdomains, 'Layers/Tile', 'initialize');
-                Validators_MoreThan.validate(options.subdomains.length, 0, 'Layers/Tile', 'initialize');
-                Validators_Number.validate(options.tileSize, 'Layers/Tile', 'initialize');
-                Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'initialize');
+                Validators_NotUndefined.validate(options, 'Layers/Tile', 'init');
+                Validators_String.validate(options.url, 'Layers/Tile', 'init');
+                Validators_Array.validate(options.subdomains, 'Layers/Tile', 'init');
+                Validators_MoreThan.validate(options.subdomains.length, 0, 'Layers/Tile', 'init');
+                Validators_Number.validate(options.tileSize, 'Layers/Tile', 'init');
+                Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'init');
                 if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
                     InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
                 }

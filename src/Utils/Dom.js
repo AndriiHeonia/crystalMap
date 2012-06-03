@@ -2,7 +2,7 @@
  * DOM utils module.
  * Provides a DOM processing functionality.
  */
-define(['MapRegister', 'Utils/DomEventFactory'], function(MapRegister, Utils_DomEventFactory) {
+define(['require', 'Utils/DomEventFactory'], function(require, Utils_DomEventFactory) {
     var object = {
         /**
          * Provides a DOM processing functionality.
@@ -88,7 +88,7 @@ define(['MapRegister', 'Utils/DomEventFactory'], function(MapRegister, Utils_Dom
         addListener: function(element, eventName, handler) {
             var parentMap;
             
-            parentMap = MapRegister.getItemByDomElement(element);
+            parentMap = require('MapRegister').getItemByDomElement(element);
             
             // handles browser event, creates one of Crystal.Events.* event and calls an user handler.
             var metaHandler = function(event) {

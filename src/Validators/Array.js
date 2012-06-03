@@ -6,12 +6,12 @@ define(['Utils/Type'], function(Utils_Type) {
         /**
          * Checks or value is an array.
          * @param {Object} value Value should be validated. Required.
-         * @param {String} callerClass Caller class name. Required.
+         * @param {String} callerObject Caller object name. Required.
          * @param {String} callerMethod Caller method name. Required.
          */
-        validate: function(value, callerClass, callerMethod) {
+        validate: function(value, callerObject, callerMethod) {
             if(Utils_Type.isArray(value) === false) {
-                throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be an Array.');
+                throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerObject + ' should be an Array.');
             }
         }
     };

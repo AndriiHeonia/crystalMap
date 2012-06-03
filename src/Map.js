@@ -158,7 +158,7 @@ define([
 
             /**
              * Adds an observer to the map.
-             * @param {Crystal.IMapObserver} observer Observer to listen map events. Required.
+             * @param {Interfaces/MapObserver} observer Observer to listen map events. Required.
              */
             this.add = function(observer)
             {
@@ -171,7 +171,7 @@ define([
 
             /**
              * Removes an observer from the map.
-             * @param {Crystal.IMapObserver} observer Registered observer. Required.
+             * @param {Interfaces/MapObserver} observer Registered observer. Required.
              */
             this.remove = function(observer)
             {
@@ -193,7 +193,7 @@ define([
                 }
                 _userObservers = [];
 
-                Crystal.MapRegister.remove(this.container.id);
+                MapRegister.remove(this.container.id);
             };
             
             function _handleDragging(event)

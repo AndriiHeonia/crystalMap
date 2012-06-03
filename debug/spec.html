@@ -21,7 +21,17 @@
         <!-- include source files here -->
         <script type="text/javascript">
             require([
-              '../spec/suites/Events/MapSpec'
+              '../spec/suites/Events/Map',
+              '../spec/suites/Events/Mouse',
+              '../spec/suites/Layers/Tile',
+              '../spec/suites/Projections/SphericalMercator',
+              '../spec/suites/Utils/Common',
+              '../spec/suites/Utils/DomEventFactory',
+              '../spec/suites/Utils/Dom',
+              '../spec/suites/Utils/Math',
+              '../spec/suites/Utils/Type',
+              '../spec/suites/Validators/Array',
+              '../spec/suites/Validators/Boolean'
             ],
             function() {
                 jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
