@@ -8,75 +8,43 @@
  * @see http://wiki.openstreetmap.org/wiki/Mercator#Spherical_Mercator
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html
  */
-define(["Utils/Math", "Utils/Common"], function(Utils_Math, Utils_Common) {
+define(["Utils/Math"], function(Utils_Math) {
+    /**
+     * Ellipsoid radius (in meters).
+     * @const
+     * @type {Number}
+     */
+    var _ellipsoidAxis = 6378137;
+
+    /**
+     * Minimum latitude.
+     * @const
+     * @type {Number}
+     */
+    var _minLat = -85.05112878;
+
+    /**
+     * Maximum latitude.
+     * @const
+     * @type {Number}
+     */
+    var _maxLat = 85.05112878;
+
+    /**
+     * Minimum longitude.
+     * @const
+     * @type {Number}
+     */
+    var _minLon = -180;
+
+    /**
+     * Maximum longitude.
+     * @const
+     * @type {Number}
+     */
+    var _maxLon = 180;
+
     var object = {
-        /**
-         * Ellipsoid radius (in meters).
-         * @const
-         * @type {Number}
-         */
-        ELLIPSOID_AXIS: 6378137,
-
-        /**
-         * Minimum latitude.
-         * @const
-         * @type {Number}
-         */
-        MIN_LAT: -85.05112878,
-
-        /**
-         * Maximum latitude.
-         * @const
-         * @type {Number}
-         */
-        MAX_LAT: 85.05112878,
-
-        /**
-         * Minimum longitude.
-         * @const
-         * @type {Number}
-         */
-        MIN_LON: -180,
-
-        /**
-         * Maximum longitude.
-         * @const
-         * @type {Number}
-         */
-        MAX_LON: 180,
-
-        /**
-         * Returns point in global Cartesian coordinate system by geographic point.
-         * @param {Object} geoPoint Geographic point. Structure:
-         * - {Number} lat Latitude.
-         * - {Number} lon Longitude.
-         * @return {Object} Structure:
-         * - {Number} x X coordinate (in meters).
-         * - {Number} y Y coordinate (in meters).
-         */
-        project: function(geoPoint) {
-            return {
-                x: 1 * (this.ELLIPSOID_AXIS * Utils_Math.degreesToRadians(geoPoint.lon)).toFixed(10),
-                y: 1 * (this.ELLIPSOID_AXIS * Math.log(Math.tan(Math.PI / 4 + Utils_Math.degreesToRadians(Utils_Common.clip(geoPoint.lat, this.MIN_LAT, this.MAX_LAT)) / 2))).toFixed(10)
-            };
-        },
-
-        /**
-         * Returns geographic point by point in global Cartesian coordinate system.
-         * @param {Object} point Point in Cartesian coordinate system. Structure:
-         * - {Number} x X coordinate (in meters).
-         * - {Number} y Y coordinate (in meters).
-         * @return {Object} Structure:
-         * - {Number} lat Latitude.
-         * - {Number} lon Longitude.
-         */
-        unproject: function(point) {
-            return {
-                lat: 1 * (Utils_Math.radiansToDegrees(2 * Math.atan(Math.exp(point.y / this.ELLIPSOID_AXIS)) - Math.PI / 2)).toFixed(10),
-                lon: 1 * (Utils_Math.radiansToDegrees(point.x / this.ELLIPSOID_AXIS)).toFixed(10)
-            };
-        },
-
         /**
          * Returns ground reolution.
          * The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
@@ -89,11 +57,66 @@ define(["Utils/Math", "Utils/Common"], function(Utils_Math, Utils_Common) {
             var clippedLat;
             var latInRadians;
 
-            clippedLat = Utils_Common.clip(lat, this.MIN_LAT, this.MAX_LAT);
+            clippedLat = Utils_Math.clip(lat, _minLat, _maxLat);
             latInRadians = Utils_Math.degreesToRadians(clippedLat);
 
             // ground resolution = cos(latitude * pi/180) * earth circumference / map width
-            return 1 * (Math.cos(latInRadians) * (2 * Math.PI * this.ELLIPSOID_AXIS) / size).toFixed(10);
+            return 1 * (Math.cos(latInRadians) * (2 * Math.PI * _ellipsoidAxis) / size).toFixed(10);
+        },
+
+        getViewPortStartInGlobalCoords: function(viewPortSize, mapCenter, mapSize) {
+            var mapCenterInGlobalPixel;
+                
+            mapCenterInGlobalPixel = this.projectToGlobalCoords(mapCenter, mapSize);
+            
+            return {
+                x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
+                y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
+            };
+        },
+
+        /**
+         * Returns point in view port Cartesian coordinate system by geographic point.
+         * @param {Object} geoPoint Geographic point. Structure:
+         * - {Number} lat Latitude.
+         * - {Number} lon Longitude.
+         * @return {Object} Structure:
+         * - {Number} x X coordinate (in meters).
+         * - {Number} y Y coordinate (in meters).
+         */
+        projectToViewPort: function(geoPoint, mapCenter, mapSize, viewPortSize) {
+            var geoPointInGlobalPixel;
+            var viewPortStartInGlobalPixel;
+
+            geoPointInGlobalPixel = this.projectToGlobalCoords(geoPoint, mapSize);
+            viewPortStartInGlobalPixel = this.getViewPortStartInGlobalCoords(viewPortSize, mapCenter, mapSize);
+
+            return {
+                x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
+                y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
+            };
+        },
+
+        unprojectFromViewPort: function() {
+
+        },
+
+        projectToGlobalCoords: function(geoPoint, mapSize) {
+            var lat = Utils_Math.clip(geoPoint.lat, _minLat, _maxLat);
+            var lon = Utils_Math.clip(geoPoint.lon, _minLon, _maxLon);
+            
+            var x = (lon + 180) / 360;
+            var sinLat = Math.sin(lat * Math.PI / 180);
+            var y = 0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI);
+                
+            return {
+                x: Utils_Math.clip(x * mapSize + 0.5, 0, mapSize - 1),
+                y: Utils_Math.clip(y * mapSize + 0.5, 0, mapSize - 1)
+            };
+        },
+
+        unprojectFromGlobalCoors: function() {
+
         }
     };
 

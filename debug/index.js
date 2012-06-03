@@ -13,7 +13,6 @@ require([
             lon: 82.927
         };
         
-        map = new Map('myMap', geoPoint, 10);
         var map = new Map('myMap', geoPoint, 10);
         var layer = new Layers_Tile({
             url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
@@ -24,28 +23,33 @@ require([
         });
         map.add(layer);
     
-    //console.log(Crystal.Projections.SphericalMercator.project(geoPoint));
-    //console.log(Crystal.Projections.SphericalMercator.unproject({x: 9231481.597949006, y: 7367484.0730569875}))
-    
-    drawMarker();
-    function drawMarker() {
+        drawMarker();
+        function drawMarker() {
 
-        // map should contain getBaseLayer() method
-        var pixel = layer.projectToViewPort(geoPoint, 256);
+            // map should contain getBaseLayer() method
+            var pixel = layer.projection.projectToViewPort(
+                geoPoint,
+                map.getCenter(),
+                layer.getSize(),
+                {
+                    width: map.container.clientWidth,
+                    height: map.container.clientHeight
+                });
 
-        if(document.getElementById('m1')) {
-            map.container.removeChild(document.getElementById('m1'));
+            if(document.getElementById('m1')) {
+                map.container.removeChild(document.getElementById('m1'));
+            }
+            var marker = document.createElement('div');
+            marker.id = 'm1';
+            marker.style.position = 'absolute';
+            marker.style.left = pixel.x + 'px';
+            marker.style.top = pixel.y + 'px';
+            marker.style.width = '20px';
+            marker.style.height = '20px';
+            marker.style.backgroundColor = 'blue';
+            map.container.appendChild(marker);
         }
-        var marker = document.createElement('div');
-        marker.id = 'm1';
-        marker.style.position = 'absolute';
-        marker.style.left = pixel.x + 'px';
-        marker.style.top = pixel.y + 'px';
-        marker.style.width = '20px';
-        marker.style.height = '20px';
-        marker.style.backgroundColor = 'blue';
-        map.container.appendChild(marker);
-    }
+
 
     var zoomInBtn = document.getElementById('zoomin');
     var zoomOutBtn = document.getElementById('zoomout');

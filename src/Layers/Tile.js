@@ -36,14 +36,14 @@ define([
         InterfaceChecker
     ) {
         /**
+         * @type {Layers/Tile}
+         */
+        var _self;
+
+        /**
          * @type {Object} Container of the layer.
          */
         var _container;
-        
-        /**
-         * @type {Object}
-         */
-        var _options;
 
         /**
          * @type {Map} Map instance, layer belongs to.
@@ -92,16 +92,16 @@ define([
 
             _container.innerHTML = '';
             
-            viewPortWidthAndHeight.width = Math.ceil(_map.container.offsetWidth / _options.tileSize);
-            viewPortWidthAndHeight.height = Math.ceil(_map.container.offsetHeight / _options.tileSize);
+            viewPortWidthAndHeight.width = Math.ceil(_map.container.offsetWidth / _self.tileSize);
+            viewPortWidthAndHeight.height = Math.ceil(_map.container.offsetHeight / _self.tileSize);
             viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
             
             centralTileXY = _getTileXY.apply(this, [_map.getCenter()]);
             currentTileXY = _getTileXY.apply(this, [_map.getCenter()]);
             
             var centralTileShift = {
-                x: this.getGeoPointInGlobalPixel(_map.getCenter()).x - centralTileXY.x * 256,
-                y: this.getGeoPointInGlobalPixel(_map.getCenter()).y - centralTileXY.y * 256
+                x: _self.projection.projectToGlobalCoords(_map.getCenter(), _self.getSize()).x - centralTileXY.x * 256,
+                y: _self.projection.projectToGlobalCoords(_map.getCenter(), _self.getSize()).y - centralTileXY.y * 256
             };
 
             // show central tile
@@ -168,12 +168,12 @@ define([
 
             centralTilePixel.x = Math.floor(viewPortCenter.x - centralTileShift.x);
             centralTilePixel.y = Math.floor(viewPortCenter.y - centralTileShift.y);
-            xPixel = centralTilePixel.x + ((x - centralTileXY.x) * _options.tileSize);
-            yPixel = centralTilePixel.y + ((y - centralTileXY.y) * _options.tileSize);
+            xPixel = centralTilePixel.x + ((x - centralTileXY.x) * _self.tileSize);
+            yPixel = centralTilePixel.y + ((y - centralTileXY.y) * _self.tileSize);
             
-            subdomain = _options.subdomains[Math.floor(Math.random() * _options.subdomains.length)];
+            subdomain = _self.subdomains[Math.floor(Math.random() * _self.subdomains.length)];
             
-            url = _options.url;
+            url = _self.url;
             url = url.replace("{x}", x);
             url = url.replace("{y}", y);
             url = url.replace("{z}", _map.getZoom());
@@ -184,7 +184,7 @@ define([
                 Utils_Dom.fadeIn(img, 250);
             };
             img.src = 'http://' + subdomain + '.' + url;
-            img.width = img.height = _options.tileSize;
+            img.width = img.height = _self.tileSize;
             img.style.left = xPixel + 'px';
             img.style.top = yPixel + 'px';
 
@@ -212,10 +212,37 @@ define([
          * @implements {IMapObserver}
          */
         var constructor = function() {
+            _self = this;
+
             /**
-             * @type {Map} Map instance, layer belongs to.
+             * Tile server url (without "http://").
+             * @type {String}
              */
-            this.map = null;
+            _self.url = null;
+
+            /**
+             * Array with tile server subdomains.
+             * @type {Array}
+             */
+            _self.subdomains = null;
+
+            /**
+             * Tile size.
+             * @type {Number}
+             */
+            _self.tileSize = null;
+
+            /**
+             * Tile, should be displayed on error.
+             * @type {String}
+             */
+            _self.errorTileUrl = null;
+
+            /**
+             * Projection of the layer.
+             * @type {Interfaces/Projection}
+             */
+            _self.projection = null;
 
             /**
              * Init.
@@ -233,22 +260,26 @@ define([
                 Validators_MoreThan.validate(options.subdomains.length, 0, 'Layers/Tile', 'init');
                 Validators_Number.validate(options.tileSize, 'Layers/Tile', 'init');
                 Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'init');
+                
                 if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
-                    InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
+                    //InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
+                    _self.projection = options.projection;
                 }
                 else {
-                    options.projection = Projections_SphericalMercator;
+                    _self.projection = Projections_SphericalMercator;
                 }
-                
-                _options = options;
+                _self.url = options.url;
+                _self.subdomains = options.subdomains;
+                _self.tileSize = options.tileSize;
+                _self.errorTileUrl = options.errorTileUrl;
             })(arguments[0]);
 
             /**
              * Handles and process addition to the map notification.
              * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
              */
-            this.onAddToMap = function(mapEvent) {
-                _map = this.map = mapEvent.map;
+            _self.onAddToMap = function(mapEvent) {
+                _map = mapEvent.map;
 
                 _initContainer.call(this);
                 _redraw.call(this);
@@ -261,7 +292,7 @@ define([
             * Handles and process removal from the map notification.
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
-            this.onRemoveFromMap = function(mapEvent) {
+            _self.onRemoveFromMap = function(mapEvent) {
                 _map.removeListener('ZoomChanging', _redraw);
                 _map.removeListener('CenterChanging', _redraw);
                 
@@ -273,77 +304,8 @@ define([
              * Determines the layer width and height (in pixels) at a specified zoom level.
              * @return {Number}
              */
-            this.getSize = function() {
-                return _options.tileSize * Math.pow(2, _map.getZoom());
-            };
-
-            /**
-             * Returns ground resolution of the layer.
-             * The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
-             * For example, at a ground resolution of 10 meters/pixel, each pixel represents a ground distance of 10 meters.
-             * @param {Number} lat Latitude (in degrees) at which to measure the ground resolution.
-             * @return {Number} The ground resolution, in meters per pixel.
-             */
-            this.getGroundResolution = function(lat) {
-                var size;
-
-                size = this.getSize(_options.tileSize, _map.getZoom());
-
-                return _options.projection.getGroundResolution(lat, size);
-            };
-
-            /**
-             * Returns point in view port Cartesian coordinate system by geographic point.
-             * @param {Object} geoPoint Geographic point. Structure:
-             * - {Number} lat Latitude.
-             * - {Number} lon Longitude.
-             * @return {Object} Structure:
-             * - {Number} x X coordinate (in meters).
-             * - {Number} y Y coordinate (in meters).
-             */
-            this.projectToViewPort = function(geoPoint) {
-                var geoPointInGlobalPixel;
-                var viewPortStartInGlobalPixel;
-
-                geoPointInGlobalPixel = this.getGeoPointInGlobalPixel(geoPoint);
-                viewPortStartInGlobalPixel = this.getViewPortStartInGlobalPixel();
-
-                return {
-                    x: geoPointInGlobalPixel.x - viewPortStartInGlobalPixel.x,
-                    y: geoPointInGlobalPixel.y - viewPortStartInGlobalPixel.y
-                };
-            };
-
-            this.getGeoPointInGlobalPixel = function(geoPoint) {
-                var lat = Utils_Common.clip(geoPoint.lat, _options.projection.MIN_LAT, _options.projection.MAX_LAT);
-                var lon = Utils_Common.clip(geoPoint.lon, _options.projection.MIN_LON, _options.projection.MAX_LON);
-                
-                var x = (lon + 180) / 360;
-                var sinLat = Math.sin(lat * Math.PI / 180);
-                var y = 0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI);
-                var mapSize = this.getSize();
-                
-                return {
-                    x: Utils_Common.clip(x * mapSize + 0.5, 0, mapSize - 1),
-                    y: Utils_Common.clip(y * mapSize + 0.5, 0, mapSize - 1)
-                };
-            };
-
-            this.getViewPortStartInGlobalPixel = function() {
-                var mapCenterInGlobalPixel;
-                var viewPortSize;
-
-                viewPortSize = {
-                    width: _map.container.clientWidth,
-                    height: _map.container.clientHeight
-                };
-                
-                mapCenterInGlobalPixel = this.getGeoPointInGlobalPixel(_map.getCenter());
-                
-                return {
-                    x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
-                    y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
-                };
+            _self.getSize = function() {
+                return _self.tileSize * Math.pow(2, _map.getZoom());
             };
         };
 

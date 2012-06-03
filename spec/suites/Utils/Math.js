@@ -12,6 +12,16 @@ define(['Utils/Math'], function(Utils_Math) {
                 expect(Utils_Math.radiansToDegrees(1)).toEqual(57.2957795131);
             });
         });
+
+        describe("clip", function() {
+            it("should clip number by min value", function() {
+                expect(Utils_Math.clip(-90, -85, 85)).toEqual(-85);
+            });
+
+            it("should clip number by max value", function() {
+                expect(Utils_Math.clip(90, -85, 85)).toEqual(85);
+            });
+        });
         
     });
 });
