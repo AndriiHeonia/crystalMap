@@ -186,6 +186,8 @@ define([
              * Destructor
              */
             this.destroy = function() {
+                this.parent.destroy();
+                
                 // Calls onRemoveFromMap method to each user added observer and clears _userObservers array
                 for(var i = 0; i < _userObservers.length; i++) {
                     _userObservers[i].onRemoveFromMap(this.getEventObject);
@@ -217,6 +219,7 @@ define([
         };
 
         constructor.prototype = Observable;
+        constructor.prototype.parent = constructor.prototype;
 
         return constructor;
     }

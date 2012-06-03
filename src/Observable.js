@@ -38,26 +38,6 @@ define(["Utils/Type"], function(Utils_Type) {
         },
 
         /**
-         * Unregisters the specified event(s) from the list of events which this Observable may fire.
-         * @param {String|Array} eventName Event name or an array of the event names. Required.
-         */
-        unregisterEvent: function(eventName) {
-            // @todo check memory leaks
-            if(Utils_Type.isString(eventName) === false && Utils_Type.isArray(eventName) === false) {
-                throw new TypeError('unregisterEvent method called with invalid event name(s).');
-            }
-            
-            if(Utils_Type.isString(eventName) === true) {
-                _observers[eventName] = [];
-            }
-            else if(Utils_Type.isArray(eventName) === true) {
-                for(var i = 0; i < eventName.length; i++) {
-                    _observers[eventName[i]] = [];
-                }
-            }
-        },
-
-        /**
          * Appends an event handler to this object.
          * @param {String} eventName The name of the event to listen for. Required.
          * @param {Function} handler The method the event invokes. Required.
@@ -103,6 +83,14 @@ define(["Utils/Type"], function(Utils_Type) {
             for(var i = 0; i < _observers[eventName].length; i++) {
                 _observers[eventName][i].call(this, this.getEventObject());
             }
+        },
+
+        /**
+         * Destructor.
+         * @todo check memory leaks.
+         */
+        destroy: function() {
+            _observers = {};
         }
     };
 

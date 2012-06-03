@@ -64,7 +64,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
         });
 
         describe("addListener", function() {
-            /*it("should not throw any errors", function() {
+            it("should not throw any errors", function() {
                 var myMap = new Map('myMap');
                 myMap.registerEvent('MyEvent');
                 myMap.addListener('MyEvent', function() {});
@@ -76,7 +76,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 expect(function(){
                     myMap.addListener({}, function() {});
                 }).toThrow(new TypeError('addListener method called with invalid event name.'));
-            });*/
+            });
 
             it("should throw an error, because event hasn't been registered", function() {
                 var myMap = new Map('myMap');
@@ -86,15 +86,15 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 }).toThrow(new TypeError('addListener method called with invalid event name.'));
             });
 
-            /*it("should throw an error, because handler is incorrect", function() {
+            it("should throw an error, because handler is incorrect", function() {
                 var myMap = new Map('myMap');
                 myMap.registerEvent('MyEvent');
                 expect(function(){
                     myMap.addListener('MyEvent', {});
                 }).toThrow(new TypeError('addListener method called with invalid handler.'));
-            });*/
+            });
         });
-/*
+
         describe("removeListener", function() {
             it("should not throw any errors", function() {
                 var myMap = new Map('myMap');
@@ -208,7 +208,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 }).toThrow(new Error('Geographic point latitude is invalid.'));
             });
         });
-        
+
         describe("getZoom/setZoom", function() {
             it("should return correct zoom after initialization", function() {
                 var myMap = new Map('myMap', {lat: 50, lon: 50}, 5);
@@ -244,10 +244,10 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 expect(function(){
                     var myMap = new Map('myMap');
                     myMap.setZoom('5');
-                }).toThrow(new TypeError('Value 5 passed to setZoom method of the Map class should be a Number.'));
+                }).toThrow(new TypeError('Value 5 passed to setZoom method of the Map should be a Number.'));
             });
         });
-        
+
         describe("add", function() {
             it("should notify observers about addition to the map", function() {
                 function MyObserver() {
@@ -270,7 +270,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 expect(function(){
                     var myMap = new Map('myMap');
                     myMap.add({});
-                }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');
+                }).toThrow('Object does not implement the "Interfaces/MapObserver" interface. Method "onAddToMap" was not found.');
             });
         });
         
@@ -297,7 +297,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 expect(function(){
                     var myMap = new Map('myMap');
                     myMap.remove({});
-                }).toThrow('Object does not implement the "IMapObserver" interface. Method "onAddToMap" was not found.');
+                }).toThrow('Object does not implement the "Interfaces/MapObserver" interface. Method "onAddToMap" was not found.');
             });
         });
 
@@ -325,6 +325,6 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 expect(myObserver2.onRemoveFromMap).toHaveBeenCalled();
             });
         });
-*/
+
     });
 });
