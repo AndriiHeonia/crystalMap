@@ -9,7 +9,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      */
     var _items = {};
 
-    return {
+    var object = {
         /**
          * Adds map to register.
          * @param {Crystal.Map} map Map object.
@@ -77,5 +77,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
             
             return null;
         }
-    }
+    };
+
+    return object;
 });

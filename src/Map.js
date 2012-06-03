@@ -54,7 +54,7 @@ define([
          * @constructor
          * @extends {Observable}
          */
-        var func = function() {
+        var constructor = function() {
             var self = this;
 
             /**
@@ -217,8 +217,8 @@ define([
             }
         };
 
-        func.prototype = Observable;
+        constructor.prototype = Observable;
 
-        return func;
+        return constructor;
     }
 );

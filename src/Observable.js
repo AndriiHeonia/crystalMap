@@ -9,7 +9,7 @@ define(["Utils/Type"], function(Utils_Type) {
      */
     var _observers = {};
 
-    return {
+    var object = {
         /**
          * Returns an event object with information about this Observable.
          * This method should be overriden by child classes.
@@ -85,4 +85,6 @@ define(["Utils/Type"], function(Utils_Type) {
             }
         }
     };
+
+    return object;
 });

@@ -2,7 +2,7 @@
  * Pixel validator module.
  */
 define(['Utils/Type'], function(Utils_Type) {
-    return {
+    var object = {
         /**
          * Checks or pixel is correct.
          * @static
@@ -16,5 +16,7 @@ define(['Utils/Type'], function(Utils_Type) {
                 throw new TypeError('Pixel y coordinate is invalid.');
             }
         }
-    }
+    };
+
+    return object;
 });

@@ -2,7 +2,7 @@
  * Array validator module.
  */
 define(['Utils/Type'], function(Utils_Type) {
-    return {
+    var object = {
         /**
          * Checks or value is an array.
          * @param {Object} value Value should be validated. Required.
@@ -14,5 +14,7 @@ define(['Utils/Type'], function(Utils_Type) {
                 throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be an Array.');
             }
         }
-    }
+    };
+
+    return object;
 });

@@ -2,8 +2,10 @@
  * Defines a map observer interface.
  */
 define(["Interface"], function(Interface) {
-    return new Interface('Interfaces/MapObserver', [
+    var object = new Interface('Interfaces/MapObserver', [
         'onAddToMap',
         'onRemoveFromMap'
     ]);
+
+    return object;
 });

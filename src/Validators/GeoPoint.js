@@ -2,7 +2,7 @@
  * Geographic point validator module.
  */
 define(['Utils/Type'], function(Utils_Type) {
-    return {
+    var object = {
         /**
          * Checks or geographic point is correct.
          * @param {Object} geoPoint Object should be validated. Required.
@@ -15,5 +15,7 @@ define(['Utils/Type'], function(Utils_Type) {
                 throw new Error('Geographic point longitude is invalid.');
             }
         }
-    }
+    };
+
+    return object;
 });

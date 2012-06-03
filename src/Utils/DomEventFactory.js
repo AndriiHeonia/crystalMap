@@ -3,7 +3,7 @@
  * Creates a custom event objects.
  */
 define(['Events/Mouse'], function(Events_Mouse) {
-    return {
+    var object = {
         /**
          * Creates one of the Crystal.Events.* object.
          * @param {Object} event Browser event.
@@ -22,5 +22,7 @@ define(['Events/Mouse'], function(Events_Mouse) {
             }
             return customEvent;
         }
-    }
+    };
+
+    return object;
 });

@@ -2,7 +2,7 @@
  * DOM element validator module.
  */
 define(['Utils/Dom'], function(Utils_Dom) {
-    return {
+    var object = {
         /**
          * Checks or value is a DOM element.
          * @param {Object} value Value should be validated. Required.
@@ -16,5 +16,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 throw new TypeError('Value ' + value + ' passed to ' + callerMethod + ' method of the ' + callerClass + ' class should be a DOM element.');
             }
         }
-    }
+    };
+
+    return object;
 });

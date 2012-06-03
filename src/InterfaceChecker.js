@@ -2,7 +2,7 @@
  * Checks or object implements interface.
  */
 define(['Interface'], function(Interface){
-    return {
+    var object = {
         /**
          * Ensure that object impements interfaces.
          * @param {Object} object Object to be checked. Required.
@@ -29,5 +29,7 @@ define(['Interface'], function(Interface){
                 }
             }
         }
-    }
+    };
+
+    return object;
 });

@@ -8,14 +8,8 @@
  * @see http://wiki.openstreetmap.org/wiki/Mercator#Spherical_Mercator
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html
  */
-define([
-        "Utils/Math",
-        "Utils/Common"
-    ], function(
-        Utils_Math,
-        Utils_Common
-    ) {
-    return {
+define(["Utils/Math", "Utils/Common"], function(Utils_Math, Utils_Common) {
+    var object = {
         /**
          * Ellipsoid radius (in meters).
          * @const
@@ -101,5 +95,7 @@ define([
             // ground resolution = cos(latitude * pi/180) * earth circumference / map width
             return 1 * (Math.cos(latInRadians) * (2 * Math.PI * this.ELLIPSOID_AXIS) / size).toFixed(10);
         }
-    }
+    };
+
+    return object;
 });

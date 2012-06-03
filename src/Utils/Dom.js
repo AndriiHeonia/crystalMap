@@ -2,15 +2,8 @@
  * DOM utils module.
  * Provides a DOM processing functionality.
  */
-define([
-        'MapRegister',
-        'Utils/DomEventFactory'
-    ],
-    function(
-        MapRegister,
-        Utils_DomEventFactory
-    ) {
-    return {
+define(['MapRegister', 'Utils/DomEventFactory'], function(MapRegister, Utils_DomEventFactory) {
+    var object = {
         /**
          * Provides a DOM processing functionality.
          * @param {String} tagName Tag, should be created. Required.
@@ -141,5 +134,7 @@ define([
             }
             return false;
         }
-    }
+    };
+
+    return object;
 });

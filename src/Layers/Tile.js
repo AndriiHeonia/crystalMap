@@ -211,14 +211,14 @@ define([
          * @constructor
          * @implements {IMapObserver}
          */
-        return function() {
+        var constructor = function() {
             /**
              * @type {Map} Map instance, layer belongs to.
              */
             this.map = null;
 
             /**
-             * Initialization.
+             * Init.
              * @param {Object} options Layer options object. Required. Structure:
              * - {String} url Tile server url (without "http://"). Required.
              * - {Array} subdomains Array with tile server subdomains. Required.
@@ -346,5 +346,7 @@ define([
                 };
             };
         };
+
+        return constructor;
     }
 );

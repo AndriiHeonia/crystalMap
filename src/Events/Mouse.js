@@ -3,11 +3,16 @@
  */
 define(['Projections/SphericalMercator'], function(Projections_SphericalMercator) {
     /**
-     * @type {Object}
+     * @type {Object} Native browser event.
      */
     var _browserEvent;
 
-    return function() {
+    /**
+     * @constructor
+     */
+    var constructor = function() {
+        var self = this;
+
         /**
          * Map, event has been raised in.
          * @type {Map|null}
@@ -52,20 +57,21 @@ define(['Projections/SphericalMercator'], function(Projections_SphericalMercator
         this.screenY = null;
 
         /**
+         * Init.
          * @param {Object} event Browser event.
          * @param {Map|null} map Map, event has been raised in.
          */
         (function(event, map) {
             _browserEvent = event;
             
-            this.target = event.target;
-            this.clientX = event.clientX;
-            this.clientY = event.clientY;
-            this.screenX = event.screenX;
-            this.screenY = event.screenY;
-            this.button = event.button; // @todo should be normalized for IE, @see http://www.w3schools.com/jsref/event_button.asp
-                
-            this.map = map;
+            self.target = event.target;
+            self.clientX = event.clientX;
+            self.clientY = event.clientY;
+            self.screenX = event.screenX;
+            self.screenY = event.screenY;
+            self.button = event.button; // @todo should be normalized for IE, @see http://www.w3schools.com/jsref/event_button.asp
+            
+            self.map = map;
         })(arguments[0], arguments[1]);
 
         /**
@@ -125,4 +131,6 @@ define(['Projections/SphericalMercator'], function(Projections_SphericalMercator
             };
         };
     };
+
+    return constructor;
 });
