@@ -23,7 +23,7 @@ require([
             projection: Projections_SphericalMercator
         });
         map.add(layer);
-    /*
+    
     //console.log(Crystal.Projections.SphericalMercator.project(geoPoint));
     //console.log(Crystal.Projections.SphericalMercator.unproject({x: 9231481.597949006, y: 7367484.0730569875}))
     
@@ -58,11 +58,11 @@ require([
     zoomOutBtn.onclick = function() {
         map.setZoom(map.getZoom() - 1);
         drawMarker();
-    };*/
+    };
 
 
     // 2GIS
-/*    DG.autoload(function() {
+    DG.autoload(function() {
         var myMap = new DG.Map('2gisMap');
         myMap.setCenter(new DG.GeoPoint(82.927, 55.028), 10);
         var myMarker = new DG.Markers.Common({
@@ -71,13 +71,13 @@ require([
         myMap.controls.add(new DG.Controls.Zoom());
         myMap.markers.add(myMarker);
     });
-*/
+
     // LeafLet
-/*    var lMap = new L.Map('lMap', {'crs': L.CRS.EPSG3857});
+    var lMap = new L.Map('lMap', {'crs': L.CRS.EPSG3857});
     var doubleGisUrl = 'http://tile0.maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
         doubleGisAttribution = '&copy; ООО «ДубльГИС», 2011',
         doubleGisLayer = new L.TileLayer(doubleGisUrl, {maxZoom: 17, attribution: doubleGisAttribution});
     lMap.setView(new L.LatLng(55.028, 82.927), 10).addLayer(doubleGisLayer);
     var marker = new L.Marker(new L.LatLng(55.028, 82.927));
-    lMap.addLayer(marker);*/
+    lMap.addLayer(marker);
 });
