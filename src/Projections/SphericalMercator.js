@@ -3,7 +3,7 @@
  * Provides a functionality to project geographic coordinates to
  * coordinates in Cartesian coordinate system via Spherical Mercator
  * projection (WGS-84) and inverse transformations.
- *
+ * @todo should be tested and completed
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
  * @see http://wiki.openstreetmap.org/wiki/Mercator#Spherical_Mercator
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html
@@ -64,14 +64,69 @@ define(["Utils/Math"], function(Utils_Math) {
             return 1 * (Math.cos(latInRadians) * (2 * Math.PI * _ellipsoidAxis) / size).toFixed(10);
         },
 
+        /**
+         * Returns view port start in global Cartesian coordinate system.
+         * @param {Object} viewPortSize View port size. Structure:
+         * - {Number} width
+         * - {Numbet} height
+         * @param {Object} mapCenter Geographic point. Structure:
+         * - {Number} lat Latitude.
+         * - {Number} lon Longitude.
+         * @param {Number} mapSize Map/base layer size in pixels.
+         * @return {Object} Structure:
+         * - {Number} x X coordinate (in pixels).
+         * - {Number} y Y coordinate (in pixels).
+         */
         getViewPortStartInGlobalCoords: function(viewPortSize, mapCenter, mapSize) {
-            var mapCenterInGlobalPixel;
-                
-            mapCenterInGlobalPixel = this.projectToGlobalCoords(mapCenter, mapSize);
+            var mapCenterInGlobalCoords = this.projectToGlobalCoords(mapCenter, mapSize);
             
             return {
-                x: mapCenterInGlobalPixel.x - (viewPortSize.width / 2),
-                y: mapCenterInGlobalPixel.y - (viewPortSize.height / 2)
+                x: mapCenterInGlobalCoords.x - (viewPortSize.width / 2),
+                y: mapCenterInGlobalCoords.y - (viewPortSize.height / 2)
+            };
+        },
+
+        /**
+         * Returns point in global Cartesian coordinate system by geographic point.
+         * @param {Object} geoPoint Geographic point. Structure:
+         * - {Number} lat Latitude.
+         * - {Number} lon Longitude.
+         * @param {Number} mapSize Map/base layer size in pixels.
+         * @return {Object} Structure:
+         * - {Number} x X coordinate (in pixels).
+         * - {Number} y Y coordinate (in pixels).
+         */
+        projectToGlobalCoords: function(geoPoint, mapSize) {
+            var lat = Utils_Math.clip(geoPoint.lat, _minLat, _maxLat);
+            var lon = Utils_Math.clip(geoPoint.lon, _minLon, _maxLon);
+            
+            var x = (lon + 180) / 360;
+            var sinLat = Math.sin(lat * Math.PI / 180);
+            var y = 0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI);
+                
+            return {
+                x: Utils_Math.clip(x * mapSize + 0.5, 0, mapSize - 1),
+                y: Utils_Math.clip(y * mapSize + 0.5, 0, mapSize - 1)
+            };
+        },
+
+        /**
+         * Returns geographic point by point in global Cartesian coordinate system.
+         * @param {Object} pixel Point in global Cartesian coordinate system. Structure:
+         * - {Number} x X coordinate (in pixels).
+         * - {Number} y Y coordinate (in pixels).
+         * @param {Number} mapSize Map/base layer size in pixels.
+         * @return Geographic point. Structure:
+         * - {Number} lat Latitude.
+         * - {Number} lon Longitude.
+         */
+        unprojectFromGlobalCoors: function(pixel, mapSize) {
+            var x = (Utils_Math.clip(pixel.x, 0, mapSize - 1) / mapSize) - 0.5;
+            var y = 0.5 - (Utils_Math(pixel.y, 0, mapSize - 1) / mapSize);
+
+            return {
+                lat: 90 - 360 * Math.atan(Math.exp((-1 * y) * 2 * Math.PI)) / Math.PI,
+                lon: 360 * x
             };
         },
 
@@ -80,9 +135,16 @@ define(["Utils/Math"], function(Utils_Math) {
          * @param {Object} geoPoint Geographic point. Structure:
          * - {Number} lat Latitude.
          * - {Number} lon Longitude.
+         * @param {Object} mapCenter Geographic point. Structure:
+         * - {Number} lat Latitude.
+         * - {Number} lon Longitude.
+         * @param {Number} mapSize Map/base layer size in pixels.
+         * @param {Object} viewPortSize View port size. Structure:
+         * - {Number} width
+         * - {Numbet} height
          * @return {Object} Structure:
-         * - {Number} x X coordinate (in meters).
-         * - {Number} y Y coordinate (in meters).
+         * - {Number} x X coordinate (in pixels).
+         * - {Number} y Y coordinate (in pixels).
          */
         projectToViewPort: function(geoPoint, mapCenter, mapSize, viewPortSize) {
             var geoPointInGlobalPixel;
@@ -98,24 +160,6 @@ define(["Utils/Math"], function(Utils_Math) {
         },
 
         unprojectFromViewPort: function() {
-
-        },
-
-        projectToGlobalCoords: function(geoPoint, mapSize) {
-            var lat = Utils_Math.clip(geoPoint.lat, _minLat, _maxLat);
-            var lon = Utils_Math.clip(geoPoint.lon, _minLon, _maxLon);
-            
-            var x = (lon + 180) / 360;
-            var sinLat = Math.sin(lat * Math.PI / 180);
-            var y = 0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI);
-                
-            return {
-                x: Utils_Math.clip(x * mapSize + 0.5, 0, mapSize - 1),
-                y: Utils_Math.clip(y * mapSize + 0.5, 0, mapSize - 1)
-            };
-        },
-
-        unprojectFromGlobalCoors: function() {
 
         }
     };
