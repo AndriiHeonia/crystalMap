@@ -13,12 +13,14 @@
     <![endif]-->
     <script src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
 
-    <!-- data-main attribute tells require.js to load
-         index.js after require.js loads. -->
-    <script data-main="/crystalMap/src/main" src="../lib/require-js/require.js"></script>
-
-    <!--<script type="text/javascript" src="../lib/lab-js/LAB.min.js"></script>
-    <script type="text/javascript" src="loader.js"></script>-->
+    <!-- data-main attribute tells require.js to load index.js after require.js loads. -->
+    <script type="text/javascript" src="../lib/require-js/require.js"></script>
+    <script type="text/javascript">
+        require.config({
+            baseUrl: "/crystalMap/src"
+        });
+    </script>
+    <script type="text/javascript" src="index.js"></script>
 </head>
 
 <body>

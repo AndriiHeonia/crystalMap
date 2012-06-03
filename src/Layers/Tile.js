@@ -215,7 +215,7 @@ define([
             /**
              * @type {Map} Map instance, layer belongs to.
              */
-            this.map = _map;
+            this.map = null;
 
             /**
              * Initialization.
@@ -248,7 +248,7 @@ define([
              * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
              */
             this.onAddToMap = function(mapEvent) {
-                this.map = mapEvent.map;
+                _map = this.map = mapEvent.map;
 
                 _initContainer.call(this);
                 _redraw.call(this);

@@ -211,9 +211,6 @@ define([
                 this.fireEvent('CenterChanging');*/
             }
             
-            /**
-        *
-        */
             function _addDomListeners()
             {
                 Utils_Dom.addListener(this.container, 'click', Utils_Common.bind(this, _handleDragging));

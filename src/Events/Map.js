@@ -1,7 +1,7 @@
 /**
  * Incapsulates information about the map that has been raised an event.
  */
-define(['Map', 'Validators/Instance'], function(Map, Validators_Instance) {
+define(function() {
     return function() {
         /**
          * Map instance that has been raised an event.
@@ -9,12 +9,13 @@ define(['Map', 'Validators/Instance'], function(Map, Validators_Instance) {
          */
         this.map = null;
 
+        _self = this;
+
          /**
           * @param {Map} map Map instance.
           */
         (function(map){
-            Validators_Instance.validate(map, Map, 'Events/Map');
-            this.map = map;
+            _self.map = map;
         })(arguments[0]);
     };
 });
