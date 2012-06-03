@@ -6,9 +6,28 @@
 		<link rel="shortcut icon" type="image/png" href="../lib/jasmine/jasmine_favicon.png">
 		<link rel="stylesheet" type="text/css" href="../lib/jasmine/jasmine.css">
         <link rel="stylesheet" href="../src/style.css" />
-		<!-- include source files here -->
-        <script type="text/javascript" src="../lib/lab-js/LAB.min.js"></script>
-        <script type="text/javascript" src="loader.js"></script>
+
+        <script type="text/javascript" src="../lib/require-js/require.js"></script>
+        <script type="text/javascript">
+            require.config({
+                baseUrl: "/crystalMap/src"
+            });
+        </script>
+
+        <script type="text/javascript" src="../lib/jasmine/jasmine.js"></script>
+        <script type="text/javascript" src="../lib/jasmine/jasmine-html.js"></script>
+        <script type="text/javascript" src="../lib/jasmine/jasmine-after-each.js"></script>
+		
+        <!-- include source files here -->
+        <script type="text/javascript">
+            require([
+              '../spec/suites/Events/MapSpec'
+            ],
+            function() {
+                jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+                jasmine.getEnv().execute();
+            });
+        </script>
 	</head>
 	<body>
         <div style="width: 1200px; height: 300px; border: 1px solid black; margin: auto" id="myMap"></div>
