@@ -71,6 +71,25 @@ define(['Layers/Tile'], function(Layers_Tile) {
                     });
                 }).toThrow(new TypeError('Value 666 passed to init method of the Layers/Tile should be a String.'));
             });
+
+            it("should throw an error, because projection option is invalid", function() {
+                expect(function() {
+                    new Layers_Tile({
+                        url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
+                        subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
+                        tileSize: 255,
+                        errorTileUrl: 'http://www.saleevent.ca/images/products/no_image.jpg',
+                        projection: {
+                            getGroundResolution: function() {},
+                            getViewPortStartInGlobalCoords: function() {},
+                            projectToGlobalCoords: function() {},
+                            unprojectFromGlobalCoords: function() {},
+                            projectToViewPort: function() {}
+                        }
+                    });
+                }).toThrow(new ReferenceError('Object does not implement the "Interfaces/Projection" interface. Method "unprojectFromViewPort" was not found.'));
+            });
+
         });
 
     });

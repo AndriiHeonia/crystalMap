@@ -262,7 +262,7 @@ define([
                 Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'init');
                 
                 if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
-                    //InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
+                    InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
                     _self.projection = options.projection;
                 }
                 else {
