@@ -22,7 +22,7 @@ require([
             projection: Projections_SphericalMercator
         });
         map.add(layer);
-    
+        
         drawMarker();
         function drawMarker() {
 
