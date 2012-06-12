@@ -1,7 +1,7 @@
 /**
  * Incapsulates information about mouse.
  */
-define(['Projections/SphericalMercator'], function(Projections_SphericalMercator) {
+define(function() {
     /**
      * @type {Object} Native browser event.
      */
@@ -96,43 +96,19 @@ define(['Projections/SphericalMercator'], function(Projections_SphericalMercator
         // experimental code:
 
         /**
+         * @todo doc and test
          * Returns a geographic coordinates by mouse cursor position.
          * @return {Object}
          */
         this.getGeoPoint = function() {
-            var pixel;
-            var mapSize;
-            var zoomLevel = 10;
-            var tileSize = 256;
-            var mapCenterPixel;
-
-            zoomLevel = this.map.getZoom();
-            mapSize = Projections_SphericalMercator.getMapSize(tileSize, zoomLevel);
-
-            mapCenterPixel = Projections_SphericalMercator.getPixelByGeoPoint(this.map.getCenter(), zoomLevel, tileSize);
-            pixel = {
-                x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
-                y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
-            };
-
-            return Projections_SphericalMercator.getGeoPointByPixel(pixel, zoomLevel, tileSize);
+            return _self.map.unprojectFromViewPort(_self.getPixel());
         },
 
+        // @todo doc and test
         this.getPixel = function() {
-            var pixel;
-            var mapSize;
-            var zoomLevel = 10;
-            var tileSize = 256;
-            var mapCenterPixel;
-
-            zoomLevel = this.map.getZoom();
-            mapSize = Projections_SphericalMercator.getMapSize(tileSize, zoomLevel);
-
-            mapCenterPixel = Projections_SphericalMercator.getPixelByGeoPoint(this.map.getCenter(), zoomLevel, tileSize);
-                
             return {
-                x: mapSize - mapCenterPixel.x - (this.map.container.offsetWidth / 2) + this.clientX,
-                y: mapSize - mapCenterPixel.y - (this.map.container.offsetHeight / 2) + this.clientY
+                x: _self.clientX - _self.map.container.offsetLeft,
+                y: _self.clientY - _self.map.container.offsetTop
             };
         };
     };

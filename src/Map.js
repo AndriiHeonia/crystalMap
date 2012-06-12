@@ -75,6 +75,13 @@ define([
             this.container = null;
 
             /**
+             * Base layer
+             * @todo to think about attaching base layer to the map!
+             * @type {Layers/Tile}
+             */
+            this.baseLayer = null;
+
+            /**
              * Initialization.
              * @param {String|Object} container DOM element or ID of the DOM element, which should contain this map. Required.
              * @param {Object} center Geographic coordinates of the center. Optional.
@@ -125,7 +132,7 @@ define([
             */
             this.getEventObject = function()
             {
-                return new Events_Map(this);
+                return new Events_Map(_self);
             };
 
             /**
@@ -146,7 +153,7 @@ define([
                 Validators_GeoPoint.validate(center);
                 
                 _center = center;
-                this.fireEvent('CenterChanging');
+                _self.fireEvent('CenterChanging');
             };
 
             /**
@@ -166,7 +173,7 @@ define([
             {
                 Validators_Number.validate(zoom, 'Map', 'setZoom');
                 _zoom = zoom;
-                this.fireEvent('ZoomChanging');
+                _self.fireEvent('ZoomChanging');
             };
 
             /**
@@ -178,8 +185,11 @@ define([
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
                 
                 _directObservers.push(observer);
-                observer.onAddToMap(this.getEventObject());
-                this.fireEvent('MapUpdating');
+                if(_self.baseLayer === null) {
+                    _self.baseLayer = observer; // @todo shouldn't be first object
+                }
+                observer.onAddToMap(_self.getEventObject());
+                _self.fireEvent('MapUpdating');
             };
 
             /**
@@ -190,45 +200,51 @@ define([
             {
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
 
-                observer.onRemoveFromMap(this.getEventObject());
+                observer.onRemoveFromMap(_self.getEventObject());
                 _directObservers.splice(_directObservers.indexOf(observer), 1);
-                this.fireEvent('MapUpdating');
+                _self.fireEvent('MapUpdating');
             };
             
             /**
              * Destructor
              */
             this.destroy = function() {
-                this.parent.destroy();
+                _self.parent.destroy();
                 
                 // Calls onRemoveFromMap method to each user added observer and clears _directObservers array
                 for(var i = 0; i < _directObservers.length; i++) {
-                    _directObservers[i].onRemoveFromMap(this.getEventObject);
+                    _directObservers[i].onRemoveFromMap(_self.getEventObject);
                 }
                 _directObservers = [];
 
-                MapRegister.remove(this.container.id);
+                MapRegister.remove(_self.container.id);
             };
-            
-            function _handleDragging(event)
-            {
-                // @todo
-                // console.log('src:');
-                // console.log(event.getPixel());
-                // console.log(event.getGeoPoint());
 
-                // console.log('converted:');
-                // console.log(Crystal.Projections.SphericalMercator.getPixelByGeoPoint(event.getGeoPoint(), 10, 256));
-                // console.log(Crystal.Projections.SphericalMercator.getGeoPointByPixel(event.getPixel(), 10, 256));
+            // @todo doc and test
+            this.projectToViewPort = function(geoPoint) {
+                return _self.baseLayer.projection.projectToViewPort(
+                    geoPoint,
+                    _self.getCenter(),
+                    _self.baseLayer.getSize(),
+                    {
+                        width: _self.container.clientWidth,
+                        height: _self.container.clientHeight
+                    }
+                );
+            };
 
-                        /*_center = event.getGeoPoint();
-                this.fireEvent('CenterChanging');*/
-            }
-            
-            function _addDomListeners()
-            {
-                Utils_Dom.addListener(this.container, 'click', Utils_Common.bind(this, _handleDragging));
-            }
+            // @todo doc and test
+            this.unprojectFromViewPort = function(pixel) {
+                return _self.baseLayer.projection.unprojectFromViewPort(
+                    pixel,
+                    _self.getCenter(),
+                    _self.baseLayer.getSize(),
+                    {
+                        width: _self.container.clientWidth,
+                        height: _self.container.clientHeight
+                    }
+                );
+            };
         };
 
         constructor.prototype = Observable;

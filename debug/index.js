@@ -26,15 +26,7 @@ require([
         drawMarker();
         function drawMarker() {
 
-            // map should contain getBaseLayer() method
-            var pixel = layer.projection.projectToViewPort(
-                geoPoint,
-                map.getCenter(),
-                layer.getSize(),
-                {
-                    width: map.container.clientWidth,
-                    height: map.container.clientHeight
-                });
+            var pixel = map.projectToViewPort(geoPoint);
 
             if(document.getElementById('m1')) {
                 map.container.removeChild(document.getElementById('m1'));
