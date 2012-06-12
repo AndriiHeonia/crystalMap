@@ -5,7 +5,7 @@
 define(['Events/Mouse'], function(Events_Mouse) {
     var object = {
         /**
-         * Creates one of the Crystal.Events.* object.
+         * Creates one of the custom event object.
          * @param {Object} event Browser event.
          * @param {Crystal.Map|null} map Map, event has been raised in.
          * @return {Object}

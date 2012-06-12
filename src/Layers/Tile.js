@@ -96,8 +96,8 @@ define([
             viewPortWidthAndHeight.height = Math.ceil(_map.container.offsetHeight / _self.tileSize);
             viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
             
-            centralTileXY = _getTileXY.apply(this, [_map.getCenter()]);
-            currentTileXY = _getTileXY.apply(this, [_map.getCenter()]);
+            centralTileXY = _getTileXY(_map.getCenter());
+            currentTileXY = _getTileXY(_map.getCenter());
             
             var centralTileShift = {
                 x: _self.projection.projectToGlobalCoords(_map.getCenter(), _self.getSize()).x - centralTileXY.x * 256,
@@ -105,32 +105,32 @@ define([
             };
 
             // show central tile
-            _showTile.apply(this, [centralTileXY.x, centralTileXY.y, centralTileXY, centralTileShift]);
+            _showTile(centralTileXY.x, centralTileXY.y, centralTileXY, centralTileShift);
             showed++;
             
             // show another tiles by spiral from the center
             while(showed < viewPortTileSize) {
                 while(currentTileXY.x < centralTileXY.x + spiral) { // move >
                     currentTileXY.x++;
-                    _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
+                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
                 
                 while(currentTileXY.y < centralTileXY.y + spiral) { // move v
                     currentTileXY.y++;
-                    _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
+                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
 
                 while(currentTileXY.x > centralTileXY.x - spiral) { // move <
                     currentTileXY.x--;
-                    _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
+                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
 
                 while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) { // move ^
                     currentTileXY.y--;
-                    _showTile.apply(this, [currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift]);
+                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
                 
@@ -281,8 +281,8 @@ define([
             _self.onAddToMap = function(mapEvent) {
                 _map = mapEvent.map;
 
-                _initContainer.call(this);
-                _redraw.call(this);
+                _initContainer();
+                _redraw();
 
                 _map.addListener('ZoomChanging', _redraw);
                 _map.addListener('CenterChanging', _redraw);
@@ -296,7 +296,7 @@ define([
                 _map.removeListener('ZoomChanging', _redraw);
                 _map.removeListener('CenterChanging', _redraw);
                 
-                _destroyContainer.call(this);
+                _destroyContainer();
                 _map = null;
             };
 

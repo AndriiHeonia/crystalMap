@@ -18,7 +18,8 @@ define([
         'InterfaceChecker',
         'Interfaces/MapObserver',
         'Utils/Dom',
-        'Utils/Common'
+        'Utils/Common',
+        'Map/Behavior'
     ],
     function(
         Observable,
@@ -32,8 +33,14 @@ define([
         InterfaceChecker,
         Interfaces_MapObserver,
         Utils_Dom,
-        Utils_Common
+        Utils_Common,
+        Map_Behavior
     ) {
+        /**
+         * @type {Map}
+         */
+        var _self;
+
         /**
          * @type {Object}
          */
@@ -47,15 +54,19 @@ define([
         /**
          * @type {Array}
          */
-        var _userObservers = [];
+        var _directObservers = [];
 
+        /**
+         * @type {Map/Behavior} Behavior of this map.
+         */
+        var _behavior;
 
         /**
          * @constructor
          * @extends {Observable}
          */
         var constructor = function() {
-            var self = this;
+            _self = this;
 
             /**
              * DOM element, which contains this map.
@@ -73,13 +84,13 @@ define([
                 var containerIsStr;
                     
                 containerIsStr = Utils_Type.isString(container);
-                self.container = containerIsStr ? document.getElementById(container) : container;
+                _self.container = containerIsStr ? document.getElementById(container) : container;
                     
                 if(containerIsStr) {
-                    Validators_NotNull.validate(self.container, 'Map', 'initialize');
+                    Validators_NotNull.validate(_self.container, 'Map', 'initialize');
                 }
                 else {
-                    Validators_DomElement.validate(self.container, 'Map', 'initialize');
+                    Validators_DomElement.validate(_self.container, 'Map', 'initialize');
                 }
                 if(center) {
                     Validators_GeoPoint.validate(center);
@@ -88,20 +99,22 @@ define([
                     Validators_Number.validate(zoom, 'Map', 'initialize');
                 }
                 
-                self.container.innerHTML = '';
-                self.container.style.position = 'relative';
-                self.container.style.backgroundColor = '#F4F2EE';
+                _self.container.innerHTML = '';
+                _self.container.style.position = 'relative';
+                _self.container.style.backgroundColor = '#F4F2EE';
                 _center = center || {lat: 0, lon: 0};
                 _zoom = zoom || 0;
 
-                MapRegister.add(self);
+                MapRegister.add(_self);
                     
                 // events, which can be fired by this object
-                self.registerEvent([
+                _self.registerEvent([
                     'MapUpdating',
                     'ZoomChanging',
                     'CenterChanging'
                 ]);
+
+                _behavior = new Map_Behavior(_self);
                     
                 //_addDomListeners.call(this);
              })(arguments[0], arguments[1], arguments[2]);
@@ -164,7 +177,7 @@ define([
             {
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
                 
-                _userObservers.push(observer);
+                _directObservers.push(observer);
                 observer.onAddToMap(this.getEventObject());
                 this.fireEvent('MapUpdating');
             };
@@ -178,7 +191,7 @@ define([
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
 
                 observer.onRemoveFromMap(this.getEventObject());
-                _userObservers.splice(_userObservers.indexOf(observer), 1);
+                _directObservers.splice(_directObservers.indexOf(observer), 1);
                 this.fireEvent('MapUpdating');
             };
             
@@ -188,11 +201,11 @@ define([
             this.destroy = function() {
                 this.parent.destroy();
                 
-                // Calls onRemoveFromMap method to each user added observer and clears _userObservers array
-                for(var i = 0; i < _userObservers.length; i++) {
-                    _userObservers[i].onRemoveFromMap(this.getEventObject);
+                // Calls onRemoveFromMap method to each user added observer and clears _directObservers array
+                for(var i = 0; i < _directObservers.length; i++) {
+                    _directObservers[i].onRemoveFromMap(this.getEventObject);
                 }
-                _userObservers = [];
+                _directObservers = [];
 
                 MapRegister.remove(this.container.id);
             };
