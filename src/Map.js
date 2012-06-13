@@ -130,8 +130,7 @@ define([
             * Returns an event object with information about the map.
             * @return {Events.Map}
             */
-            this.getEventObject = function()
-            {
+            this.getEventObject = function() {
                 return new Events_Map(_self);
             };
 
@@ -139,8 +138,7 @@ define([
             * Returns geographic coordinates of the center.
             * @return {Object} Coordinates of the center.
             */
-            this.getCenter = function()
-            {
+            this.getCenter = function() {
                 return _center;
             };
 
@@ -148,8 +146,7 @@ define([
              * Sets geographic coordinates of the center.
              * @param {Object} center Coordinates of the center. Required.
              */
-            this.setCenter = function(center)
-            {
+            this.setCenter = function(center) {
                 Validators_GeoPoint.validate(center);
                 
                 _center = center;
@@ -160,8 +157,7 @@ define([
              * Returns zoom level of the map.
              * @return {Number} Zoom level.
              */
-            this.getZoom = function()
-            {
+            this.getZoom = function() {
                 return _zoom;
             };
 
@@ -169,8 +165,7 @@ define([
              * Sets zoom level of the map.
              * @param {Number} zoom Zoom level. Required.
              */
-            this.setZoom = function(zoom)
-            {
+            this.setZoom = function(zoom) {
                 Validators_Number.validate(zoom, 'Map', 'setZoom');
                 _zoom = zoom;
                 _self.fireEvent('ZoomChanging');
@@ -180,8 +175,7 @@ define([
              * Adds an observer to the map.
              * @param {Interfaces/MapObserver} observer Observer to listen map events. Required.
              */
-            this.add = function(observer)
-            {
+            this.add = function(observer) {
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
                 
                 _directObservers.push(observer);
@@ -196,8 +190,7 @@ define([
              * Removes an observer from the map.
              * @param {Interfaces/MapObserver} observer Registered observer. Required.
              */
-            this.remove = function(observer)
-            {
+            this.remove = function(observer) {
                 InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
 
                 observer.onRemoveFromMap(_self.getEventObject());

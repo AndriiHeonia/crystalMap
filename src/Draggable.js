@@ -1,0 +1,5 @@
+/**
+ * Draggable module.
+ */
+define({
+});
