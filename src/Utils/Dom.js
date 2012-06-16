@@ -90,7 +90,7 @@ define(['require', 'Utils/DomEventFactory'], function(require, Utils_DomEventFac
             
             parentMap = require('MapRegister').getItemByDomElement(element);
             
-            // handles browser event, creates one of Crystal.Events.* event and calls an user handler.
+            // handles browser event, creates one of Events.* event and calls an user handler.
             var metaHandler = function(event) {
                 handler.call(this, Utils_DomEventFactory.create(event, parentMap));
             };

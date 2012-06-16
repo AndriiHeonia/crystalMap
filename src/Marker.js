@@ -2,7 +2,7 @@
  * DOM marker.
  * @todo
  */
-define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
+define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Common, Draggable) {
     /**
      * @type {Markers/Common}
      */
@@ -24,29 +24,28 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
     var _iconUrl;
 
     /**
+     * @type {Boolean}
+     */
+    var _isDraggable;
+
+    /**
      * Initializes marker container.
      */
     function _initContainer() {
-        var pixel;
-
-        pixel = _map.projectToViewPort(_geoPoint);
-
         _self.container = Utils_Dom.create(
             'img',
             Utils_Common.createUniqueId('Marker'),
             'crystal-marker'
         );
 
-        _self.container.src = _iconUrl || Utils_Common.getBaseUrl() + '/images/marker.png';
-        _self.container.style.left = pixel.x + 'px';
-        _self.container.style.top = pixel.y + 'px';
+        _self.container.src = _iconUrl;
     }
 
     /**
      * Destroys a tile container.
      */
     function _destroyContainer() {
-        _map.container.removeChild(_container);
+        _map.container.removeChild(_self.container);
         _self.container = null;
     }
 
@@ -94,10 +93,12 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
          *  - {Number} lat Latitude.
          *  - {Number} lon Longitude.
          * - {String} iconUrl Marker icon url.
+         * - {Boolean} isDraggable Defines or marker is draggable.
          */
         (function(options) {
             _geoPoint = options.geoPoint;
-            _iconUrl = options.iconUrl;
+            _iconUrl = options.iconUrl || Utils_Common.getBaseUrl() + '/images/marker.png';
+            _isDraggable = options.isDraggable || false;
         })(arguments[0]);
 
         /**
@@ -109,6 +110,10 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
 
             _initContainer();
             _draw();
+
+            if(_isDraggable === true) {
+                _self.enableDragging(_map, _self.container);
+            }
 
             _map.addListener('ZoomChanging', _redraw);
             _map.addListener('CenterChanging', _redraw);
@@ -125,7 +130,18 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
             _destroyContainer();
             _map = null;
         };
+
+        /**
+         * Handles and process dragging notification.
+         */
+        _self.onDrag = function(event) {
+            _geoPoint = event.getGeoPoint();
+            _redraw();
+        };
     };
+
+    constructor.prototype = Draggable;
+    constructor.prototype.parent = constructor.prototype;
 
     return constructor;
 });

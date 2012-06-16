@@ -7,16 +7,22 @@ define(['Events/Mouse'], function(Events_Mouse) {
         /**
          * Creates one of the custom event object.
          * @param {Object} event Browser event.
-         * @param {Crystal.Map|null} map Map, event has been raised in.
+         * @param {Map|null} map Map, event has been raised in.
          * @return {Object}
          */
         create: function(event, map) {
             var customEvent;
             switch(event.type) {
+                case 'click': // @todo test it
+                    customEvent = new Events_Mouse(event, map);
+                    break;
+                case 'mousedown': // @todo test it
+                    customEvent = new Events_Mouse(event, map);
+                    break;
                 case 'mousemove':
                     customEvent = new Events_Mouse(event, map);
                     break;
-                case 'click': // @todo test it
+                case 'mouseup': // @todo test it
                     customEvent = new Events_Mouse(event, map);
                     break;
             }

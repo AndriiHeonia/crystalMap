@@ -107,8 +107,8 @@ define(function() {
         // @todo doc and test
         this.getPixel = function() {
             return {
-                x: _self.clientX - _self.map.container.offsetLeft,
-                y: _self.clientY - _self.map.container.offsetTop
+                x: _self.clientX - _self.map.container.offsetLeft + window.pageXOffset,
+                y: _self.clientY - _self.map.container.offsetTop + window.pageYOffset
             };
         };
     };

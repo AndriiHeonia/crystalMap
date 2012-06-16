@@ -13,12 +13,12 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
     var _map;
 
     function _handleDragging(event) {
-        _map.setCenter(event.getGeoPoint());
-        this.fireEvent('CenterChanging');
+        //_map.setCenter(event.getGeoPoint());
+        //this.fireEvent('CenterChanging');
     }
             
     function _addDomListeners() {
-        Utils_Dom.addListener(_map.container, 'click', Utils_Common.bind(_self, _handleDragging));
+        //Utils_Dom.addListener(_map.container, 'click', Utils_Common.bind(_self, _handleDragging));
     }
 
     /**
@@ -32,8 +32,8 @@ define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
           * @param {Map/Behavior} map Map instance.
           */
         (function(map) {
-            _map = map;
-            _addDomListeners();
+            //_map = map;
+            //_addDomListeners();
         })(arguments[0]);
     };
 

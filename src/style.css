@@ -13,6 +13,7 @@
 }
 
 .crystal-marker {
+    cursor: pointer;
     position: absolute;
     z-index: 2;
 }
