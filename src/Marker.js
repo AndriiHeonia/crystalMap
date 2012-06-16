@@ -1,8 +1,8 @@
 /**
- * DOM marker module.
+ * DOM marker.
  * @todo
  */
-define(function() {
+define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
     /**
      * @type {Markers/Common}
      */
@@ -27,18 +27,19 @@ define(function() {
      * Initializes marker container.
      */
     function _initContainer() {
+        var pixel;
+
+        pixel = _map.projectToViewPort(_geoPoint);
+
         _self.container = Utils_Dom.create(
-            'div',
-            Utils_Common.createUniqueId('Markers/Common'),
+            'img',
+            Utils_Common.createUniqueId('Marker'),
             'crystal-marker'
         );
 
-        _self.container.style.position = 'absolute';
+        _self.container.src = _iconUrl || Utils_Common.getBaseUrl() + '/images/marker.png';
         _self.container.style.left = pixel.x + 'px';
         _self.container.style.top = pixel.y + 'px';
-        _self.container.style.width = '20px';
-        _self.container.style.height = '20px';
-        _self.container.style.backgroundColor = 'blue';        
     }
 
     /**
@@ -49,8 +50,24 @@ define(function() {
         _self.container = null;
     }
 
+    /**
+     * Appends marker to the map.
+     */
+    function _draw() {
+        _map.container.appendChild(_self.container);
+        _redraw();
+    }
+
+    /**
+     * Redraws marker into new position.
+     */
     function _redraw() {
-        var pixel = map.projectToViewPort(_geoPoint);
+        var pixel;
+
+        pixel = _map.projectToViewPort(_geoPoint);
+
+        _self.container.style.left = pixel.x - (_self.container.clientWidth / 2) + 'px';
+        _self.container.style.top = pixel.y - (_self.container.clientHeight) + 'px';
     }
 
     /**
@@ -63,14 +80,19 @@ define(function() {
         /**
          * @type {Object} Marker DOM object.
          */
-        this.container = null;
+        _self.container = null;
+
+        /**
+         * @type {Boolean} Marker visibility state.
+         */
+        _self.isShown = false;
 
         /**
          * Init.
          * @param {Object} options Marker options. Required. Structure:
          * - {Object} geoPoint Geographic point of the marker. Structure:
          *  - {Number} lat Latitude.
-         *  - {Number} lon Longitude.        
+         *  - {Number} lon Longitude.
          * - {String} iconUrl Marker icon url.
          */
         (function(options) {
@@ -85,7 +107,9 @@ define(function() {
         _self.onAddToMap = function(mapEvent) {
             _map = mapEvent.map;
 
-            _redraw();
+            _initContainer();
+            _draw();
+
             _map.addListener('ZoomChanging', _redraw);
             _map.addListener('CenterChanging', _redraw);
         };

@@ -24,5 +24,12 @@ define({
         return function() {
             return func.apply(scope, arguments);
         };
+    },
+
+    /**
+     * @todo detection should be dynamic and cached.
+     */
+    getBaseUrl: function() {
+        return 'http://localhost/crystalMap';
     }
 });

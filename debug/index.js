@@ -1,12 +1,14 @@
 require([
         'Map',
         'Layers/Tile',
-        'Projections/SphericalMercator'
+        'Projections/SphericalMercator',
+        'Marker'
     ],
     function(
         Map,
         Layers_Tile,
-        Projections_SphericalMercator
+        Projections_SphericalMercator,
+        Marker
     ) {
         var geoPoint = {
             lat: 55.028,
@@ -22,38 +24,22 @@ require([
             projection: Projections_SphericalMercator
         });
         map.add(layer);
+
+        var marker = new Marker({
+            geoPoint: geoPoint
+        });
+        map.add(marker);
         
-        drawMarker();
-        function drawMarker() {
-
-            var pixel = map.projectToViewPort(geoPoint);
-
-            if(document.getElementById('m1')) {
-                map.container.removeChild(document.getElementById('m1'));
-            }
-            var marker = document.createElement('div');
-            marker.id = 'm1';
-            marker.style.position = 'absolute';
-            marker.style.left = pixel.x + 'px';
-            marker.style.top = pixel.y + 'px';
-            marker.style.width = '20px';
-            marker.style.height = '20px';
-            marker.style.backgroundColor = 'blue';
-            map.container.appendChild(marker);
-        }
-
 
     var zoomInBtn = document.getElementById('zoomin');
     var zoomOutBtn = document.getElementById('zoomout');
     
     zoomInBtn.onclick = function() {
         map.setZoom(map.getZoom() + 1);
-        drawMarker();
     };
     
     zoomOutBtn.onclick = function() {
         map.setZoom(map.getZoom() - 1);
-        drawMarker();
     };
 
 
@@ -74,6 +60,5 @@ require([
         doubleGisAttribution = '&copy; ООО «ДубльГИС», 2011',
         doubleGisLayer = new L.TileLayer(doubleGisUrl, {maxZoom: 17, attribution: doubleGisAttribution});
     lMap.setView(new L.LatLng(55.028, 82.927), 10).addLayer(doubleGisLayer);
-    var marker = new L.Marker(new L.LatLng(55.028, 82.927));
-    lMap.addLayer(marker);
+    lMap.addLayer(new L.Marker(new L.LatLng(55.028, 82.927)));
 });
