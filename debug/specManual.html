@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Visual tests</title>
+        <link rel="stylesheet" href="../src/style.css" />
+
+        <script type="text/javascript" src="../lib/require-js/require.js"></script>
+        <script type="text/javascript">
+            require.config({
+                baseUrl: "/crystalMap/src"
+            });
+        </script>
+        <!-- include source files here -->
+        <script type="text/javascript">
+            require([
+              '../spec/manual/Draggable',
+            ]);
+        </script>        
+    </head>
+    <body>
+        Draggable + Marker dragging: 1) Try to drag marker out of the map 2) Check console log 
+        <div style="width: 1200px; height: 300px; border: 1px solid black; margin: auto" id="myMap_Draggable"></div>
+    </body>
+</html>

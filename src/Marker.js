@@ -139,7 +139,6 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          */
         _self.onDrag = function(event) {
             _pixel = event.currentPixel;
-            console.log(event.getIsOutOfMap());
             _redraw();
         };
     };
