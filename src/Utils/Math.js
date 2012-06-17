@@ -21,11 +21,6 @@
         return 1 * (radians * (180 / Math.PI)).toFixed(10);
     },
     
-    // @todo test it
-    div: function(val, by) {
-        return (val - val % by) / by;
-    },
-
     /**
      * Clips a number to the specified minimum and maximum values.
      * @param {Number} number The number to clip.

@@ -4,10 +4,6 @@
  * @see http://politerm.com.ru/zuludoc/tile_servers.htm
  * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
- * @todo should use project and unproject methods from SphericalMercator class
- * @todo setCenter() should be fixed
- * @todo add clipping for projection
- * @todo draw strategy should be configurable
  */
 define([
         'Validators/NotUndefined',
@@ -20,7 +16,8 @@ define([
         'Utils/Dom',
         'Projections/SphericalMercator',
         'Interfaces/Projection',
-        'System/InterfaceChecker'
+        'System/InterfaceChecker',
+        'Draggable'
     ],
     function(
         Validators_NotUndefined,
@@ -33,7 +30,8 @@ define([
         Utils_Dom,
         Projections_SphericalMercator,
         Interfaces_Projection,
-        System_InterfaceChecker
+        System_InterfaceChecker,
+        Draggable
     ) {
         /**
          * @type {Layers/Tile}
@@ -283,7 +281,9 @@ define([
 
                 _initContainer();
                 _redraw();
-
+                
+                _self.enableDragging(_map, _container);
+                
                 _map.addListener('ZoomChanging', _redraw);
                 _map.addListener('CenterChanging', _redraw);
             };
@@ -300,6 +300,13 @@ define([
                 _map = null;
             };
 
+            // @todo make it!
+            _self.onDrag = function(event) {
+                var pixel = event.currentPixel;
+                _container.style.left = pixel.x + 'px';
+                _container.style.top = pixel.y + 'px';
+            };
+
             /**
              * Determines the layer width and height (in pixels) at a specified zoom level.
              * @return {Number}
@@ -308,6 +315,9 @@ define([
                 return _self.tileSize * Math.pow(2, _map.getZoom());
             };
         };
+
+        constructor.prototype = Draggable;
+        constructor.prototype.parent = constructor.prototype;
 
         return constructor;
     }
