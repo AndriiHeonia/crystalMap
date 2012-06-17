@@ -16,7 +16,12 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
     /**
      * @type {Object}
      */
-    var _geoPoint;
+    var _initGeoPoint;
+
+    /**
+     * @type {Object}
+     */
+    var _pixel;
 
     /**
      * @type {String}
@@ -61,12 +66,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
      * Redraws marker into new position.
      */
     function _redraw() {
-        var pixel;
-
-        pixel = _map.projectToViewPort(_geoPoint);
-
-        _self.container.style.left = pixel.x - (_self.container.clientWidth / 2) + 'px';
-        _self.container.style.top = pixel.y - (_self.container.clientHeight) + 'px';
+        _self.container.style.left = _pixel.x - (_self.container.clientWidth / 2) + 'px';
+        _self.container.style.top = _pixel.y - (_self.container.clientHeight) + 'px';
     }
 
     /**
@@ -96,7 +97,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          * - {Boolean} isDraggable Defines or marker is draggable.
          */
         (function(options) {
-            _geoPoint = options.geoPoint;
+            _initGeoPoint = options.geoPoint;
             _iconUrl = options.iconUrl || Utils_Common.getBaseUrl() + '/images/marker.png';
             _isDraggable = options.isDraggable || false;
         })(arguments[0]);
@@ -107,6 +108,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          */
         _self.onAddToMap = function(mapEvent) {
             _map = mapEvent.map;
+            _pixel = _map.projectToViewPort(_initGeoPoint);
 
             _initContainer();
             _draw();
@@ -128,6 +130,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
             _map.removeListener('CenterChanging', _redraw);
                 
             _destroyContainer();
+            _pixel = null;
             _map = null;
         };
 
@@ -135,7 +138,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          * Handles and process dragging notification.
          */
         _self.onDrag = function(event) {
-            _geoPoint = event.getGeoPoint();
+            _pixel = event.currentPixel;
+            console.log(event.getIsOutOfMap());
             _redraw();
         };
     };
