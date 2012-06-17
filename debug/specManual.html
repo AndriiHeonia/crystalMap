@@ -16,10 +16,37 @@
             require([
               '../spec/manual/Draggable',
             ]);
-        </script>        
+        </script>
+
+        <style type="text/css">
+            .map {
+                float: left;
+            }
+            .flow {
+                margin-right: 50px;
+                float: left;
+                width: 400px;
+                font-size: 12px;
+            }
+            .separator {
+                float: left;
+                width: 100%;
+                height: 1px;
+                margin-bottom: 10px;
+                margin-top: 10px;
+                background-color: black;
+            }
+        </style>      
     </head>
     <body>
-        Draggable + Marker dragging: 1) Try to drag marker out of the map 2) Check console log 
-        <div style="width: 1200px; height: 300px; border: 1px solid black; margin: auto" id="myMap_Draggable"></div>
+        <div class="flow">
+            <b>Draggable + Marker dragging</b>
+            <ul>
+                <li>Try to drag marker out of the map</li>
+                <li>Check console log</li>
+            </ul>
+        </div>
+        <div class="map" style="width: 600px; height: 300px; border: 1px solid black; margin: auto" id="myMap_Draggable"></div>
+        <div class="separator"></div>
     </body>
 </html>
