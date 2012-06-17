@@ -20,7 +20,7 @@ define([
         'Utils/Dom',
         'Projections/SphericalMercator',
         'Interfaces/Projection',
-        'InterfaceChecker'
+        'System/InterfaceChecker'
     ],
     function(
         Validators_NotUndefined,
@@ -33,7 +33,7 @@ define([
         Utils_Dom,
         Projections_SphericalMercator,
         Interfaces_Projection,
-        InterfaceChecker
+        System_InterfaceChecker
     ) {
         /**
          * @type {Layers/Tile}
@@ -262,7 +262,7 @@ define([
                 Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'init');
                 
                 if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
-                    InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
+                    System_InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
                     _self.projection = options.projection;
                 }
                 else {

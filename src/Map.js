@@ -15,7 +15,7 @@ define([
         'Validators/NotNull',
         'MapRegister',
         'Events/Map',
-        'InterfaceChecker',
+        'System/InterfaceChecker',
         'Interfaces/MapObserver',
         'Utils/Dom',
         'Utils/Common',
@@ -30,7 +30,7 @@ define([
         Validators_NotNull,
         MapRegister,
         Events_Map,
-        InterfaceChecker,
+        System_InterfaceChecker,
         Interfaces_MapObserver,
         Utils_Dom,
         Utils_Common,
@@ -176,7 +176,7 @@ define([
              * @param {Interfaces/MapObserver} observer Observer to listen map events. Required.
              */
             this.add = function(observer) {
-                InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
+                System_InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
                 
                 _directObservers.push(observer);
                 if(_self.baseLayer === null) {
@@ -191,7 +191,7 @@ define([
              * @param {Interfaces/MapObserver} observer Registered observer. Required.
              */
             this.remove = function(observer) {
-                InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
+                System_InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
 
                 observer.onRemoveFromMap(_self.getEventObject());
                 _directObservers.splice(_directObservers.indexOf(observer), 1);

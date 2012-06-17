@@ -1,8 +1,8 @@
 /**
  * Defines a map observer interface.
  */
-define(["Interface"], function(Interface) {
-    var object = new Interface('Interfaces/MapObserver', [
+define(["System/Interface"], function(System_Interface) {
+    var object = new System_Interface('Interfaces/MapObserver', [
         'onAddToMap',
         'onRemoveFromMap'
     ]);

@@ -1,7 +1,7 @@
 /**
  * Checks or object implements interface.
  */
-define(['Interface'], function(Interface){
+define(['System/Interface'], function(System_Interface){
     var object = {
         /**
          * Ensure that object impements interfaces.
@@ -18,8 +18,8 @@ define(['Interface'], function(Interface){
             }
                 
             for(var i = 0; i < interfaces.length; i++) {
-                if(interfaces[i].constructor !== Interface) {
-                    throw new TypeError('Interface should be instance of "Interface".');
+                if(interfaces[i].constructor !== System_Interface) {
+                    throw new TypeError('Interface should be instance of "System/Interface".');
                 }
                 for(var j = 0; j < interfaces[i].methods.length; j++) {
                     var method = interfaces[i].methods[j];

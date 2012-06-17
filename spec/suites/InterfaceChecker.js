@@ -1,5 +1,5 @@
-define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) {
-    describe("InterfaceChecker", function() {
+define(['System/InterfaceChecker', 'System/Interface'], function(System_InterfaceChecker, System_Interface) {
+    describe("System/InterfaceChecker", function() {
 
         describe("isImplements", function() {
             it("should NOT throw an exceptions", function() {
@@ -8,8 +8,8 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 var MyConstructor;
                 var obj;
                 
-                MyInterface1 = new Interface('myInterface1', ['method1', 'method2']);
-                MyInterface2 = new Interface('myInterface2', ['method3', 'method4']);
+                MyInterface1 = new System_Interface('myInterface1', ['method1', 'method2']);
+                MyInterface2 = new System_Interface('myInterface2', ['method3', 'method4']);
                 
                 MyConstructor = function() {};
                 MyConstructor.prototype = {
@@ -21,25 +21,25 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 obj = new MyConstructor();
 
                 expect(function(){
-                    InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2]);
+                    System_InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2]);
                 }).not.toThrow();
             });
             
             it("should throw an exception, because object is not passed", function()
             {
                 expect(function(){
-                    InterfaceChecker.isImplements();
+                    System_InterfaceChecker.isImplements();
                 }).toThrow(new ReferenceError('Parameter "object" should be passed.'));
             });
             
             it("should throw an exception, because 2nd parameter is invalid", function()
             {
                 expect(function(){
-                    InterfaceChecker.isImplements({}, []);
+                    System_InterfaceChecker.isImplements({}, []);
                 }).toThrow(new ReferenceError('Parameter "interfaces" is required and should be not empty array.'));
 
                 expect(function(){
-                    InterfaceChecker.isImplements({}, 'someString');
+                    System_InterfaceChecker.isImplements({}, 'someString');
                 }).toThrow(new ReferenceError('Parameter "interfaces" is required and should be not empty array.'));
             });
             
@@ -50,8 +50,8 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 var MyConstructor;
                 var obj;
 
-                MyInterface1 = new Interface('myInterface1', ['method1', 'method2']);
-                MyInterface2 = new Interface('myInterface2', ['method3', 'method4']);
+                MyInterface1 = new System_Interface('myInterface1', ['method1', 'method2']);
+                MyInterface2 = new System_Interface('myInterface2', ['method3', 'method4']);
 
                 MyConstructor = function() {};
                 MyConstructor.prototype.method1 = function() {};
@@ -62,8 +62,8 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 obj = new MyConstructor();
 
                 expect(function(){
-                    InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2, {}]);
-                }).toThrow(new TypeError('Interface should be instance of "Interface".'));
+                    System_InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2, {}]);
+                }).toThrow(new TypeError('Interface should be instance of "System/Interface".'));
             });
 
             it("should throw an exception, because object not implements all interfaces", function()
@@ -73,8 +73,8 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 var MyConstructor;
                 var obj;
 
-                MyInterface1 = new Interface('myInterface1', ['method1', 'method2']);
-                MyInterface2 = new Interface('myInterface2', ['method3', 'method4']);
+                MyInterface1 = new System_Interface('myInterface1', ['method1', 'method2']);
+                MyInterface2 = new System_Interface('myInterface2', ['method3', 'method4']);
 
                 MyConstructor = function() {};
                 MyConstructor.prototype.method1 = function() {};
@@ -84,7 +84,7 @@ define(['InterfaceChecker', 'Interface'], function(InterfaceChecker, Interface) 
                 obj = new MyConstructor();
 
                 expect(function(){
-                    InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2]);
+                    System_InterfaceChecker.isImplements(obj, [MyInterface1, MyInterface2]);
                 }).toThrow(new TypeError('Object does not implement the "myInterface2" interface. Method "method4" was not found.'));
             });
             

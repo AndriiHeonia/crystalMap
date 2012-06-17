@@ -1,8 +1,8 @@
 /**
  * Defines a layer interface.
  */
-define(["Interface"], function(Interface) {
-    var object = new Interface('Interfaces/Layer', [
+define(["System/Interface"], function(System_Interface) {
+    var object = new System_Interface('Interfaces/Layer', [
         'getSize',
         'getGroundResolution',
         'getScale',

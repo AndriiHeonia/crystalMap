@@ -1,8 +1,8 @@
 /**
  * Defines a projection interface.
  */
-define(["Interface"], function(Interface) {
-    var object = new Interface('Interfaces/Projection', [
+define(["System/Interface"], function(System_Interface) {
+    var object = new System_Interface('Interfaces/Projection', [
         'getGroundResolution',
         'getViewPortStartInGlobalCoords',
         'projectToGlobalCoords',
