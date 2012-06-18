@@ -5,6 +5,7 @@ define(['Events/Mouse', 'Map'], function(Events_Mouse, Map) {
         var bowserEventStub = {
             type: 'mousemove',
             target: myMap.container,
+            currentTarget: myMap.container,
             button: 0,
             screenX: 10,
             screenY: 10,
@@ -41,6 +42,14 @@ define(['Events/Mouse', 'Map'], function(Events_Mouse, Map) {
                 var mouseEvent = new Events_Mouse(bowserEventStub, myMap);
                 
                 expect(mouseEvent.target).toEqual(bowserEventStub.target);
+            });
+        });
+
+        describe("currentTarget", function() {
+            it("should return map container", function() {
+                var mouseEvent = new Events_Mouse(bowserEventStub, myMap);
+                
+                expect(mouseEvent.currentTarget).toEqual(bowserEventStub.currentTarget);
             });
         });
         

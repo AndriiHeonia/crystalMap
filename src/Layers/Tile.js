@@ -39,11 +39,6 @@ define([
         var _self;
 
         /**
-         * @type {Object} Container of the layer.
-         */
-        var _container;
-
-        /**
          * @type {Map} Map instance, layer belongs to.
          */
         var _map;
@@ -52,7 +47,7 @@ define([
          * Initializes a tile container.
          */
         function _initContainer() {
-            _container = Utils_Dom.create(
+            _self.container = Utils_Dom.create(
                 'div',
                 Utils_Common.createUniqueId('Layers/Tile'),
                 'crystal-layer',
@@ -64,8 +59,8 @@ define([
          * Destroys a tile container.
          */
         function _destroyContainer() {
-            _map.container.removeChild(_container);
-            _container = null;
+            _map.container.removeChild(_self.container);
+            _self.container = null;
         }
 
         /**
@@ -88,7 +83,7 @@ define([
             var spiral = 1; // spiral number
             var showed = 0; // tiles showed count
 
-            _container.innerHTML = '';
+            _self.container.innerHTML = '';
             
             viewPortWidthAndHeight.width = Math.ceil(_map.container.offsetWidth / _self.tileSize);
             viewPortWidthAndHeight.height = Math.ceil(_map.container.offsetHeight / _self.tileSize);
@@ -186,7 +181,7 @@ define([
             img.style.left = xPixel + 'px';
             img.style.top = yPixel + 'px';
 
-            _container.appendChild(img);
+            _self.container.appendChild(img);
         }
 
         /**
@@ -243,6 +238,12 @@ define([
             _self.projection = null;
 
             /**
+             * @type {Object} Container of the layer.
+             */
+            _self.container = null;
+
+
+            /**
              * Init.
              * @param {Object} options Layer options object. Required. Structure:
              * - {String} url Tile server url (without "http://"). Required.
@@ -282,7 +283,7 @@ define([
                 _initContainer();
                 _redraw();
                 
-                _self.enableDragging(_map, _container);
+                _self.enableDragging(_map, _self.container);
                 
                 _map.addListener('ZoomChanging', _redraw);
                 _map.addListener('CenterChanging', _redraw);
@@ -302,9 +303,10 @@ define([
 
             // @todo make it!
             _self.onDrag = function(event) {
+                //console.log(event.offsetPixel);
                 var pixel = event.currentPixel;
-                _container.style.left = pixel.x + 'px';
-                _container.style.top = pixel.y + 'px';
+                _self.container.style.left = (pixel.x - event.offsetPixel.x) + 'px';
+                _self.container.style.top = (pixel.y - event.offsetPixel.y) + 'px';
             };
 
             /**

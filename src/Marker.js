@@ -50,7 +50,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
      * Destroys a tile container.
      */
     function _destroyContainer() {
-        _map.container.removeChild(_self.container);
+        _map.baseLayer.container.removeChild(_self.container);
         _self.container = null;
     }
 
@@ -58,7 +58,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
      * Appends marker to the map.
      */
     function _draw() {
-        _map.container.appendChild(_self.container);
+        _map.baseLayer.container.appendChild(_self.container);
         _redraw();
     }
 

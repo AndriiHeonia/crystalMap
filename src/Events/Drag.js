@@ -32,6 +32,14 @@ define({
     endPixel: null,
 
     /**
+     * Offset from the left top corner of the draggable element.
+     * @type {Object} Structure:
+     * - {Number} x X coordinate.
+     * - {Number} y Y coordinate.
+     */
+    offsetPixel: null,
+
+    /**
      * Checks or object is outside related map.
      * @return {Boolean} True - outside, false - inside.
      */

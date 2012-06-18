@@ -34,15 +34,20 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
         handleMouseDown: function(event) {
             var mapRelatedMousePixel;
 
+            this.dragObject = event.currentTarget;
+
             // we can't use event.getPixel(), because target may be outside the map
             mapRelatedMousePixel = {
                 x: event.clientX - this.map.container.offsetLeft + window.pageXOffset,
                 y: event.clientY - this.map.container.offsetTop + window.pageYOffset
             };
-            this.dragObject = event.target;
             Events_Drag.map = this.map;
             Events_Drag.startPixel = mapRelatedMousePixel;
             Events_Drag.currentPixel = mapRelatedMousePixel;
+            Events_Drag.offsetPixel = {
+                x: mapRelatedMousePixel.x - this.dragObject.offsetLeft,
+                y: mapRelatedMousePixel.y - this.dragObject.offsetTop
+            };
             this.onDragStart(Events_Drag);
 
             event.preventDefault();

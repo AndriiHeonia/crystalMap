@@ -31,6 +31,12 @@ define(function() {
         this.target = null;
 
         /**
+         * DOM element, event has been attached.
+         * @type {Object}
+         */
+        this.currentTarget = null;
+
+        /**
          * Button was clicked when an event was triggered.
          * 0 - left mouse-button; 1 - middle mouse-button; 2 - right mouse-button.
          * @type {Number}
@@ -70,6 +76,7 @@ define(function() {
             _browserEvent = event;
             
             _self.target = event.target;
+            _self.currentTarget = event.currentTarget;
             _self.clientX = event.clientX;
             _self.clientY = event.clientY;
             _self.screenX = event.screenX;
