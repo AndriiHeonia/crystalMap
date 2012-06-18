@@ -44,7 +44,7 @@ define([
         var _map;
 
         /**
-         * Initializes a tile container.
+         * Initializes a tile layer DOM element.
          */
         function _initContainer() {
             _self.container = Utils_Dom.create(
@@ -56,7 +56,7 @@ define([
         }
 
         /**
-         * Destroys a tile container.
+         * Destroys a tile layer DOM element.
          */
         function _destroyContainer() {
             _map.container.removeChild(_self.container);

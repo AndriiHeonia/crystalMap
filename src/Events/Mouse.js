@@ -22,50 +22,50 @@ define(function() {
          * Map, event has been raised in.
          * @type {Map|null}
          */
-        this.map = null;
+        _self.map = null;
 
         /**
          * DOM element, event has been raised in.
          * @type {Object}
          */
-        this.target = null;
+        _self.target = null;
 
         /**
          * DOM element, event has been attached.
          * @type {Object}
          */
-        this.currentTarget = null;
+        _self.currentTarget = null;
 
         /**
          * Button was clicked when an event was triggered.
          * 0 - left mouse-button; 1 - middle mouse-button; 2 - right mouse-button.
          * @type {Number}
          */
-        this.button = null;
+        _self.button = null;
 
         /**
          * X coordinate of the mouse pointer, relative to the current window, when an event was triggered.
          * @type {Number}
          */
-        this.clientX = null;
+        _self.clientX = null;
 
         /**
          * Y coordinate of the mouse pointer, relative to the current window, when an event was triggered.
          * @type {Number}
          */
-        this.clientY = null;
+        _self.clientY = null;
 
         /**
          * X coordinate of the mouse pointer, relative to the screen, when an event was triggered.
          * @type {Number}
          */
-        this.screenX = null;
+        _self.screenX = null;
 
         /**
          * Y coordinate of the mouse pointer, relative to the screen, when an event was triggered.
          * @type {Number}
          */
-        this.screenY = null;
+        _self.screenY = null;
 
         /**
          * Init.
@@ -89,14 +89,14 @@ define(function() {
         /**
          * Stops propagation
          */
-        this.stopPropagation = function() {
+        _self.stopPropagation = function() {
             _browserEvent.stopPropagation();
         };
 
         /**
          * Prevents default action
          */
-        this.preventDefault = function() {
+        _self.preventDefault = function() {
             _browserEvent.preventDefault();
         };
             
@@ -107,16 +107,23 @@ define(function() {
          * Returns a geographic coordinates by mouse cursor position.
          * @return {Object}
          */
-        this.getGeoPoint = function() {
+        _self.getGeoPoint = function() {
             return _self.map.unprojectFromViewPort(_self.getPixel());
         },
 
         // @todo doc and test
-        this.getPixel = function() {
+        _self.getPixel = function() {
             return {
                 x: _self.clientX - _self.map.container.offsetLeft + window.pageXOffset,
                 y: _self.clientY - _self.map.container.offsetTop + window.pageYOffset
             };
+        };
+
+        // @todo doc, test, normalize, extend from base
+        _self.stopPropagation = function() {
+            if (_browserEvent.stopPropagation) {
+                _browserEvent.stopPropagation();
+            }
         };
     };
 

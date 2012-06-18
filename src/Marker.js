@@ -139,6 +139,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          */
         _self.onDrag = function(event) {
             _pixel = event.currentPixel;
+            _pixel.x -= _map.baseLayer.container.offsetLeft;
+            _pixel.y -= _map.baseLayer.container.offsetTop;
             _redraw();
         };
     };

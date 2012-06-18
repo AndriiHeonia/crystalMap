@@ -35,6 +35,7 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
             var mapRelatedMousePixel;
 
             this.dragObject = event.currentTarget;
+            event.stopPropagation();
 
             // we can't use event.getPixel(), because target may be outside the map
             mapRelatedMousePixel = {
