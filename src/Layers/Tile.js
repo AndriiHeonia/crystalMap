@@ -44,6 +44,17 @@ define([
         var _map;
 
         /**
+         * Stores offset of tile layer before dragging.
+         * @type {Object} Structure:
+         * - {Number} x Offset by x.
+         * - {Number} y Offset by y.
+         */
+        _containerOffset = {
+            x: 0,
+            y: 0
+        };
+
+        /**
          * Initializes a tile layer DOM element.
          */
         function _initContainer() {
@@ -243,17 +254,6 @@ define([
             _self.container = null;
 
             /**
-             * Stores offset of tile layer before dragging.
-             * @type {Object} Structure:
-             * - {Number} x Offset by x.
-             * - {Number} y Offset by y.
-             */
-            _self.containerOffset = {
-                x: 0,
-                y: 0
-            };
-
-            /**
              * Init.
              * @param {Object} options Layer options object. Required. Structure:
              * - {String} url Tile server url (without "http://"). Required.
@@ -313,13 +313,13 @@ define([
 
             // @todo make it!
             _self.onDragStart = function(event) {
-                _self.containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
-                _self.containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
+                _containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
+                _containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
             };
 
             _self.onDrag = function(event) {
-                var left = _self.containerOffset.x + event.currentPixel.x - event.startPixel.x;
-                var top = _self.containerOffset.y + event.currentPixel.y - event.startPixel.y;
+                var left = _containerOffset.x + event.currentPixel.x - event.startPixel.x;
+                var top = _containerOffset.y + event.currentPixel.y - event.startPixel.y;
 
                 _self.container.style.left = left + 'px';
                 _self.container.style.top = top + 'px';

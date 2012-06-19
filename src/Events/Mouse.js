@@ -36,8 +36,18 @@ define(function() {
          */
         _self.currentTarget = null;
 
+        /**
+         * Left offset from the top left corner of current target.
+         * @todo add test
+         * @type {Number}
+         */
         _self.currentTargetOffsetX = null;
 
+        /**
+         * Top offset from the top left corner of current target.
+         * @todo add test
+         * @type {Number}
+         */
         _self.currentTargetOffsetY = null,
 
         /**
@@ -81,6 +91,7 @@ define(function() {
             
             _self.target = event.target;
             _self.currentTarget = event.currentTarget;
+            // @todo fix it, check on marker
             _self.currentTargetOffsetX = event.clientX - event.currentTarget.offsetLeft;
             _self.currentTargetOffsetY = event.clientY - event.currentTarget.offsetTop;
             _self.clientX = event.clientX;
