@@ -242,6 +242,16 @@ define([
              */
             _self.container = null;
 
+            /**
+             * Stores offset of tile layer before dragging.
+             * @type {Object} Structure:
+             * - {Number} x Offset by x.
+             * - {Number} y Offset by y.
+             */
+            _self.containerOffset = {
+                x: 0,
+                y: 0
+            };
 
             /**
              * Init.
@@ -283,7 +293,7 @@ define([
                 _initContainer();
                 _redraw();
                 
-                _self.enableDragging(_map, _self.container);
+                _self.enableDragging(_map, _map.container);
                 
                 _map.addListener('ZoomChanging', _redraw);
                 _map.addListener('CenterChanging', _redraw);
@@ -302,11 +312,17 @@ define([
             };
 
             // @todo make it!
+            _self.onDragStart = function(event) {
+                _self.containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
+                _self.containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
+            };
+
             _self.onDrag = function(event) {
-                //console.log(event.offsetPixel);
-                var pixel = event.currentPixel;
-                _self.container.style.left = (pixel.x - event.offsetPixel.x) + 'px';
-                _self.container.style.top = (pixel.y - event.offsetPixel.y) + 'px';
+                var left = _self.containerOffset.x + event.currentPixel.x - event.startPixel.x;
+                var top = _self.containerOffset.y + event.currentPixel.y - event.startPixel.y;
+
+                _self.container.style.left = left + 'px';
+                _self.container.style.top = top + 'px';
             };
 
             /**

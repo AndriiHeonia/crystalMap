@@ -46,8 +46,8 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
             Events_Drag.startPixel = mapRelatedMousePixel;
             Events_Drag.currentPixel = mapRelatedMousePixel;
             Events_Drag.offsetPixel = {
-                x: mapRelatedMousePixel.x - this.dragObject.offsetLeft,
-                y: mapRelatedMousePixel.y - this.dragObject.offsetTop
+                x: event.currentTargetOffsetX,
+                y: event.currentTargetOffsetY
             };
             this.onDragStart(Events_Drag);
 
@@ -68,6 +68,7 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
                     y: event.clientY - this.map.container.offsetTop + window.pageYOffset
                 };
                 Events_Drag.currentPixel = mapRelatedMousePixel;
+
                 this.onDrag(Events_Drag);
             }
 

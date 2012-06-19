@@ -36,6 +36,10 @@ define(function() {
          */
         _self.currentTarget = null;
 
+        _self.currentTargetOffsetX = null;
+
+        _self.currentTargetOffsetY = null,
+
         /**
          * Button was clicked when an event was triggered.
          * 0 - left mouse-button; 1 - middle mouse-button; 2 - right mouse-button.
@@ -77,12 +81,13 @@ define(function() {
             
             _self.target = event.target;
             _self.currentTarget = event.currentTarget;
+            _self.currentTargetOffsetX = event.clientX - event.currentTarget.offsetLeft;
+            _self.currentTargetOffsetY = event.clientY - event.currentTarget.offsetTop;
             _self.clientX = event.clientX;
             _self.clientY = event.clientY;
             _self.screenX = event.screenX;
             _self.screenY = event.screenY;
             _self.button = event.button; // @todo should be normalized for IE, @see http://www.w3schools.com/jsref/event_button.asp
-            
             _self.map = map;
         })(arguments[0], arguments[1]);
 
