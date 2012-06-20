@@ -1,4 +1,4 @@
-define(['Map', 'Events/Map'], function(Map, Events_Map) {
+define(['Map', 'Events/Map', 'Vendors/PubSub'], function(Map, Events_Map, Vendors_PubSub) {
     describe("Map", function() {
 
         describe("init", function() {
@@ -48,116 +48,6 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
             });
         });
         
-        describe("registerEvent", function() {
-            it("should not throw any errors", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                myMap.registerEvent(['MyEvent1', 'MyEvent2']);
-            });
-            
-            it("should throw an error, because event name is incorrect", function() {
-                var myMap = new Map('myMap');
-                expect(function(){
-                    myMap.registerEvent({});
-                }).toThrow(new TypeError('registerEvent method called with invalid event name(s).'));
-            });
-        });
-
-        describe("addListener", function() {
-            it("should not throw any errors", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                myMap.addListener('MyEvent', function() {});
-            });
-            
-            it("should throw an error, because event name is incorrect", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                expect(function(){
-                    myMap.addListener({}, function() {});
-                }).toThrow(new TypeError('addListener method called with invalid event name.'));
-            });
-
-            it("should throw an error, because event hasn't been registered", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                expect(function(){
-                    myMap.addListener('MyEvent1', function(){});
-                }).toThrow(new TypeError('addListener method called with invalid event name.'));
-            });
-
-            it("should throw an error, because handler is incorrect", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                expect(function(){
-                    myMap.addListener('MyEvent', {});
-                }).toThrow(new TypeError('addListener method called with invalid handler.'));
-            });
-        });
-
-        describe("removeListener", function() {
-            it("should not throw any errors", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                var myHandler = function(){};
-                myMap.addListener('MyEvent', myHandler);
-                myMap.removeListener('MyEvent', myHandler);
-            });
-            
-            it("should throw an error, because event name is incorrect", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                myMap.addListener('MyEvent', function(){});
-                expect(function(){
-                    myMap.removeListener({}, function(){});
-                }).toThrow(new TypeError('removeListener method called with invalid event name.'));
-            });
-
-            it("should throw an error, because event hasn't been registered", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                myMap.addListener('MyEvent', function(){});
-                expect(function(){
-                    myMap.removeListener('MyEvent1', function(){});
-                }).toThrow(new TypeError('removeListener method called with invalid event name.'));
-            });
-            
-            it("should throw an error, because handler hasn't been registered", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                var myHandler = function(){};
-                var myHandler1 = function(){};
-                myMap.addListener('MyEvent', myHandler);
-                expect(function(){
-                    myMap.removeListener('MyEvent', myHandler1);
-                }).toThrow(new TypeError('removeListener method called with invalid handler.'));
-            });
-        });
-
-        describe("fireEvent", function() {
-            it("should fire an event handler", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                
-                var Klass = {};
-                Klass.staticMethod = function(){};
-                spyOn(Klass, 'staticMethod');
-
-                myMap.addListener('MyEvent', Klass.staticMethod);
-                myMap.fireEvent('MyEvent');
-                
-                expect(Klass.staticMethod).toHaveBeenCalled();
-            });
-            
-            it("should throw an error, because event name is incorrect", function() {
-                var myMap = new Map('myMap');
-                myMap.registerEvent('MyEvent');
-                expect(function(){
-                    myMap.fireEvent('MyUnregisteredEvent');
-                }).toThrow(new TypeError('fireEvent method called with invalid event name.'));
-            });
-        });
-
         describe("container", function() {
             it("should return correct DOM element", function() {
                 var myMap = new Map('myMap');
@@ -195,7 +85,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 spyOn(myObserver, 'onCenterChanging');
                 
                 myMap.add(myObserver);
-                myMap.addListener('CenterChanging', myObserver.onCenterChanging);
+                Vendors_PubSub.subscribe('Map/CenterChanging', myObserver.onCenterChanging);
                 myMap.setCenter({lat: 50, lon: 50});
 
                 expect(myObserver.onCenterChanging).toHaveBeenCalled();
@@ -234,7 +124,7 @@ define(['Map', 'Events/Map'], function(Map, Events_Map) {
                 spyOn(myObserver, 'onZoomChanging');
                 
                 myMap.add(myObserver);
-                myMap.addListener('ZoomChanging', myObserver.onZoomChanging);
+                Vendors_PubSub.subscribe('Map/ZoomChanging', myObserver.onZoomChanging);
                 myMap.setZoom(5);
 
                 expect(myObserver.onZoomChanging).toHaveBeenCalled();

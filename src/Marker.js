@@ -2,7 +2,7 @@
  * DOM marker.
  * @todo
  */
-define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Common, Draggable) {
+define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Utils_Dom, Utils_Common, Draggable, Vendors_PubSub) {
     /**
      * @type {Markers/Common}
      */
@@ -117,8 +117,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
                 _self.enableDragging(_map, _self.container);
             }
 
-            _map.addListener('ZoomChanging', _redraw);
-            _map.addListener('CenterChanging', _redraw);
+            Vendors_PubSub.subscribe('Map/CenterChanging', _redraw);
+            Vendors_PubSub.subscribe('Map/ZoomChanging', _redraw);
         };
 
         /**
@@ -126,8 +126,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable'], function(Utils_Dom, Utils_Com
          * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
          */
         _self.onRemoveFromMap = function(mapEvent) {
-            _map.removeListener('ZoomChanging', _redraw);
-            _map.removeListener('CenterChanging', _redraw);
+            Vendors_PubSub.unsubscribe('Map/CenterChanging', _redraw);
+            Vendors_PubSub.unsubscribe('Map/ZoomChanging', _redraw);
                 
             _destroyContainer();
             _pixel = null;

@@ -6,6 +6,7 @@ define(['Map', 'Utils/DomEventFactory', 'Events/Mouse'], function(Map, Utils_Dom
                 var bowserEventStub = {
                     type: 'mousemove',
                     target: myMap.container,
+                    currentTarget: myMap.container,
                     button: 0,
                     screenX: 10,
                     screenY: 10,

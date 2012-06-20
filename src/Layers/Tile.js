@@ -17,7 +17,8 @@ define([
         'Projections/SphericalMercator',
         'Interfaces/Projection',
         'System/InterfaceChecker',
-        'Draggable'
+        'Draggable',
+        'Vendors/PubSub'
     ],
     function(
         Validators_NotUndefined,
@@ -31,7 +32,8 @@ define([
         Projections_SphericalMercator,
         Interfaces_Projection,
         System_InterfaceChecker,
-        Draggable
+        Draggable,
+        Vendors_PubSub
     ) {
         /**
          * @type {Layers/Tile}
@@ -294,9 +296,9 @@ define([
                 _redraw();
                 
                 _self.enableDragging(_map, _map.container);
-                
-                _map.addListener('ZoomChanging', _redraw);
-                _map.addListener('CenterChanging', _redraw);
+
+                Vendors_PubSub.subscribe('Map/CenterChanging', _redraw);
+                Vendors_PubSub.subscribe('Map/ZoomChanging', _redraw);
             };
 
            /**
@@ -304,8 +306,8 @@ define([
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
             _self.onRemoveFromMap = function(mapEvent) {
-                _map.removeListener('ZoomChanging', _redraw);
-                _map.removeListener('CenterChanging', _redraw);
+                Vendors_PubSub.unsubscribe('Map/CenterChanging', _redraw);
+                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _redraw);
                 
                 _destroyContainer();
                 _map = null;

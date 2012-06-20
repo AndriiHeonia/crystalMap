@@ -7,7 +7,6 @@
  * - CenterChanging - when map center changed.
  */
 define([
-        'Observable',
         'Utils/Type',
         'Validators/DomElement',
         'Validators/GeoPoint',
@@ -19,10 +18,10 @@ define([
         'Interfaces/MapObserver',
         'Utils/Dom',
         'Utils/Common',
-        'Map/Behavior'
+        'Map/Behavior',
+        'Vendors/PubSub'
     ],
     function(
-        Observable,
         Utils_Type,
         Validators_DomElement,
         Validators_GeoPoint,
@@ -34,7 +33,8 @@ define([
         Interfaces_MapObserver,
         Utils_Dom,
         Utils_Common,
-        Map_Behavior
+        Map_Behavior,
+        Vendors_PubSub
     ) {
         /**
          * @type {Map}
@@ -63,7 +63,6 @@ define([
 
         /**
          * @constructor
-         * @extends {Observable}
          */
         var constructor = function() {
             _self = this;
@@ -116,11 +115,11 @@ define([
                 MapRegister.add(_self);
                     
                 // events, which can be fired by this object
-                _self.registerEvent([
+                /*_self.registerEvent([
                     'MapUpdating',
                     'ZoomChanging',
                     'CenterChanging'
-                ]);
+                ]);*/
 
                 _behavior = new Map_Behavior(_self);
                     
@@ -149,9 +148,8 @@ define([
              */
             this.setCenter = function(center) {
                 Validators_GeoPoint.validate(center);
-                
                 _center = center;
-                _self.fireEvent('CenterChanging');
+                Vendors_PubSub.publish("Map/CenterChanging");
             };
 
             /**
@@ -169,7 +167,7 @@ define([
             this.setZoom = function(zoom) {
                 Validators_Number.validate(zoom, 'Map', 'setZoom');
                 _zoom = zoom;
-                _self.fireEvent('ZoomChanging');
+                Vendors_PubSub.publish("Map/ZoomChanging");
             };
 
             /**
@@ -184,7 +182,7 @@ define([
                     _self.baseLayer = observer; // @todo shouldn't be first object
                 }
                 observer.onAddToMap(_self.getEventObject());
-                _self.fireEvent('MapUpdating');
+                Vendors_PubSub.publish("Map/MapUpdating");
             };
 
             /**
@@ -196,15 +194,13 @@ define([
 
                 observer.onRemoveFromMap(_self.getEventObject());
                 _directObservers.splice(_directObservers.indexOf(observer), 1);
-                _self.fireEvent('MapUpdating');
+                Vendors_PubSub.publish("Map/MapUpdating");
             };
             
             /**
              * Destructor
              */
             this.destroy = function() {
-                _self.parent.destroy();
-                
                 // Calls onRemoveFromMap method to each user added observer and clears _directObservers array
                 for(var i = 0; i < _directObservers.length; i++) {
                     _directObservers[i].onRemoveFromMap(_self.getEventObject);
@@ -240,9 +236,6 @@ define([
                 );
             };
         };
-
-        constructor.prototype = Observable;
-        constructor.prototype.parent = constructor.prototype;
 
         return constructor;
     }
