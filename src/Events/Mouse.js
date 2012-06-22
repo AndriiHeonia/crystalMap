@@ -37,20 +37,6 @@ define(function() {
         _self.currentTarget = null;
 
         /**
-         * Left offset from the top left corner of current target.
-         * @todo add test
-         * @type {Number}
-         */
-        _self.currentTargetOffsetX = null;
-
-        /**
-         * Top offset from the top left corner of current target.
-         * @todo add test
-         * @type {Number}
-         */
-        _self.currentTargetOffsetY = null,
-
-        /**
          * Button was clicked when an event was triggered.
          * 0 - left mouse-button; 1 - middle mouse-button; 2 - right mouse-button.
          * @type {Number}
@@ -82,6 +68,20 @@ define(function() {
         _self.screenY = null;
 
         /**
+         * Value in pixels for the X coordinate of the
+         * mouse pointer, relative to the whole document.
+         * @type {Number}
+         */
+        _self.pageX = null;
+
+        /**
+         * Value in pixels for the Y coordinate of the
+         * mouse pointer, relative to the whole document.
+         * @type {Number}
+         */
+        _self.pageY = null;
+
+        /**
          * Init.
          * @param {Object} event Browser event.
          * @param {Map|null} map Map, event has been raised in.
@@ -91,9 +91,8 @@ define(function() {
             
             _self.target = event.target;
             _self.currentTarget = event.currentTarget;
-            // @todo fix it, check on marker
-            _self.currentTargetOffsetX = event.clientX - event.currentTarget.offsetLeft;
-            _self.currentTargetOffsetY = event.clientY - event.currentTarget.offsetTop;
+            _self.pageX = event.pageX;
+            _self.pageY = event.pageY;
             _self.clientX = event.clientX;
             _self.clientY = event.clientY;
             _self.screenX = event.screenX;

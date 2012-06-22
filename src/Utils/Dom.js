@@ -133,6 +133,42 @@ define(['require', 'Utils/DomEventFactory'], function(require, Utils_DomEventFac
                 node = node.parentNode;
             }
             return false;
+        },
+
+        /**
+         * @todo test it
+         * Returns offset of the element on page.
+         * @see http://javascript.ru/ui/offset
+         * @param {Object} element DOM element.
+         * @return {Objject} Structure:
+         * - {Number} top Top offset.
+         * - {Number} left Left offset.
+         */
+        getOffset: function(element) {
+            var box, body, docElem, scrollTop, scrollLeft, clientTop, clientLeft, top, left;
+
+            if (element.getBoundingClientRect) {
+                box = element.getBoundingClientRect();
+                body = document.body;
+                docElem = document.documentElement;
+                scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+                scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+                clientTop = docElem.clientTop || body.clientTop || 0;
+                clientLeft = docElem.clientLeft || body.clientLeft || 0;
+                top  = box.top +  scrollTop - clientTop;
+                left = box.left + scrollLeft - clientLeft;
+
+                return { top: Math.round(top), left: Math.round(left) };
+            } else {
+                top=0, left=0;
+                while(element) {
+                    top = top + parseInt(element.offsetTop, 10);
+                    left = left + parseInt(element.offsetLeft, 10);
+                    element = element.offsetParent;
+                }
+
+                return {top: top, left: left};
+            }
         }
     };
 

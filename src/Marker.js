@@ -141,6 +141,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
             _pixel = event.currentPixel;
             _pixel.x -= _map.baseLayer.container.offsetLeft;
             _pixel.y -= _map.baseLayer.container.offsetTop;
+
             _redraw();
         };
     };

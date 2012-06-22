@@ -32,7 +32,7 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
          * @param {Events/Mouse} event Mouse event.
          */
         handleMouseDown: function(event) {
-            var mapRelatedMousePixel;
+            var mapRelatedMousePixel, currentTargetOffset;
 
             this.dragObject = event.currentTarget;
             event.stopPropagation();
@@ -45,10 +45,12 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
             Events_Drag.map = this.map;
             Events_Drag.startPixel = mapRelatedMousePixel;
             Events_Drag.currentPixel = mapRelatedMousePixel;
+            currentTargetOffset = Utils_Dom.getOffset(event.currentTarget);
             Events_Drag.offsetPixel = {
-                x: event.currentTargetOffsetX,
-                y: event.currentTargetOffsetY
+                x: event.pageX - currentTargetOffset.left,
+                y: event.pageY - currentTargetOffset.top
             };
+            console.log(Events_Drag.offsetPixel);
             this.onDragStart(Events_Drag);
 
             event.preventDefault();
