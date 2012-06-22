@@ -50,7 +50,7 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
                 x: event.pageX - currentTargetOffset.left,
                 y: event.pageY - currentTargetOffset.top
             };
-            console.log(Events_Drag.offsetPixel);
+            
             this.onDragStart(Events_Drag);
 
             event.preventDefault();
