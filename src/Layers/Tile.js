@@ -18,7 +18,8 @@ define([
         'Interfaces/Projection',
         'System/InterfaceChecker',
         'Draggable',
-        'Vendors/PubSub'
+        'Vendors/PubSub',
+        'Layers/Tile/Drawer'
     ],
     function(
         Validators_NotUndefined,
@@ -33,17 +34,13 @@ define([
         Interfaces_Projection,
         System_InterfaceChecker,
         Draggable,
-        Vendors_PubSub
+        Vendors_PubSub,
+        Layers_Tile_Drawer
     ) {
         /**
          * @type {Layers/Tile}
          */
         var _self;
-
-        /**
-         * @type {Map} Map instance, layer belongs to.
-         */
-        var _map;
 
         /**
          * Stores offset of tile layer before dragging.
@@ -57,6 +54,11 @@ define([
         };
 
         /**
+         * @type {Layers/Tile/Drawer} Tile drawer.
+         */
+        var _drawer;
+
+        /**
          * Initializes a tile layer DOM element.
          */
         function _initContainer() {
@@ -64,7 +66,7 @@ define([
                 'div',
                 Utils_Common.createUniqueId('Layers/Tile'),
                 'crystal-layer',
-                _map.container
+                _self.map.container
             );
         }
 
@@ -72,145 +74,8 @@ define([
          * Destroys a tile layer DOM element.
          */
         function _destroyContainer() {
-            _map.container.removeChild(_self.container);
+            _self.map.container.removeChild(_self.container);
             _self.container = null;
-        }
-
-        /**
-         * Displays tiles.
-         */
-        function _redraw() {
-            var centralTileXY = { // position of the central tile in a tile grid
-                x: null,
-                y: null
-            };
-            var currentTileXY = { // position of the current tile in a tile grid
-                x: null,
-                y: null
-            };
-            var viewPortWidthAndHeight = { // max count of the tiles, view port can contains by x and y
-                width: null,
-                height: null
-            };
-            var viewPortTileSize; // max count of the tiles, view port can contains
-            var spiral = 1; // spiral number
-            var showed = 0; // tiles showed count
-
-            _self.container.innerHTML = '';
-            
-            viewPortWidthAndHeight.width = Math.ceil(_map.container.offsetWidth / _self.tileSize);
-            viewPortWidthAndHeight.height = Math.ceil(_map.container.offsetHeight / _self.tileSize);
-            viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
-            
-            centralTileXY = _getTileXY(_map.getCenter());
-            currentTileXY = _getTileXY(_map.getCenter());
-            
-            var centralTileShift = {
-                x: _self.projection.projectToGlobalCoords(_map.getCenter(), _self.getSize()).x - centralTileXY.x * 256,
-                y: _self.projection.projectToGlobalCoords(_map.getCenter(), _self.getSize()).y - centralTileXY.y * 256
-            };
-
-            // show central tile
-            _showTile(centralTileXY.x, centralTileXY.y, centralTileXY, centralTileShift);
-            showed++;
-            
-            // show another tiles by spiral from the center
-            while(showed < viewPortTileSize) {
-                while(currentTileXY.x < centralTileXY.x + spiral) { // move >
-                    currentTileXY.x++;
-                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
-                    showed++;
-                }
-                
-                while(currentTileXY.y < centralTileXY.y + spiral) { // move v
-                    currentTileXY.y++;
-                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
-                    showed++;
-                }
-
-                while(currentTileXY.x > centralTileXY.x - spiral) { // move <
-                    currentTileXY.x--;
-                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
-                    showed++;
-                }
-
-                while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) { // move ^
-                    currentTileXY.y--;
-                    _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
-                    showed++;
-                }
-                
-                spiral++;
-            }
-        }
-
-       /**
-         * Displays tile.
-         * @param {Number} x X position in a tile grid.
-         * @param {Number} y Y position in a tile grid.
-         * @param {Object} centralTileXY Position of the central tile in a tile grid. Structure:
-         * - {Number} x Offset by x.
-         * - {Number} y Offset by y.
-         * @param {Object} centralTileShift
-         */
-        function _showTile(x, y, centralTileXY, centralTileShift) {
-            var viewPortCenter = {
-                x: null,
-                y: null
-            };
-            var centralTilePixel = { // position of the central tile in view port
-                x: null,
-                y: null
-            };
-
-            var img;
-            var url;
-            var xPixel; // x position on the screen
-            var yPixel; // y position on the screen
-            var subdomain; // subdomain of the tile server
-            
-            viewPortCenter.x = _map.container.offsetWidth / 2;
-            viewPortCenter.y = _map.container.offsetHeight / 2;
-
-            centralTilePixel.x = Math.floor(viewPortCenter.x - centralTileShift.x);
-            centralTilePixel.y = Math.floor(viewPortCenter.y - centralTileShift.y);
-            xPixel = centralTilePixel.x + ((x - centralTileXY.x) * _self.tileSize);
-            yPixel = centralTilePixel.y + ((y - centralTileXY.y) * _self.tileSize);
-            
-            subdomain = _self.subdomains[Math.floor(Math.random() * _self.subdomains.length)];
-            
-            url = _self.url;
-            url = url.replace("{x}", x);
-            url = url.replace("{y}", y);
-            url = url.replace("{z}", _map.getZoom());
-
-            img = Utils_Dom.create('img');
-            Utils_Dom.setOpacity(img, 0);
-            img.onload = function () {
-                Utils_Dom.fadeIn(img, 250);
-            };
-            img.src = 'http://' + subdomain + '.' + url;
-            img.width = img.height = _self.tileSize;
-            img.style.left = xPixel + 'px';
-            img.style.top = yPixel + 'px';
-
-            _self.container.appendChild(img);
-        }
-
-        /**
-         * Returns x and y position of the tile in a tile server.
-         * @param {Object} geoPoint Geographic point. Structure:
-         * - {Number} lat Latitude.
-         * - {Number} lon Longitude.
-         * @return {Object} Structure:
-         * - {Number} x Row number.
-         * - {Number} y Col number.
-         */
-        function _getTileXY(geoPoint) {
-            return {
-                x: Math.floor((geoPoint.lon + 180) / 360 * Math.pow(2, _map.getZoom())),
-                y: Math.floor((1 - Math.log(Math.tan(geoPoint.lat * Math.PI / 180) + 1 / Math.cos(geoPoint.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, _map.getZoom()))
-            };
         }
 
         /**
@@ -256,6 +121,11 @@ define([
             _self.container = null;
 
             /**
+             * @type {Map} Map instance, layer belongs to.
+             */
+             _self.map = null;
+
+            /**
              * Init.
              * @param {Object} options Layer options object. Required. Structure:
              * - {String} url Tile server url (without "http://"). Required.
@@ -283,6 +153,8 @@ define([
                 _self.subdomains = options.subdomains;
                 _self.tileSize = options.tileSize;
                 _self.errorTileUrl = options.errorTileUrl;
+
+                _drawer = new Layers_Tile_Drawer(_self);
             })(arguments[0]);
 
             /**
@@ -290,15 +162,15 @@ define([
              * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
              */
             _self.onAddToMap = function(mapEvent) {
-                _map = mapEvent.map;
+                _self.map = mapEvent.map;
 
                 _initContainer();
-                _redraw();
+                _drawer.redraw();
                 
-                _self.enableDragging(_map, _map.container);
+                _self.enableDragging(_self.map, _self.map.container);
 
-                Vendors_PubSub.subscribe('Map/CenterChanging', _redraw);
-                Vendors_PubSub.subscribe('Map/ZoomChanging', _redraw);
+                Vendors_PubSub.subscribe('Map/CenterChanging', _drawer.redraw);
+                Vendors_PubSub.subscribe('Map/ZoomChanging', _drawer.redraw);
             };
 
            /**
@@ -306,11 +178,11 @@ define([
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
             _self.onRemoveFromMap = function(mapEvent) {
-                Vendors_PubSub.unsubscribe('Map/CenterChanging', _redraw);
-                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _redraw);
+                Vendors_PubSub.unsubscribe('Map/CenterChanging', _drawer.redraw);
+                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _drawer.redraw);
                 
                 _destroyContainer();
-                _map = null;
+                _self.map = null;
             };
 
             // @todo make it!
@@ -332,7 +204,7 @@ define([
              * @return {Number}
              */
             _self.getSize = function() {
-                return _self.tileSize * Math.pow(2, _map.getZoom());
+                return _self.tileSize * Math.pow(2, _self.map.getZoom());
             };
         };
 
