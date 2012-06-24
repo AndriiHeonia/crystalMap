@@ -18,6 +18,27 @@ define(['Utils/Dom'], function(Utils_Dom) {
     var _tileBufferSize;
 
     /**
+     * Showed tiles bound.
+     * @type {Object} Structure:
+     * - {Object} leftTop Structure:
+     *  - {Number} x X coordinate in tile grid.
+     *  - {Number} y Y coordinate in tile grid.
+     * - {Object} rightBottom Structure:
+     *  - {Number} x X coordinate in tile grid.
+     *  - {Number} y Y coordinate in tile grid.
+     */
+    var _showedTiles = {
+        leftTop: {
+            x: 0,
+            y: 0
+        },
+        rightBottom: {
+            x: 0,
+            y: 0
+        }
+    };
+
+    /**
      * Number of tiles, should be displayed in view port.
      * @type {Number}
      */
@@ -33,7 +54,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * @param {Object} centralTileShift
      */
     function _showTile(x, y, centralTileXY, centralTileShift) {
-        console.log(x, y, centralTileXY, centralTileShift);
         var viewPortCenter = {
             x: null,
             y: null
@@ -109,7 +129,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         })(arguments[0], arguments[1]);
 
         /**
-         * Displays tiles.
+         * Clears all previous tiles and displays new tiles in view port by spiral.
          */
         _self.redraw = function() {
             var centralTileXY = { // position of the central tile in a tile grid
@@ -156,21 +176,25 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 while(currentTileXY.x < centralTileXY.x + spiral) { // move >
                     currentTileXY.x++;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
+                    _showedTiles.rightBottom.x = currentTileXY.x;
                     showed++;
                 }
                 while(currentTileXY.y < centralTileXY.y + spiral) { // move v
                     currentTileXY.y++;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
+                    _showedTiles.rightBottom.y = currentTileXY.y;
                     showed++;
                 }
                 while(currentTileXY.x > centralTileXY.x - spiral) { // move <
                     currentTileXY.x--;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
+                    _showedTiles.leftTop.x = currentTileXY.x;
                     showed++;
                 }
                 while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) { // move ^
                     currentTileXY.y--;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
+                    _showedTiles.leftTop.y = currentTileXY.y;
                     showed++;
                 }
                 spiral++;
@@ -178,7 +202,10 @@ define(['Utils/Dom'], function(Utils_Dom) {
         };
 
         // experimental code
-        _self.drawNewTiles = function() {
+        /**
+         * Appends new tiles to view port
+         */
+        _self.drawNewTiles = function(offset) {
             var viewPortWidthAndHeight = {};
             viewPortWidthAndHeight.width = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
             viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
@@ -187,7 +214,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - centralTileXY.x * 256,
                 y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - centralTileXY.y * 256
             };
-           
+            
+            
+                       
            for(var i = 0; i < viewPortWidthAndHeight.height; i++) {
                 _showTile(
                     centralTileXY.x - (Math.ceil(viewPortWidthAndHeight.width / 2) + 1),

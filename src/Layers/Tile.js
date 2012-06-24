@@ -196,10 +196,12 @@ define([
 
                 _self.container.style.left = left + 'px';
                 _self.container.style.top = top + 'px';
-            };
 
-            _self.onDragStop = function() {
-                _drawer.drawNewTiles();
+                var offset = {
+                    x: Math.ceil((event.currentPixel.x - event.startPixel.x) / _self.tileSize),
+                    y: Math.ceil((event.currentPixel.y - event.startPixel.y) / _self.tileSize)
+                };
+                _drawer.drawNewTiles(offset);
             };
 
             /**
