@@ -24,14 +24,6 @@ define({
     currentPixel: null,
 
     /**
-     * End pixel position in view port cartesian coordinate system.
-     * @type {Object} Structure:
-     * - {Number} x X coordinate.
-     * - {Number} y Y coordinate.
-     */
-    endPixel: null,
-
-    /**
      * Offset from the left top corner of the draggable element.
      * @type {Object} Structure:
      * - {Number} x X coordinate.

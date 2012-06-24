@@ -83,14 +83,7 @@ define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_C
          * @param {Events/Mouse} event Mouse event.
          */
         handleMouseUp: function(event) {
-            var mapRelatedMousePixel;
-
             if(this.dragObject !== null) {
-                mapRelatedMousePixel = {
-                    x: event.clientX - this.map.container.offsetLeft + window.pageXOffset,
-                    y: event.clientY - this.map.container.offsetTop + window.pageYOffset
-                };
-                Events_Drag.endPixel = mapRelatedMousePixel;
                 this.dragObject = null;
                 this.onDragStop(Events_Drag);
             }

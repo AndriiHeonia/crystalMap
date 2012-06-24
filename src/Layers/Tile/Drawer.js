@@ -8,9 +8,20 @@ define(['Utils/Dom'], function(Utils_Dom) {
     var _self;
 
     /**
-     * @type {Layers/Tile} layer Layer, drawer belongs to.
+     * @type {Layers/Tile}
      */
     var _layer;
+
+    /**
+     * @type {Number}
+     */
+    var _tileBufferSize;
+
+    /**
+     * Number of tiles, should be displayed in view port.
+     * @type {Number}
+     */
+    var _viewPortTileSize = null;
 
     /**
      * Displays tile.
@@ -22,6 +33,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * @param {Object} centralTileShift
      */
     function _showTile(x, y, centralTileXY, centralTileShift) {
+        console.log(x, y, centralTileXY, centralTileShift);
         var viewPortCenter = {
             x: null,
             y: null
@@ -89,10 +101,12 @@ define(['Utils/Dom'], function(Utils_Dom) {
         /**
          * Init.
          * @param {Layers/Tile} layer Layer, drawer belongs to. Required.
+         * @param {Number} tileBufferSize Number of cached tiles on each side. Optional. 0 by default.
          */
-        (function(layer) {
+        (function(layer, tileBufferSize) {
             _layer = layer;
-        })(arguments[0]);
+            _tileBufferSize = tileBufferSize || 0;
+        })(arguments[0], arguments[1]);
 
         /**
          * Displays tiles.
@@ -110,7 +124,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 width: null,
                 height: null
             };
-            var viewPortTileSize; // max count of the tiles, view port can contains
             var spiral = 1; // spiral number
             var showed = 0; // tiles showed count
             var centralTileShift = {
@@ -119,11 +132,13 @@ define(['Utils/Dom'], function(Utils_Dom) {
             };
 
             _layer.container.innerHTML = '';
-                
-            viewPortWidthAndHeight.width = Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
-            viewPortWidthAndHeight.height = Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
-            viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
-                
+            
+            if(_viewPortTileSize === null) {
+                viewPortWidthAndHeight.width = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
+                viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
+                _viewPortTileSize = viewPortWidthAndHeight.width * viewPortWidthAndHeight.height;
+            }
+
             centralTileXY = _getTileXY(_layer.map.getCenter());
             currentTileXY = _getTileXY(_layer.map.getCenter());
                 
@@ -137,33 +152,50 @@ define(['Utils/Dom'], function(Utils_Dom) {
             showed++;
                 
             // show another tiles by spiral from the center
-            while(showed < viewPortTileSize) {
+            while(showed < _viewPortTileSize) {
                 while(currentTileXY.x < centralTileXY.x + spiral) { // move >
                     currentTileXY.x++;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
-                    
                 while(currentTileXY.y < centralTileXY.y + spiral) { // move v
                     currentTileXY.y++;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
-
                 while(currentTileXY.x > centralTileXY.x - spiral) { // move <
                     currentTileXY.x--;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
-
                 while(currentTileXY.y > centralTileXY.y - spiral && currentTileXY.y !== 0) { // move ^
                     currentTileXY.y--;
                     _showTile(currentTileXY.x, currentTileXY.y, centralTileXY, centralTileShift);
                     showed++;
                 }
-                    
                 spiral++;
             }
+        };
+
+        // experimental code
+        _self.drawNewTiles = function() {
+            var viewPortWidthAndHeight = {};
+            viewPortWidthAndHeight.width = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
+            viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
+            var centralTileXY = _getTileXY(_layer.map.getCenter());
+            var centralTileShift = {
+                x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - centralTileXY.x * 256,
+                y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - centralTileXY.y * 256
+            };
+           
+           for(var i = 0; i < viewPortWidthAndHeight.height; i++) {
+                _showTile(
+                    centralTileXY.x - (Math.ceil(viewPortWidthAndHeight.width / 2) + 1),
+                    centralTileXY.y - (Math.ceil(viewPortWidthAndHeight.height / 2) - 1 - i),
+                    centralTileXY,
+                    centralTileShift
+                );
+           }
         };
     };
 

@@ -45,7 +45,7 @@ require([
 
 
         // other stuff..
-
+/*
         var zoomInBtn = document.getElementById('zoomin');
         var zoomOutBtn = document.getElementById('zoomout');
         
@@ -75,5 +75,5 @@ require([
             doubleGisAttribution = '&copy; ООО «ДубльГИС», 2011',
             doubleGisLayer = new L.TileLayer(doubleGisUrl, {maxZoom: 17, attribution: doubleGisAttribution});
         lMap.setView(new L.LatLng(55.028, 82.927), 10).addLayer(doubleGisLayer);
-        lMap.addLayer(new L.Marker(new L.LatLng(55.028, 82.927)));
+        lMap.addLayer(new L.Marker(new L.LatLng(55.028, 82.927)));*/
 });

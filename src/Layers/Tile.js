@@ -154,7 +154,7 @@ define([
                 _self.tileSize = options.tileSize;
                 _self.errorTileUrl = options.errorTileUrl;
 
-                _drawer = new Layers_Tile_Drawer(_self);
+                _drawer = new Layers_Tile_Drawer(_self, 0);
             })(arguments[0]);
 
             /**
@@ -185,7 +185,6 @@ define([
                 _self.map = null;
             };
 
-            // @todo make it!
             _self.onDragStart = function(event) {
                 _containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
                 _containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
@@ -197,6 +196,10 @@ define([
 
                 _self.container.style.left = left + 'px';
                 _self.container.style.top = top + 'px';
+            };
+
+            _self.onDragStop = function() {
+                _drawer.drawNewTiles();
             };
 
             /**

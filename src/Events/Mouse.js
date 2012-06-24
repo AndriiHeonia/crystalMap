@@ -126,7 +126,7 @@ define(function() {
             return _self.map.unprojectFromViewPort(_self.getPixel());
         },
 
-        // @todo doc and test
+        // @todo optimize reflow, doc and test
         _self.getPixel = function() {
             return {
                 x: _self.clientX - _self.map.container.offsetLeft + window.pageXOffset,
