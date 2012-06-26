@@ -112,6 +112,35 @@ define(['Utils/Dom'], function(Utils_Dom) {
         };
     }
 
+    function _drawLeftTiles() {
+        var centralTileXY;
+        var centralTileShift;
+        var tilesCountByY;
+
+        centralTileXY = _getTileXY(_layer.map.getCenter());
+        centralTileShift = {
+            x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - centralTileXY.x * _layer.tileSize,
+            y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - centralTileXY.y * _layer.tileSize
+        };
+        tilesCountByY = _showedTiles.rightBottom.y - _showedTiles.leftTop.y;
+        for(var i = 0; i < tilesCountByY; i++) {
+            _showTile(_showedTiles.leftTop.x - 1, _showedTiles.leftTop.y + i, centralTileXY, centralTileShift);
+        }
+        _showedTiles.leftTop.x--;
+    }
+
+    function _drawRightTiles() {
+        console.log('_drawRightTiles');
+    }
+
+    function _drawTopTiles() {
+        console.log('_drawTopTiles');
+    }
+
+    function _drawBottomTiles() {
+        console.log('_drawBottomTiles');
+    }
+
     /**
      * @constructor
      */
@@ -160,7 +189,8 @@ define(['Utils/Dom'], function(Utils_Dom) {
             }
 
             centralTileXY = _getTileXY(_layer.map.getCenter());
-            currentTileXY = _getTileXY(_layer.map.getCenter());
+            currentTileXY.x = centralTileXY.x;
+            currentTileXY.y = centralTileXY.y;
                 
             centralTileShift = {
                 x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - centralTileXY.x * 256,
@@ -206,7 +236,21 @@ define(['Utils/Dom'], function(Utils_Dom) {
          * Appends new tiles to view port
          */
         _self.drawNewTiles = function(offset) {
-            var viewPortWidthAndHeight = {};
+            if(offset.x > 0) {
+                _drawLeftTiles();
+            }
+            else if(offset.x < 0) {
+                _drawRightTiles();
+            }
+
+            if(offset.y > 0) {
+                _drawTopTiles();
+            }
+            else if(offset.x < 0) {
+                _drawBottomTiles();
+            }
+
+            /*var viewPortWidthAndHeight = {};
             viewPortWidthAndHeight.width = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
             viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
             var centralTileXY = _getTileXY(_layer.map.getCenter());
@@ -224,7 +268,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
                     centralTileXY,
                     centralTileShift
                 );
-           }
+           }*/
         };
     };
 
