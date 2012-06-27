@@ -165,6 +165,8 @@ define([
                 _self.map = mapEvent.map;
 
                 _initContainer();
+                _drawer.initViewPortTileSize();
+                _drawer.initCentralTile();
                 _drawer.redraw();
                 
                 _self.enableDragging(_self.map, _self.map.container);
