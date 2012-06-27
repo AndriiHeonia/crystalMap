@@ -107,23 +107,14 @@ define([
                 
                 _self.container.innerHTML = '';
                 _self.container.style.position = 'relative';
-                //_self.container.style.overflow = 'hidden';
+                _self.container.style.overflow = 'hidden';
                 _self.container.style.backgroundColor = '#F4F2EE';
                 _center = center || {lat: 0, lon: 0};
                 _zoom = zoom || 0;
 
                 MapRegister.add(_self);
-                    
-                // events, which can be fired by this object
-                /*_self.registerEvent([
-                    'MapUpdating',
-                    'ZoomChanging',
-                    'CenterChanging'
-                ]);*/
 
                 _behavior = new Map_Behavior(_self);
-                    
-                //_addDomListeners.call(this);
              })(arguments[0], arguments[1], arguments[2]);
 
             /**
