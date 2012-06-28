@@ -154,7 +154,7 @@ define([
                 _self.tileSize = options.tileSize;
                 _self.errorTileUrl = options.errorTileUrl;
 
-                _drawer = new Layers_Tile_Drawer(_self, 0);
+                _drawer = new Layers_Tile_Drawer(_self, 1);
             })(arguments[0]);
 
             /**

@@ -38,6 +38,12 @@ define(['Utils/Dom'], function(Utils_Dom) {
         }
     };
 
+    /**
+     * View port width and height.
+     * @type {Object} Structure:
+     * - {Number} width View port width.
+     * - {Number} height View port height.
+     */
     var _viewPortWidthAndHeight = {
         width: 0,
         height: 0
@@ -54,11 +60,23 @@ define(['Utils/Dom'], function(Utils_Dom) {
         y: 0
     };
 
+    /**
+     * Shift of the central tile from the center.
+     * @type {Object} Structure:
+     * - {Number} x Shift by x coordinate (in pixels).
+     * - {Number} y Shift by y coordinate (in pixels).
+     */
     var _centralTileShift = {
         x: 0,
         y: 0
     };
 
+    /**
+     * Offset of the draggable layer container.
+     * @type {Object} Structure:
+     * - {Number} x Offset by x coordinate (in pixels).
+     * - {Number} y Offset by y coordinate (in pixels).
+     */
     var _containerOffset = {
         x: 0,
         y: 0
@@ -69,7 +87,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
      */
-    function _showTile(x, y, className) {
+    function _drawTile(x, y) {
         var viewPortCenter = {
             x: null,
             y: null
@@ -99,7 +117,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         url = url.replace("{y}", y);
         url = url.replace("{z}", _layer.map.getZoom());
 
-        img = Utils_Dom.create('img', null, className);
+        img = Utils_Dom.create('img', x + '_' + y);
         Utils_Dom.setOpacity(img, 0);
         img.onload = function () {
             Utils_Dom.fadeIn(img, 250);
@@ -112,6 +130,40 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _layer.container.appendChild(img);
     }
 
+    function _updateTileClasses() {
+        var topTile;
+        var rightTile;
+        var bottomTile;
+        var leftTile;
+
+        _resetTileClasses('topTile');
+        _resetTileClasses('bottomTile');
+        _resetTileClasses('leftTile');
+        _resetTileClasses('rightTile');
+
+        // update top and bottom tile classes
+        for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
+            topTile = document.getElementById(i + '_' + _showedTiles.leftTop.y);
+            topTile.className = 'topTile';
+            bottomTile = document.getElementById(i + '_' + _showedTiles.rightBottom.y);
+            bottomTile.className = 'bottomTile';
+        }
+
+        // update corner, left and right tile classes
+        leftTile = document.getElementById(_showedTiles.leftTop.x + '_' + _showedTiles.leftTop.y);
+        leftTile.className = 'leftTile topTile';
+        rightTile = document.getElementById(_showedTiles.rightBottom.x + '_' + _showedTiles.leftTop.y);
+        rightTile.className = 'rightTile topTile';
+        for(var j = _showedTiles.leftTop.y + 1; j <= _showedTiles.rightBottom.y; j++) {
+            leftTile = document.getElementById(_showedTiles.leftTop.x + '_' + j);
+            leftTile.className = 'leftTile';
+            rightTile = document.getElementById(_showedTiles.rightBottom.x + '_' + j);
+            rightTile.className = 'rightTile';
+        }
+        leftTile.className += ' bottomTile';
+        rightTile.className += ' bottomTile';
+    }
+
     /**
      * Removes tile classes.
      * @param {String} className Class name of the tiles.
@@ -121,7 +173,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
 
         elements = document.getElementsByClassName(className);
         while(typeof(elements[0]) !== 'undefined') {
-            Utils_Dom.removeClass(elements[0], className);
+            elements[0].removeAttribute('class');
         }
     }
 
@@ -155,53 +207,43 @@ define(['Utils/Dom'], function(Utils_Dom) {
     }
 
     function _drawLeftTiles() {
-        var tilesCountByY;
-
-        tilesCountByY = _showedTiles.rightBottom.y - _showedTiles.leftTop.y;
-
         _showedTiles.leftTop.x--;
-        _resetTileClasses('leftTile');
-        for(var i = 0; i <= tilesCountByY; i++) {
-            _showTile(_showedTiles.leftTop.x, _showedTiles.leftTop.y + i, 'leftTile');
+        for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
+            _drawTile(_showedTiles.leftTop.x, i);
         }
         _removeTilesByClass('rightTile');
         _showedTiles.rightBottom.x--;
+        _updateTileClasses();
     }
 
     function _drawRightTiles() {
-        var tilesCountByY;
-
-        tilesCountByY = _showedTiles.rightBottom.y - _showedTiles.leftTop.y;
-
         _showedTiles.rightBottom.x++;
-        _resetTileClasses('rightTile');
-        for(var i = 0; i <= tilesCountByY; i++) {
-            _showTile(_showedTiles.rightBottom.x, _showedTiles.leftTop.y + i, 'rightTile');
+        for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
+            _drawTile(_showedTiles.rightBottom.x, i);
         }
         _removeTilesByClass('leftTile');
         _showedTiles.leftTop.x++;
+        _updateTileClasses();
     }
 
     function _drawTopTiles() {
-        var tilesCountByX;
-
-        tilesCountByX = _showedTiles.rightBottom.x - _showedTiles.leftTop.x;
-
         _showedTiles.leftTop.y--;
-        for(var i = 0; i <= tilesCountByX; i++) {
-            _showTile(_showedTiles.leftTop.x + i, _showedTiles.leftTop.y, 'topTile');
+        for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
+            _drawTile(i, _showedTiles.leftTop.y);
         }
+        _removeTilesByClass('bottomTile');
+        _showedTiles.rightBottom.y--;
+        _updateTileClasses();
     }
 
     function _drawBottomTiles() {
-        var tilesCountByX;
-
-        tilesCountByX = _showedTiles.rightBottom.x - _showedTiles.leftTop.x;
-        
         _showedTiles.rightBottom.y++;
-        for(var i = 0; i <= tilesCountByX; i++) {
-            _showTile(_showedTiles.leftTop.x + i, _showedTiles.rightBottom.y, 'bottomTile');
+        for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
+            _drawTile(i, _showedTiles.rightBottom.y);
         }
+        _removeTilesByClass('topTile');
+        _showedTiles.leftTop.y++;
+        _updateTileClasses();
     }
 
     /**
@@ -213,11 +255,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
         /**
          * Init.
          * @param {Layers/Tile} layer Layer, drawer belongs to. Required.
-         * @param {Number} tileBufferSize Number of cached tiles on each side. Optional. 0 by default.
+         * @param {Number} tileBufferSize Number of cached tiles on each side. Optional. 1 by default.
          */
         (function(layer, tileBufferSize) {
             _layer = layer;
-            _tileBufferSize = tileBufferSize || 0;
+            _tileBufferSize = tileBufferSize || 1;
         })(arguments[0], arguments[1]);
 
         _self.initViewPortTileSize = function() {
@@ -263,9 +305,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 _showedTiles.rightBottom.x = i;
                 for(var j = leftTop.y; j < rightBottom.y; j++) {
                     _showedTiles.rightBottom.y = j;
-                    _showTile(i, j);
+                    _drawTile(i, j);
                 }
             }
+
+            _updateTileClasses();
         };
 
         /**
