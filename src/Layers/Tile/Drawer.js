@@ -88,7 +88,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
      */
-    function _drawTile(x, y) {
+    function _drawTile(x, y, container) {
         var viewPortCenter = {
             x: null,
             y: null
@@ -128,7 +128,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         img.style.left = xPixel + 'px';
         img.style.top = yPixel + 'px';
 
-        _layer.container.appendChild(img);
+        container.appendChild(img);
     }
 
     function _updateTileClasses() {
@@ -210,7 +210,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
     function _drawLeftTiles() {
         _showedTiles.leftTop.x--;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.leftTop.x, i);
+            _drawTile(_showedTiles.leftTop.x, i, _layer.container);
         }
         _removeTilesByClass('rightTile');
         _showedTiles.rightBottom.x--;
@@ -220,7 +220,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
     function _drawRightTiles() {
         _showedTiles.rightBottom.x++;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.rightBottom.x, i);
+            _drawTile(_showedTiles.rightBottom.x, i, _layer.container);
         }
         _removeTilesByClass('leftTile');
         _showedTiles.leftTop.x++;
@@ -230,7 +230,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
     function _drawTopTiles() {
         _showedTiles.leftTop.y--;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.leftTop.y);
+            _drawTile(i, _showedTiles.leftTop.y, _layer.container);
         }
         _removeTilesByClass('bottomTile');
         _showedTiles.rightBottom.y--;
@@ -240,7 +240,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
     function _drawBottomTiles() {
         _showedTiles.rightBottom.y++;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.rightBottom.y);
+            _drawTile(i, _showedTiles.rightBottom.y, _layer.container);
         }
         _removeTilesByClass('topTile');
         _showedTiles.leftTop.y++;
@@ -280,6 +280,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
             var rightBottom;
             var viewPortHalfWidth;
             var viewPortHalfHeight;
+            var documentFragment;
+
+            documentFragment = document.createDocumentFragment();
 
             _centralTileXY = _getTileXY(_layer.map.getCenter());
             _centralTileShift = {
@@ -304,10 +307,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
                 _showedTiles.rightBottom.x = i;
                 for(var j = leftTop.y; j < rightBottom.y; j++) {
                     _showedTiles.rightBottom.y = j;
-                    _drawTile(i, j);
+                    _drawTile(i, j, documentFragment);
                 }
             }
 
+            _layer.container.appendChild(documentFragment);
             _updateTileClasses();
         };
 

@@ -1,10 +1,8 @@
-/*!
-* pubsub.js
-*
-* @author Federico "Lox" Lucignano <https://plus.google.com/117046182016070432246>
-*
-* Original implementation by Daniel Lamb <daniellmb.com>
-*/
+/**
+ * pubsub.js
+ * @author Federico "Lox" Lucignano <https://plus.google.com/117046182016070432246>
+ * Original implementation by Daniel Lamb <daniellmb.com>
+ */
 (function(){
     //universal module
     if(typeof module != "undefined")//CommonJS module

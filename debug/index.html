@@ -14,23 +14,17 @@
 
     <link rel="stylesheet" href="../src/style.css" />
     <!-- data-main attribute tells require.js to load index.js after require.js loads. -->
-    <script type="text/javascript" src="../lib/require-js/require.js"></script>
+    <script data-main="./index.js" type="text/javascript" src="../lib/require-js/require.js"></script>
     <script type="text/javascript">
         require.config({
-            baseUrl: "/crystalMap/src"
+            baseUrl: "../src"
         });
     </script>
-    <script type="text/javascript" src="index.js"></script>
 </head>
 
 <body>
-
-    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto; margin-top: 512px;" id="myMap"></div>
+    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto; margin-top: 100px;" id="myMap"></div>
     <br />
     &nbsp;&nbsp;&nbsp;&nbsp;<input id="zoomin" type="button" value="Zoom In" /> | <input id="zoomout" type="button" value="Zoom Out" />
-    <br /><br />
-    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto" id="2gisMap"></div>
-    <br /><br />
-    <div style="width: 1024px; height: 1024px; border: 1px solid black; margin: auto" id="lMap"></div>
 </body>
 </html>
