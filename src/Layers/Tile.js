@@ -167,7 +167,6 @@ define([
 
                 _initContainer();
                 _drawer.initViewPortTileSize();
-                _drawer.initCentralTile();
                 _drawer.draw();
                 
                 _self.enableDragging(_self.map, _self.map.container);

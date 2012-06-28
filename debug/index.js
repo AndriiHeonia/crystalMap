@@ -15,7 +15,7 @@ require([
             lon: 82.927
         };
         
-        var map = new Map('myMap', geoPoint, 10);
+        var map = new Map('myMap', geoPoint, 9);
         var layer = new Layers_Tile({
             url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
             subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],

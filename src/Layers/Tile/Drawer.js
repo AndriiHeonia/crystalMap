@@ -272,14 +272,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
             _viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
         };
 
-        _self.initCentralTile = function() {
-            _centralTileXY = _getTileXY(_layer.map.getCenter());
-            _centralTileShift = {
-                x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - _centralTileXY.x * _layer.tileSize,
-                y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - _centralTileXY.y * _layer.tileSize
-            };
-        };
-
         /**
          * Clears all previous tiles and displays new tiles in view port.
          */
@@ -288,6 +280,12 @@ define(['Utils/Dom'], function(Utils_Dom) {
             var rightBottom;
             var viewPortHalfWidth;
             var viewPortHalfHeight;
+
+            _centralTileXY = _getTileXY(_layer.map.getCenter());
+            _centralTileShift = {
+                x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - _centralTileXY.x * _layer.tileSize,
+                y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - _centralTileXY.y * _layer.tileSize
+            };
 
             _layer.container.innerHTML = '';
 

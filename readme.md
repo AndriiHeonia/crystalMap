@@ -1,1 +1,1 @@
-Crystal Map. JavaScript GIS rendering engine (Version: in developing...)
+Crystal Map. JavaScript map library (Version: 0.1)
