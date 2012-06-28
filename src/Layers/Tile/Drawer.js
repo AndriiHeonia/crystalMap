@@ -211,6 +211,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
         };
     }
 
+    /**
+     * Draws tiles in bordered left colum.
+     */
     function _drawLeftTiles() {
         var documentFragment;
 
@@ -226,6 +229,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _updateTileClasses();
     }
 
+    /**
+     * Draws tiles in bordered right colum.
+     */
     function _drawRightTiles() {
         var documentFragment;
 
@@ -241,6 +247,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _updateTileClasses();
     }
 
+    /**
+     * Draws tiles in bordered top row.
+     */
     function _drawTopTiles() {
         var documentFragment;
 
@@ -256,6 +265,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _updateTileClasses();
     }
 
+    /**
+     * Draws tiles in bordered bottom row.
+     */
     function _drawBottomTiles() {
         var documentFragment;
 
