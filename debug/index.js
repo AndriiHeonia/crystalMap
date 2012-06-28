@@ -35,4 +35,15 @@ require([
             isDraggable: true
         });
         map.add(marker);
+
+        var zoomInBtn = document.getElementById('zoomin');
+        var zoomOutBtn = document.getElementById('zoomout');
+        
+        zoomInBtn.onclick = function() {
+            map.setZoom(map.getZoom() + 1);
+        };
+        
+        zoomOutBtn.onclick = function() {
+            map.setZoom(map.getZoom() - 1);
+        };
 });
