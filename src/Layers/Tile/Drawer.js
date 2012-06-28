@@ -38,12 +38,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
         }
     };
 
-    /**
-     * Number of tiles, should be displayed in view port.
-     * @type {Number}
-     */
-    var _viewPortTileSize = null;
-
     var _viewPortWidthAndHeight = {
         width: 0,
         height: 0
@@ -61,6 +55,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
     };
 
     var _centralTileShift = {
+        x: 0,
+        y: 0
+    };
+
+    var _containerOffset = {
         x: 0,
         y: 0
     };
@@ -193,7 +192,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
             };
             _viewPortWidthAndHeight.width = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetWidth / _layer.tileSize);
             _viewPortWidthAndHeight.height = (_tileBufferSize * 2) + Math.ceil(_layer.map.container.offsetHeight / _layer.tileSize);
-            _viewPortTileSize = _viewPortWidthAndHeight.width * _viewPortWidthAndHeight.height;
         };
 
         _self.initCentralTile = function() {
@@ -207,7 +205,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         /**
          * Clears all previous tiles and displays new tiles in view port by spiral.
          */
-        _self.redraw = function() {
+        _self.draw = function() {
             var leftTop;
             var rightBottom;
             var viewPortHalfWidth;
@@ -236,22 +234,33 @@ define(['Utils/Dom'], function(Utils_Dom) {
         };
 
         /**
-         * Appends new tiles to view port
+         * Appends new tiles to view port and removes old tiles.
+         * @param {Number} left Tile layer offset by x coordinate.
+         * @param {Number} top Tile layer offset by y coordinate.
          */
-        _self.drawNewTiles = function(offset) {
-            if(offset.x > 0) {
+        _self.redraw = function(left, top) {
+            var offsetX;
+            var offsetY;
+
+            // draws left or right line of tiles
+            offsetX = Math.round(left / _layer.tileSize);
+            if(offsetX - _containerOffset.x === 1) {
                 _drawLeftTiles();
             }
-            else if(offset.x < 0) {
+            else if(offsetX - _containerOffset.x === -1) {
                 _drawRightTiles();
             }
-
-            if(offset.y > 0) {
+            _containerOffset.x = offsetX;
+            
+            // draws top or bottom line of tiles
+            offsetY = Math.round(top / _layer.tileSize);
+            if(offsetY - _containerOffset.y === 1) {
                 _drawTopTiles();
             }
-            else if(offset.y < 0) {
+            else if(offsetY - _containerOffset.y === -1) {
                 _drawBottomTiles();
             }
+            _containerOffset.y = offsetY;
         };
     };
 

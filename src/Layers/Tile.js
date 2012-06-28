@@ -167,12 +167,12 @@ define([
                 _initContainer();
                 _drawer.initViewPortTileSize();
                 _drawer.initCentralTile();
-                _drawer.redraw();
+                _drawer.draw();
                 
                 _self.enableDragging(_self.map, _self.map.container);
 
-                Vendors_PubSub.subscribe('Map/CenterChanging', _drawer.redraw);
-                Vendors_PubSub.subscribe('Map/ZoomChanging', _drawer.redraw);
+                Vendors_PubSub.subscribe('Map/CenterChanging', _drawer.draw);
+                Vendors_PubSub.subscribe('Map/ZoomChanging', _drawer.draw);
             };
 
            /**
@@ -180,8 +180,8 @@ define([
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
             _self.onRemoveFromMap = function(mapEvent) {
-                Vendors_PubSub.unsubscribe('Map/CenterChanging', _drawer.redraw);
-                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _drawer.redraw);
+                Vendors_PubSub.unsubscribe('Map/CenterChanging', _drawer.draw);
+                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _drawer.draw);
                 
                 _destroyContainer();
                 _self.map = null;
@@ -199,11 +199,11 @@ define([
                 _self.container.style.left = left + 'px';
                 _self.container.style.top = top + 'px';
 
-                var offset = {
+/*                var offset = {
                     x: Math.ceil((event.currentPixel.x - event.startPixel.x) / _self.tileSize),
                     y: Math.ceil((event.currentPixel.y - event.startPixel.y) / _self.tileSize)
-                };
-                _drawer.drawNewTiles(offset);
+                };*/
+                _drawer.redraw(left, top);
             };
 
             /**
