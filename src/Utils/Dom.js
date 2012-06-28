@@ -169,6 +169,28 @@ define(['require', 'Utils/DomEventFactory'], function(require, Utils_DomEventFac
 
                 return {top: top, left: left};
             }
+        },
+
+        // @todo doc and test
+        hasClass: function(element, className) {
+            return element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+        },
+ 
+        // @todo doc and test
+        addClass: function(element, className) {
+            if (this.hasClass(element, className) === false) {
+                element.className += " " + className;
+            }
+        },
+ 
+        // @todo doc and test
+        removeClass: function(element, className) {
+            var reg;
+
+            if (this.hasClass(element, className)) {
+                reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                element.className = element.className.replace(reg, '');
+            }
         }
     };
 

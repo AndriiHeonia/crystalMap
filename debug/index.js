@@ -45,7 +45,7 @@ require([
 
 
         // other stuff..
-/*
+
         var zoomInBtn = document.getElementById('zoomin');
         var zoomOutBtn = document.getElementById('zoomout');
         
@@ -57,7 +57,7 @@ require([
             map.setZoom(map.getZoom() - 1);
         };
 
-
+/*
         // 2GIS
         DG.autoload(function() {
             var myMap = new DG.Map('2gisMap');

@@ -69,7 +69,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
      */
-    function _showTile(x, y) {
+    function _showTile(x, y, className) {
         var viewPortCenter = {
             x: null,
             y: null
@@ -99,7 +99,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         url = url.replace("{y}", y);
         url = url.replace("{z}", _layer.map.getZoom());
 
-        img = Utils_Dom.create('img');
+        img = Utils_Dom.create('img', null, className);
         Utils_Dom.setOpacity(img, 0);
         img.onload = function () {
             Utils_Dom.fadeIn(img, 250);
@@ -110,6 +110,32 @@ define(['Utils/Dom'], function(Utils_Dom) {
         img.style.top = yPixel + 'px';
 
         _layer.container.appendChild(img);
+    }
+
+    /**
+     * Removes tile classes.
+     * @param {String} className Class name of the tiles.
+     */
+    function _resetTileClasses(className) {
+        var elements;
+
+        elements = document.getElementsByClassName(className);
+        while(typeof(elements[0]) !== 'undefined') {
+            Utils_Dom.removeClass(elements[0], className);
+        }
+    }
+
+    /**
+     * Removes tiles by class.
+     * @param {String} className Class name.
+     */
+    function _removeTilesByClass(className) {
+        var elements;
+
+        elements = document.getElementsByClassName(className);
+        while(typeof(elements[0]) !== 'undefined') {
+            _layer.container.removeChild(elements[0]);
+        }
     }
 
     /**
@@ -131,41 +157,50 @@ define(['Utils/Dom'], function(Utils_Dom) {
     function _drawLeftTiles() {
         var tilesCountByY;
 
-        _showedTiles.leftTop.x--;
         tilesCountByY = _showedTiles.rightBottom.y - _showedTiles.leftTop.y;
+
+        _showedTiles.leftTop.x--;
+        _resetTileClasses('leftTile');
         for(var i = 0; i <= tilesCountByY; i++) {
-            _showTile(_showedTiles.leftTop.x, _showedTiles.leftTop.y + i);
+            _showTile(_showedTiles.leftTop.x, _showedTiles.leftTop.y + i, 'leftTile');
         }
+        _removeTilesByClass('rightTile');
+        _showedTiles.rightBottom.x--;
     }
 
     function _drawRightTiles() {
         var tilesCountByY;
 
-        _showedTiles.rightBottom.x++;
         tilesCountByY = _showedTiles.rightBottom.y - _showedTiles.leftTop.y;
+
+        _showedTiles.rightBottom.x++;
+        _resetTileClasses('rightTile');
         for(var i = 0; i <= tilesCountByY; i++) {
-            _showTile(_showedTiles.rightBottom.x, _showedTiles.leftTop.y + i);
+            _showTile(_showedTiles.rightBottom.x, _showedTiles.leftTop.y + i, 'rightTile');
         }
+        _removeTilesByClass('leftTile');
+        _showedTiles.leftTop.x++;
     }
 
     function _drawTopTiles() {
         var tilesCountByX;
 
-        _showedTiles.leftTop.y--;
         tilesCountByX = _showedTiles.rightBottom.x - _showedTiles.leftTop.x;
+
+        _showedTiles.leftTop.y--;
         for(var i = 0; i <= tilesCountByX; i++) {
-            _showTile(_showedTiles.leftTop.x + i, _showedTiles.leftTop.y);
+            _showTile(_showedTiles.leftTop.x + i, _showedTiles.leftTop.y, 'topTile');
         }
     }
 
     function _drawBottomTiles() {
-        console.log('_drawBottomTiles');
         var tilesCountByX;
+
+        tilesCountByX = _showedTiles.rightBottom.x - _showedTiles.leftTop.x;
         
         _showedTiles.rightBottom.y++;
-        tilesCountByX = _showedTiles.rightBottom.x - _showedTiles.leftTop.x;
         for(var i = 0; i <= tilesCountByX; i++) {
-            _showTile(_showedTiles.leftTop.x + i, _showedTiles.rightBottom.y);
+            _showTile(_showedTiles.leftTop.x + i, _showedTiles.rightBottom.y, 'bottomTile');
         }
     }
 
