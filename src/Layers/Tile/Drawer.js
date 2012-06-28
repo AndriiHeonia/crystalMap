@@ -74,6 +74,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
 
     /**
      * Offset of the draggable layer container.
+     * Helps to check or new tiles should be drawed.
      * @type {Object} Structure:
      * - {Number} x Offset by x coordinate (in pixels).
      * - {Number} y Offset by y coordinate (in pixels).
@@ -131,6 +132,9 @@ define(['Utils/Dom'], function(Utils_Dom) {
         container.appendChild(img);
     }
 
+    /**
+     * Updates classes for the bordered tiles.
+     */
     function _updateTileClasses() {
         var topTile;
         var rightTile;
@@ -208,40 +212,60 @@ define(['Utils/Dom'], function(Utils_Dom) {
     }
 
     function _drawLeftTiles() {
+        var documentFragment;
+
+        documentFragment = document.createDocumentFragment();
+
         _showedTiles.leftTop.x--;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.leftTop.x, i, _layer.container);
+            _drawTile(_showedTiles.leftTop.x, i, documentFragment);
         }
+        _layer.container.appendChild(documentFragment);
         _removeTilesByClass('rightTile');
         _showedTiles.rightBottom.x--;
         _updateTileClasses();
     }
 
     function _drawRightTiles() {
+        var documentFragment;
+
+        documentFragment = document.createDocumentFragment();
+
         _showedTiles.rightBottom.x++;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.rightBottom.x, i, _layer.container);
+            _drawTile(_showedTiles.rightBottom.x, i, documentFragment);
         }
+        _layer.container.appendChild(documentFragment);
         _removeTilesByClass('leftTile');
         _showedTiles.leftTop.x++;
         _updateTileClasses();
     }
 
     function _drawTopTiles() {
+        var documentFragment;
+
+        documentFragment = document.createDocumentFragment();
+
         _showedTiles.leftTop.y--;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.leftTop.y, _layer.container);
+            _drawTile(i, _showedTiles.leftTop.y, documentFragment);
         }
+        _layer.container.appendChild(documentFragment);
         _removeTilesByClass('bottomTile');
         _showedTiles.rightBottom.y--;
         _updateTileClasses();
     }
 
     function _drawBottomTiles() {
+        var documentFragment;
+
+        documentFragment = document.createDocumentFragment();
+
         _showedTiles.rightBottom.y++;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.rightBottom.y, _layer.container);
+            _drawTile(i, _showedTiles.rightBottom.y, documentFragment);
         }
+        _layer.container.appendChild(documentFragment);
         _removeTilesByClass('topTile');
         _showedTiles.leftTop.y++;
         _updateTileClasses();
@@ -324,7 +348,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
             var offsetX;
             var offsetY;
 
-            // draws left or right line of tiles
+            // draws left or right column with tiles
             offsetX = Math.round(left / _layer.tileSize);
             if(offsetX - _containerOffset.x === 1) {
                 _drawLeftTiles();
@@ -334,7 +358,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
             }
             _containerOffset.x = offsetX;
             
-            // draws top or bottom line of tiles
+            // draws top or bottom row with tiles
             offsetY = Math.round(top / _layer.tileSize);
             if(offsetY - _containerOffset.y === 1) {
                 _drawTopTiles();
