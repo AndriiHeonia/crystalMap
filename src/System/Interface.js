@@ -1,5 +1,6 @@
 /**
  * Provides OOP interface functionaity of the library.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(function() {
     /**

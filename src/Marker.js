@@ -1,6 +1,7 @@
 /**
  * DOM marker.
- * @todo
+ * @author Andrey Geonya <a.geonya@gmail.com>
+ * @todo Should be completed
  */
 define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Utils_Dom, Utils_Common, Draggable, Vendors_PubSub) {
     /**

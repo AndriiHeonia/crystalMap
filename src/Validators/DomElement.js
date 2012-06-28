@@ -1,5 +1,6 @@
 /**
  * DOM element validator module.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Dom'], function(Utils_Dom) {
     var object = {

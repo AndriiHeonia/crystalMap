@@ -1,5 +1,6 @@
 /**
  * Incapsulates information about drag event.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define({
     /**

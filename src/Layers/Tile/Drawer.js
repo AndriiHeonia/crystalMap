@@ -1,5 +1,6 @@
 /**
  * Tile drawer. Displays DOM tiles on the screen.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Dom'], function(Utils_Dom) {
     /**
@@ -280,7 +281,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         };
 
         /**
-         * Clears all previous tiles and displays new tiles in view port by spiral.
+         * Clears all previous tiles and displays new tiles in view port.
          */
         _self.draw = function() {
             var leftTop;

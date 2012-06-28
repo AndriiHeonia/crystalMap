@@ -1,5 +1,6 @@
 /**
  * Instance validator module.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define({
     /**

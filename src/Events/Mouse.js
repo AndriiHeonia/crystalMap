@@ -1,5 +1,6 @@
 /**
  * Incapsulates information about mouse.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(function() {
     /**

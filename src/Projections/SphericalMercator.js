@@ -3,6 +3,7 @@
  * Provides a functionality to project geographic coordinates to
  * coordinates in Cartesian coordinate system via Spherical Mercator
  * projection (WGS-84) and inverse transformations.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
  * @see http://wiki.openstreetmap.org/wiki/Mercator#Spherical_Mercator
  * @see http://kartoweb.itc.nl/geometrics/Map%20projections/mappro.html

@@ -1,6 +1,7 @@
 /**
  * DOM utils module.
  * Provides a DOM processing functionality.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['require', 'Utils/DomEventFactory'], function(require, Utils_DomEventFactory) {
     var object = {

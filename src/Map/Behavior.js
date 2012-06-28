@@ -1,5 +1,6 @@
 /**
  * Map behavior.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Dom', 'Utils/Common'], function(Utils_Dom, Utils_Common) {
     /**

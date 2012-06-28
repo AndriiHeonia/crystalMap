@@ -1,5 +1,6 @@
 /**
  * Number validator module.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Type'], function(Utils_Type) {
     var object = {

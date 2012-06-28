@@ -1,6 +1,7 @@
 /**
  * Math utils module.
  * Provides a mathematical calculations.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
  define({
     /**

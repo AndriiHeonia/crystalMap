@@ -1,6 +1,7 @@
 /**
  * Common utils module.
- * Provides a common utilities
+ * Provides a common utilities.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define({
     /**

@@ -1,6 +1,7 @@
 /**
  * DOM event factory module.
  * Creates a custom event objects.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Events/Mouse'], function(Events_Mouse) {
     var object = {

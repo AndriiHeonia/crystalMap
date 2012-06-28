@@ -1,6 +1,7 @@
 /**
  * Tile layer module.
  * Provides a XYZ tile layer functionaity.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  * @see http://politerm.com.ru/zuludoc/tile_servers.htm
  * @see http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  * @see http://msdn.microsoft.com/en-us/library/bb259689.aspx
@@ -199,10 +200,6 @@ define([
                 _self.container.style.left = left + 'px';
                 _self.container.style.top = top + 'px';
 
-/*                var offset = {
-                    x: Math.ceil((event.currentPixel.x - event.startPixel.x) / _self.tileSize),
-                    y: Math.ceil((event.currentPixel.y - event.startPixel.y) / _self.tileSize)
-                };*/
                 _drawer.redraw(left, top);
             };
 

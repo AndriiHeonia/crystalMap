@@ -1,5 +1,6 @@
 /**
  * Incapsulates draggable behavior.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Dom', 'Utils/Common', 'Events/Drag'], function(Utils_Dom, Utils_Common, Events_Drag) {
     var object = {

@@ -5,6 +5,7 @@
  * - MapUpdating - when any object added to the map or removed from the map;
  * - ZoomChanging - when map zoom changed;
  * - CenterChanging - when map center changed.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define([
         'Utils/Type',

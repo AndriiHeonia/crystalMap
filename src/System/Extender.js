@@ -1,6 +1,7 @@
 /**
 * Provides OOP extending functionaity.
 * Helps to extend constructors.
+* @author Andrey Geonya <a.geonya@gmail.com>
 */
 define({
      extend: function(child, parent) {

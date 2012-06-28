@@ -1,6 +1,7 @@
 /**
  * Map register module.
  * Contains links to all maps on the page.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['Utils/Dom'], function(Utils_Dom) {
     /**

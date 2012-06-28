@@ -1,6 +1,7 @@
 /**
  * Type module.
  * Provides a type checking utilities.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define({
     /**

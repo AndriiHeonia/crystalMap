@@ -1,5 +1,6 @@
 /**
  * Incapsulates information about the map that has been raised an event.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(function() {
     /**

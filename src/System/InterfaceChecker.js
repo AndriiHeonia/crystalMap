@@ -1,5 +1,6 @@
 /**
  * Checks or object implements interface.
+ * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define(['System/Interface'], function(System_Interface){
     var object = {
