@@ -136,7 +136,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
 
         container.appendChild(img);
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer', {x: x, y: y, z: z});
+        Vendors_PubSub.publish('Layers/Tile/Drawer/TileDrawing', img, {x: x, y: y, z: z});
     }
 
     /**
@@ -201,6 +201,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         elements = document.getElementsByClassName(className);
         _layer.container.style.display = 'none';
         while(typeof(elements[0]) !== 'undefined') {
+            Vendors_PubSub.publish('Layers/Tile/Drawer/TileRemoving', elements[0]);
             _layer.container.removeChild(elements[0]);
         }
         _layer.container.style.display = 'block';

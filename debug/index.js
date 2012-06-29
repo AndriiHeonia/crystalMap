@@ -103,17 +103,20 @@ require([
                 }
         };
 
+
+
         // subscribe to the tile drawing
-        Vendors_PubSub.subscribe('Layers/Tile/Drawer', function(tile) {
+        Vendors_PubSub.subscribe('Layers/Tile/Drawer/TileDrawing', function(tile, xyz) {
             var leftTopGlobalPixel = { // left top corner of the tile in global pixels
-                x: tile.x * 256,
-                y: tile.y * 256
+                x: xyz.x * 256,
+                y: xyz.y * 256
             };
             var rightBottomGlobalPixel = { // right bottom corner of the tile in global pixels
                 x: leftTopGlobalPixel.x + 256,
                 y: leftTopGlobalPixel.y + 256
             };
 
+            console.log('Tile drawing: Global pixel bound:');
             console.log(leftTopGlobalPixel);
             console.log(rightBottomGlobalPixel);
 
@@ -122,6 +125,7 @@ require([
             // right bottom corner of the tile in lon lat
             var rightBottomGeoPoint = Projections_SphericalMercator.unprojectFromGlobalCoords(rightBottomGlobalPixel, layer.getSize());
             
+            console.log('Tile drawing: Geopoint bound:');
             console.log(leftTopGeoPoint);
             console.log(rightBottomGeoPoint);
 
@@ -141,7 +145,14 @@ require([
                 y: rightBottomGlobalPixel.y * rightBottomGroundResolution
             };
 
+            console.log('Tile drawing: Global meters bound:');
             console.log(leftTopGlobalMeters);
             console.log(rightBottomGroundResolution);
+        });
+
+        // subscribe to the tile drawing
+        Vendors_PubSub.subscribe('Layers/Tile/Drawer/TileRemoving', function(tile) {
+            console.log('Tile removing: tile');
+            console.log(tile);
         });
 });
