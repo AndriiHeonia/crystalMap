@@ -116,6 +116,9 @@ require([
                 y: leftTopGlobalPixel.y + 256
             };
 
+            console.log('Tile drawing: tile');
+            console.log(tile);
+
             console.log('Tile drawing: Global pixel bound:');
             console.log(leftTopGlobalPixel);
             console.log(rightBottomGlobalPixel);
@@ -150,9 +153,9 @@ require([
             console.log(rightBottomGroundResolution);
         });
 
-        // subscribe to the tile drawing
+        // subscribe to the tile removing
         Vendors_PubSub.subscribe('Layers/Tile/Drawer/TileRemoving', function(tile) {
-            console.log('Tile removing: tile');
+            console.log('Tile removing: tile:');
             console.log(tile);
         });
 });
