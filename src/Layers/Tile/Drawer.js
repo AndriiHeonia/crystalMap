@@ -88,9 +88,10 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      * Displays tile.
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
+     * @param {Number} z Zoom level.
      * @patam {Object} container DOM object should contain tile.
      */
-    function _drawTile(x, y, container) {
+    function _drawTile(x, y, z, container) {
         var viewPortCenter = {
             x: null,
             y: null
@@ -104,7 +105,6 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         var xPixel; // x position on the screen
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
-        var z = _layer.map.getZoom();
             
         viewPortCenter.x = _layer.map.container.offsetWidth / 2;
         viewPortCenter.y = _layer.map.container.offsetHeight / 2;
@@ -136,7 +136,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
 
         container.appendChild(img);
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/TileDrawing', img, {x: x, y: y, z: z});
+        return img;
     }
 
     /**
@@ -201,7 +201,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         elements = document.getElementsByClassName(className);
         _layer.container.style.display = 'none';
         while(typeof(elements[0]) !== 'undefined') {
-            Vendors_PubSub.publish('Layers/Tile/Drawer/TileRemoving', elements[0]);
+            Vendors_PubSub.publish('Layers/Tile/Drawer/Removing', elements[0]);
             _layer.container.removeChild(elements[0]);
         }
         _layer.container.style.display = 'block';
@@ -228,17 +228,26 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      */
     function _drawLeftTiles() {
         var documentFragment;
+        var drawedTiles = [];
+        var zoom = _layer.map.getZoom();
 
         documentFragment = document.createDocumentFragment();
 
         _showedTiles.leftTop.x--;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.leftTop.x, i, documentFragment);
+            drawedTiles[drawedTiles.length] = {
+                tile: _drawTile(_showedTiles.leftTop.x, i, zoom, documentFragment),
+                x: _showedTiles.leftTop.x,
+                y: i,
+                z: zoom
+            };
         }
         _layer.container.appendChild(documentFragment);
         _removeTilesByClass('rightTile');
         _showedTiles.rightBottom.x--;
         _updateTileClasses();
+
+        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
     }
 
     /**
@@ -246,17 +255,26 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      */
     function _drawRightTiles() {
         var documentFragment;
+        var drawedTiles = [];
+        var zoom = _layer.map.getZoom();
 
         documentFragment = document.createDocumentFragment();
 
         _showedTiles.rightBottom.x++;
         for(var i = _showedTiles.leftTop.y; i <= _showedTiles.rightBottom.y; i++) {
-            _drawTile(_showedTiles.rightBottom.x, i, documentFragment);
+            drawedTiles[drawedTiles.length] = {
+                tile: _drawTile(_showedTiles.rightBottom.x, i, zoom, documentFragment),
+                x: _showedTiles.rightBottom.x,
+                y: i,
+                z: zoom
+            };
         }
         _layer.container.appendChild(documentFragment);
         _removeTilesByClass('leftTile');
         _showedTiles.leftTop.x++;
         _updateTileClasses();
+
+        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
     }
 
     /**
@@ -264,17 +282,26 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      */
     function _drawTopTiles() {
         var documentFragment;
+        var drawedTiles = [];
+        var zoom = _layer.map.getZoom();
 
         documentFragment = document.createDocumentFragment();
 
         _showedTiles.leftTop.y--;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.leftTop.y, documentFragment);
+            drawedTiles[drawedTiles.length] = {
+                tile: _drawTile(i, _showedTiles.leftTop.y, zoom, documentFragment),
+                x: i,
+                y: _showedTiles.leftTop.y,
+                z: zoom
+            };
         }
         _layer.container.appendChild(documentFragment);
         _removeTilesByClass('bottomTile');
         _showedTiles.rightBottom.y--;
         _updateTileClasses();
+
+        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
     }
 
     /**
@@ -282,17 +309,26 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      */
     function _drawBottomTiles() {
         var documentFragment;
+        var drawedTiles = [];
+        var zoom = _layer.map.getZoom();
 
         documentFragment = document.createDocumentFragment();
 
         _showedTiles.rightBottom.y++;
         for(var i = _showedTiles.leftTop.x; i <= _showedTiles.rightBottom.x; i++) {
-            _drawTile(i, _showedTiles.rightBottom.y, documentFragment);
+            drawedTiles[drawedTiles.length] = {
+                tile: _drawTile(i, _showedTiles.rightBottom.y, zoom, documentFragment),
+                x: i,
+                y: _showedTiles.rightBottom.y,
+                z: zoom
+            };
         }
         _layer.container.appendChild(documentFragment);
         _removeTilesByClass('topTile');
         _showedTiles.leftTop.y++;
         _updateTileClasses();
+
+        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
     }
 
     /**
@@ -329,6 +365,8 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
             var viewPortHalfWidth;
             var viewPortHalfHeight;
             var documentFragment;
+            var drawedTiles = [];
+            var zoom = _layer.map.getZoom();
 
             documentFragment = document.createDocumentFragment();
 
@@ -355,12 +393,19 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
                 _showedTiles.rightBottom.x = i;
                 for(var j = leftTop.y; j < rightBottom.y; j++) {
                     _showedTiles.rightBottom.y = j;
-                    _drawTile(i, j, documentFragment);
+                    drawedTiles[drawedTiles.length] = {
+                        tile: _drawTile(i, j, zoom, documentFragment),
+                        x: i,
+                        y: j,
+                        z: zoom
+                    };
                 }
             }
 
             _layer.container.appendChild(documentFragment);
             _updateTileClasses();
+
+            Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
         };
 
         /**
