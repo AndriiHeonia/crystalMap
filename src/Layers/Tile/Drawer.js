@@ -364,12 +364,14 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _self.redraw = function(left, top) {
             var offsetX;
             var offsetY;
-            var unroundedLeftTilesOffset = left / _layer.tileSize;
-            var unroundedTopTilesOffset = top / _layer.tileSize;
+            var unroundedOffsetX = left / _layer.tileSize;
+            var unroundedOffsetY = top / _layer.tileSize;
 
-            // draws left or right column with tiles
             // @see http://jsperf.com/math-round-vs-hack/6
-            offsetX = ~~(unroundedLeftTilesOffset + (unroundedLeftTilesOffset > 0 ? .5 : -.5));
+            offsetX = ~~(unroundedOffsetX + (unroundedOffsetX > 0 ? .5 : -.5));
+            offsetY = ~~(unroundedOffsetY + (unroundedOffsetY > 0 ? .5 : -.5));
+            
+            // draws left or right column with tiles
             if(offsetX > _containerOffset.x) {
                 _drawLeftTiles();
             }
@@ -379,8 +381,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
             _containerOffset.x = offsetX;
             
             // draws top or bottom row with tiles
-            // @see http://jsperf.com/math-round-vs-hack/6
-            offsetY = ~~(unroundedTopTilesOffset + (unroundedTopTilesOffset > 0 ? .5 : -.5));
             if(offsetY > _containerOffset.y) {
                 _drawTopTiles();
             }
