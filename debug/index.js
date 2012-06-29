@@ -34,16 +34,70 @@ require([
             geoPoint: geoPoint,
             isDraggable: true
         });
-        map.add(marker);
+        //map.add(marker);
 
         var zoomInBtn = document.getElementById('zoomin');
         var zoomOutBtn = document.getElementById('zoomout');
+        var dragBtn = document.getElementById('simulatedrag');
         
         zoomInBtn.onclick = function() {
             map.setZoom(map.getZoom() + 1);
         };
-        
         zoomOutBtn.onclick = function() {
             map.setZoom(map.getZoom() - 1);
+        };
+
+        dragBtn.onclick = function() {
+                for(var i = 10; i < 1310; i++) {
+                    layer.onDrag({
+                        map: map,
+                        startPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        offsetPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        currentPixel: {
+                            x: i,
+                            y: i
+                        }
+                    });
+                }
+                for(var i = 1310; i > 10; i--) {
+                    layer.onDrag({
+                        map: map,
+                        startPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        offsetPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        currentPixel: {
+                            x: i,
+                            y: i
+                        }
+                    });
+                }
+                for(var i = 10; i < 1310; i++) {
+                    layer.onDrag({
+                        map: map,
+                        startPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        offsetPixel: {
+                            x: 10,
+                            y: 10
+                        },
+                        currentPixel: {
+                            x: i,
+                            y: i
+                        }
+                    });
+                }
         };
 });

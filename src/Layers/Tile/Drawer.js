@@ -73,11 +73,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
     };
 
     /**
-     * Offset of the draggable layer container.
+     * Offset of the draggable layer container (stores previous value on dragging).
      * Helps to check or new tiles should be drawed.
      * @type {Object} Structure:
-     * - {Number} x Offset by x coordinate (in pixels).
-     * - {Number} y Offset by y coordinate (in pixels).
+     * - {Number} x Offset by x coordinate (tiles count).
+     * - {Number} y Offset by y coordinate (tiles count).
      */
     var _containerOffset = {
         x: 0,
@@ -88,6 +88,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
      * Displays tile.
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
+     * @patam {Object} container DOM object should contain tile.
      */
     function _drawTile(x, y, container) {
         var viewPortCenter = {
@@ -159,14 +160,16 @@ define(['Utils/Dom'], function(Utils_Dom) {
         leftTile.className = 'leftTile topTile';
         rightTile = document.getElementById(_showedTiles.rightBottom.x + '_' + _showedTiles.leftTop.y);
         rightTile.className = 'rightTile topTile';
-        for(var j = _showedTiles.leftTop.y + 1; j <= _showedTiles.rightBottom.y; j++) {
+        for(var j = _showedTiles.leftTop.y + 1; j < _showedTiles.rightBottom.y; j++) {
             leftTile = document.getElementById(_showedTiles.leftTop.x + '_' + j);
             leftTile.className = 'leftTile';
             rightTile = document.getElementById(_showedTiles.rightBottom.x + '_' + j);
             rightTile.className = 'rightTile';
         }
-        leftTile.className += ' bottomTile';
-        rightTile.className += ' bottomTile';
+        leftTile = document.getElementById(_showedTiles.leftTop.x + '_' + j);
+        leftTile.className = 'leftTile bottomTile';
+        rightTile = document.getElementById(_showedTiles.rightBottom.x + '_' + j);
+        rightTile.className = 'rightTile bottomTile';
     }
 
     /**
@@ -190,9 +193,11 @@ define(['Utils/Dom'], function(Utils_Dom) {
         var elements;
 
         elements = document.getElementsByClassName(className);
+        _layer.container.style.display = 'none';
         while(typeof(elements[0]) !== 'undefined') {
             _layer.container.removeChild(elements[0]);
         }
+        _layer.container.style.display = 'block';
     }
 
     /**
@@ -359,23 +364,27 @@ define(['Utils/Dom'], function(Utils_Dom) {
         _self.redraw = function(left, top) {
             var offsetX;
             var offsetY;
+            var unroundedLeftTilesOffset = left / _layer.tileSize;
+            var unroundedTopTilesOffset = top / _layer.tileSize;
 
             // draws left or right column with tiles
-            offsetX = Math.round(left / _layer.tileSize);
-            if(offsetX - _containerOffset.x === 1) {
+            // @see http://jsperf.com/math-round-vs-hack/6
+            offsetX = ~~(unroundedLeftTilesOffset + (unroundedLeftTilesOffset > 0 ? .5 : -.5));
+            if(offsetX > _containerOffset.x) {
                 _drawLeftTiles();
             }
-            else if(offsetX - _containerOffset.x === -1) {
+            else if(offsetX < _containerOffset.x) {
                 _drawRightTiles();
             }
             _containerOffset.x = offsetX;
             
             // draws top or bottom row with tiles
-            offsetY = Math.round(top / _layer.tileSize);
-            if(offsetY - _containerOffset.y === 1) {
+            // @see http://jsperf.com/math-round-vs-hack/6
+            offsetY = ~~(unroundedTopTilesOffset + (unroundedTopTilesOffset > 0 ? .5 : -.5));
+            if(offsetY > _containerOffset.y) {
                 _drawTopTiles();
             }
-            else if(offsetY - _containerOffset.y === -1) {
+            else if(offsetY < _containerOffset.y) {
                 _drawBottomTiles();
             }
             _containerOffset.y = offsetY;
