@@ -73,6 +73,18 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
     };
 
     /**
+     * Position of the central tile in view port.
+     * @type {Object} Structure:
+     * - {Number} x X coordinate (in pixels).
+     * - {Number} y Y coordinate (in pixels).
+     */
+    var _centralTilePixel = {
+        x: null,
+        y: null
+    };
+
+
+    /**
      * Offset of the draggable layer container (stores previous value on dragging).
      * Helps to check or new tiles should be drawed.
      * @type {Object} Structure:
@@ -92,29 +104,14 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
      * @patam {Object} container DOM object should contain tile.
      */
     function _drawTile(x, y, z, container) {
-        var viewPortCenter = {
-            x: null,
-            y: null
-        };
-        var centralTilePixel = { // position of the central tile in view port
-            x: null,
-            y: null
-        };
         var img;
         var url;
         var xPixel; // x position on the screen
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
-            
-        viewPortCenter.x = _layer.map.container.offsetWidth / 2;
-        viewPortCenter.y = _layer.map.container.offsetHeight / 2;
-
-        // @see http://ernestdelgado.com/archive/benchmark-on-the-floor/
-        centralTilePixel.x = ~~(viewPortCenter.x - _centralTileShift.x);
-        centralTilePixel.y = ~~(viewPortCenter.y - _centralTileShift.y);
-
-        xPixel = centralTilePixel.x + ((x - _centralTileXY.x) * _layer.tileSize);
-        yPixel = centralTilePixel.y + ((y - _centralTileXY.y) * _layer.tileSize);
+        
+        xPixel = _centralTilePixel.x + ((x - _centralTileXY.x) * _layer.tileSize);
+        yPixel = _centralTilePixel.y + ((y - _centralTileXY.y) * _layer.tileSize);
         
         subdomain = _layer.subdomains[(x + y) % _layer.subdomains.length];
             
@@ -366,15 +363,25 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
             var viewPortHalfHeight;
             var documentFragment;
             var drawedTiles = [];
+            var viewPortCenter = {
+                x: 0,
+                y: 0
+            };
             var zoom = _layer.map.getZoom();
 
             documentFragment = document.createDocumentFragment();
 
+            // init central tile properties
             _centralTileXY = _getTileXY(_layer.map.getCenter());
             _centralTileShift = {
                 x: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).x - _centralTileXY.x * _layer.tileSize,
                 y: _layer.projection.projectToGlobalCoords(_layer.map.getCenter(), _layer.getSize()).y - _centralTileXY.y * _layer.tileSize
             };
+            viewPortCenter.x = _layer.map.container.offsetWidth / 2;
+            viewPortCenter.y = _layer.map.container.offsetHeight / 2;
+            // @see http://ernestdelgado.com/archive/benchmark-on-the-floor/
+            _centralTilePixel.x = ~~(viewPortCenter.x - _centralTileShift.x);
+            _centralTilePixel.y = ~~(viewPortCenter.y - _centralTileShift.y);
 
             _layer.container.innerHTML = '';
 
