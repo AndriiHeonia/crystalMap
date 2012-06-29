@@ -7,13 +7,15 @@ require([
         'Map',
         'Layers/Tile',
         'Projections/SphericalMercator',
-        'Marker'
+        'Marker',
+        'Vendors/PubSub'
     ],
     function(
         Map,
         Layers_Tile,
         Projections_SphericalMercator,
-        Marker
+        Marker,
+        Vendors_PubSub
     ) {
         var geoPoint = {
             lat: 55.028,
@@ -100,4 +102,46 @@ require([
                     });
                 }
         };
+
+        // subscribe to the tile drawing
+        Vendors_PubSub.subscribe('Layers/Tile/Drawer', function(tile) {
+            var leftTopGlobalPixel = { // left top corner of the tile in global pixels
+                x: tile.x * 256,
+                y: tile.y * 256
+            };
+            var rightBottomGlobalPixel = { // right bottom corner of the tile in global pixels
+                x: leftTopGlobalPixel.x + 256,
+                y: leftTopGlobalPixel.y + 256
+            };
+
+            console.log(leftTopGlobalPixel);
+            console.log(rightBottomGlobalPixel);
+
+            // left top corner of the tile in lon lat
+            var leftTopGeoPoint = Projections_SphericalMercator.unprojectFromGlobalCoords(leftTopGlobalPixel, layer.getSize());
+            // right bottom corner of the tile in lon lat
+            var rightBottomGeoPoint = Projections_SphericalMercator.unprojectFromGlobalCoords(rightBottomGlobalPixel, layer.getSize());
+            
+            console.log(leftTopGeoPoint);
+            console.log(rightBottomGeoPoint);
+
+            // ground resolution in area of the left top corner of the tile
+            var leftTopGroundResolution = Projections_SphericalMercator.getGroundResolution(leftTopGeoPoint.lat, layer.getSize());
+
+            // left top corner of the tile in Spherical Mercator coordinates (in meters)
+            var leftTopGlobalMeters = {
+                x: leftTopGlobalPixel.x * leftTopGroundResolution,
+                y: leftTopGlobalPixel.y * leftTopGroundResolution
+            };
+
+            // ground resolution in area of the right bottom corner of the tile
+            var rightBottomGroundResolution = Projections_SphericalMercator.getGroundResolution(rightBottomGeoPoint.lat, layer.getSize());
+            var rightBottomGlobalMeters = {
+                x: rightBottomGlobalPixel.x * rightBottomGroundResolution,
+                y: rightBottomGlobalPixel.y * rightBottomGroundResolution
+            };
+
+            console.log(leftTopGlobalMeters);
+            console.log(rightBottomGroundResolution);
+        });
 });

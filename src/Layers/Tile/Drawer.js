@@ -2,7 +2,7 @@
  * Tile drawer. Displays DOM tiles on the screen.
  * @author Andrey Geonya <a.geonya@gmail.com>
  */
-define(['Utils/Dom'], function(Utils_Dom) {
+define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
     /**
      * @type {Layers/Tile/Drawer}
      */
@@ -104,6 +104,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         var xPixel; // x position on the screen
         var yPixel; // y position on the screen
         var subdomain; // subdomain of the tile server
+        var z = _layer.map.getZoom();
             
         viewPortCenter.x = _layer.map.container.offsetWidth / 2;
         viewPortCenter.y = _layer.map.container.offsetHeight / 2;
@@ -120,7 +121,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
         url = _layer.url;
         url = url.replace("{x}", x);
         url = url.replace("{y}", y);
-        url = url.replace("{z}", _layer.map.getZoom());
+        url = url.replace("{z}", z);
 
         img = document.createElement('img');
         img.id = x + '_' + y;
@@ -134,6 +135,8 @@ define(['Utils/Dom'], function(Utils_Dom) {
         img.style.top = yPixel + 'px';
 
         container.appendChild(img);
+
+        Vendors_PubSub.publish('Layers/Tile/Drawer', {x: x, y: y, z: z});
     }
 
     /**
