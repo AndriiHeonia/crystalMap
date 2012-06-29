@@ -367,26 +367,34 @@ define(['Utils/Dom'], function(Utils_Dom) {
             var offsetY;
             var unroundedOffsetX = left / _layer.tileSize;
             var unroundedOffsetY = top / _layer.tileSize;
+            var i;
 
             // @see http://jsperf.com/math-round-vs-hack/6
             offsetX = ~~(unroundedOffsetX + (unroundedOffsetX > 0 ? .5 : -.5));
             offsetY = ~~(unroundedOffsetY + (unroundedOffsetY > 0 ? .5 : -.5));
-            
             // draws left or right column with tiles
             if(offsetX > _containerOffset.x) {
-                _drawLeftTiles();
+                for(i = (offsetX - _containerOffset.x); i--;) {
+                    _drawLeftTiles();
+                }
             }
             else if(offsetX < _containerOffset.x) {
-                _drawRightTiles();
+                for(i = (_containerOffset.x - offsetX); i--;) {
+                    _drawRightTiles();
+                }
             }
             _containerOffset.x = offsetX;
             
             // draws top or bottom row with tiles
             if(offsetY > _containerOffset.y) {
-                _drawTopTiles();
+                for(i = (offsetY - _containerOffset.y); i--;) {
+                    _drawTopTiles();
+                }
             }
             else if(offsetY < _containerOffset.y) {
-                _drawBottomTiles();
+                for(i = (_containerOffset.y - offsetY); i--;) {
+                    _drawBottomTiles();
+                }
             }
             _containerOffset.y = offsetY;
         };
