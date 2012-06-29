@@ -86,6 +86,7 @@ define(['Utils/Dom'], function(Utils_Dom) {
 
     /**
      * Displays tile.
+     * @todo think about optimization
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
      * @patam {Object} container DOM object should contain tile.
