@@ -14,13 +14,13 @@ define(['Events/Mouse'], function(Events_Mouse) {
         create: function(event, map) {
             var customEvent;
             switch(event.type) {
+                case 'mousemove':
+                    customEvent = new Events_Mouse(event, map);
+                    break;
                 case 'click': // @todo test it
                     customEvent = new Events_Mouse(event, map);
                     break;
                 case 'mousedown': // @todo test it
-                    customEvent = new Events_Mouse(event, map);
-                    break;
-                case 'mousemove':
                     customEvent = new Events_Mouse(event, map);
                     break;
                 case 'mouseup': // @todo test it

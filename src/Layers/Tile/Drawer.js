@@ -86,7 +86,6 @@ define(['Utils/Dom'], function(Utils_Dom) {
 
     /**
      * Displays tile.
-     * @todo think about optimization
      * @param {Number} x X position in a tile grid.
      * @param {Number} y Y position in a tile grid.
      * @patam {Object} container DOM object should contain tile.
@@ -109,19 +108,22 @@ define(['Utils/Dom'], function(Utils_Dom) {
         viewPortCenter.x = _layer.map.container.offsetWidth / 2;
         viewPortCenter.y = _layer.map.container.offsetHeight / 2;
 
-        centralTilePixel.x = Math.floor(viewPortCenter.x - _centralTileShift.x);
-        centralTilePixel.y = Math.floor(viewPortCenter.y - _centralTileShift.y);
+        // @see http://ernestdelgado.com/archive/benchmark-on-the-floor/
+        centralTilePixel.x = ~~(viewPortCenter.x - _centralTileShift.x);
+        centralTilePixel.y = ~~(viewPortCenter.y - _centralTileShift.y);
+
         xPixel = centralTilePixel.x + ((x - _centralTileXY.x) * _layer.tileSize);
         yPixel = centralTilePixel.y + ((y - _centralTileXY.y) * _layer.tileSize);
-            
-        subdomain = _layer.subdomains[Math.floor(Math.random() * _layer.subdomains.length)];
+        
+        subdomain = _layer.subdomains[(x + y) % _layer.subdomains.length];
             
         url = _layer.url;
         url = url.replace("{x}", x);
         url = url.replace("{y}", y);
         url = url.replace("{z}", _layer.map.getZoom());
 
-        img = Utils_Dom.create('img', x + '_' + y);
+        img = document.createElement('img');
+        img.id = x + '_' + y;
         Utils_Dom.setOpacity(img, 0);
         img.onload = function () {
             Utils_Dom.fadeIn(img, 250);
