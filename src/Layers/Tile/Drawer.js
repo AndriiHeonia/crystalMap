@@ -198,7 +198,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         elements = document.getElementsByClassName(className);
         _layer.container.style.display = 'none';
         while(typeof(elements[0]) !== 'undefined') {
-            Vendors_PubSub.publish('Layers/Tile/Drawer/Removing', elements[0]);
+            Vendors_PubSub.publish('Layers/Tile/Drawer/OnRemove', elements[0]);
             _layer.container.removeChild(elements[0]);
         }
         _layer.container.style.display = 'block';
@@ -244,7 +244,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.rightBottom.x--;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
+        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -271,7 +271,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.leftTop.x++;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
+        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -298,7 +298,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.rightBottom.y--;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
+        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -325,7 +325,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.leftTop.y++;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
+        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -412,7 +412,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
             _layer.container.appendChild(documentFragment);
             _updateTileClasses();
 
-            Vendors_PubSub.publish('Layers/Tile/Drawer/Drawing', drawedTiles);
+            Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
         };
 
         /**

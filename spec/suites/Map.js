@@ -85,7 +85,7 @@ define(['Map', 'Events/Map', 'Vendors/PubSub'], function(Map, Events_Map, Vendor
                 spyOn(myObserver, 'onCenterChanging');
                 
                 myMap.add(myObserver);
-                Vendors_PubSub.subscribe('Map/CenterChanging', myObserver.onCenterChanging);
+                Vendors_PubSub.subscribe('Map/OnCenterChange', myObserver.onCenterChanging);
                 myMap.setCenter({lat: 50, lon: 50});
 
                 expect(myObserver.onCenterChanging).toHaveBeenCalled();
@@ -124,7 +124,7 @@ define(['Map', 'Events/Map', 'Vendors/PubSub'], function(Map, Events_Map, Vendor
                 spyOn(myObserver, 'onZoomChanging');
                 
                 myMap.add(myObserver);
-                Vendors_PubSub.subscribe('Map/ZoomChanging', myObserver.onZoomChanging);
+                Vendors_PubSub.subscribe('Map/OnZoomChange', myObserver.onZoomChanging);
                 myMap.setZoom(5);
 
                 expect(myObserver.onZoomChanging).toHaveBeenCalled();

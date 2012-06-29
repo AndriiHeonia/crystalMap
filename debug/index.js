@@ -18,11 +18,11 @@ require([
         Vendors_PubSub
     ) {
         // subscribe to the tiles drawing
-        Vendors_PubSub.subscribe('Layers/Tile/Drawer/Drawing', function(drawedTiles) {
+        Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnDraw', function(drawedTiles) {
             //console.log(drawedTiles);
         });
         // subscribe to the tiles removing
-        Vendors_PubSub.subscribe('Layers/Tile/Drawer/Removing', function(tile) {
+        Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnRemove', function(tile) {
             //console.log(tile);
         });
 

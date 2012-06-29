@@ -118,8 +118,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
                 _self.enableDragging(_map, _self.container);
             }
 
-            Vendors_PubSub.subscribe('Map/CenterChanging', _redraw);
-            Vendors_PubSub.subscribe('Map/ZoomChanging', _redraw);
+            Vendors_PubSub.subscribe('Map/OnCenterChange', _redraw);
+            Vendors_PubSub.subscribe('Map/OnZoomChange', _redraw);
         };
 
         /**
@@ -127,8 +127,8 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
          * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
          */
         _self.onRemoveFromMap = function(mapEvent) {
-            Vendors_PubSub.unsubscribe('Map/CenterChanging', _redraw);
-            Vendors_PubSub.unsubscribe('Map/ZoomChanging', _redraw);
+            Vendors_PubSub.unsubscribe('Map/OnCenterChange', _redraw);
+            Vendors_PubSub.unsubscribe('Map/OnZoomChange', _redraw);
                 
             _destroyContainer();
             _pixel = null;

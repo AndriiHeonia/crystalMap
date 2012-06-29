@@ -171,8 +171,8 @@ define([
                 
                 _self.enableDragging(_self.map, _self.map.container);
 
-                Vendors_PubSub.subscribe('Map/CenterChanging', _drawer.draw);
-                Vendors_PubSub.subscribe('Map/ZoomChanging', _drawer.draw);
+                Vendors_PubSub.subscribe('Map/OnCenterChange', _drawer.draw);
+                Vendors_PubSub.subscribe('Map/OnZoomChange', _drawer.draw);
             };
 
            /**
@@ -180,8 +180,8 @@ define([
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
             _self.onRemoveFromMap = function(mapEvent) {
-                Vendors_PubSub.unsubscribe('Map/CenterChanging', _drawer.draw);
-                Vendors_PubSub.unsubscribe('Map/ZoomChanging', _drawer.draw);
+                Vendors_PubSub.unsubscribe('Map/OnCenterChange', _drawer.draw);
+                Vendors_PubSub.unsubscribe('Map/OnZoomChange', _drawer.draw);
                 
                 _destroyContainer();
                 _self.map = null;
@@ -202,7 +202,7 @@ define([
                 var left = _containerOffset.x + event.currentPixel.x - event.startPixel.x;
                 var top = _containerOffset.y + event.currentPixel.y - event.startPixel.y;
 
-                Vendors_PubSub.publish('Layers/Tile/Dragging', event);
+                Vendors_PubSub.publish('Layers/Tile/OnDrag', event);
 
                 _self.container.style.cssText += "; left: " + left + "px; top: " + top + "px;";
                 _drawer.redraw(left, top);

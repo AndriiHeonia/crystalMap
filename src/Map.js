@@ -141,7 +141,7 @@ define([
             this.setCenter = function(center) {
                 Validators_GeoPoint.validate(center);
                 _center = center;
-                Vendors_PubSub.publish("Map/CenterChanging");
+                Vendors_PubSub.publish("Map/OnCenterChange");
             };
 
             /**
@@ -159,7 +159,7 @@ define([
             this.setZoom = function(zoom) {
                 Validators_Number.validate(zoom, 'Map', 'setZoom');
                 _zoom = zoom;
-                Vendors_PubSub.publish("Map/ZoomChanging");
+                Vendors_PubSub.publish("Map/OnZoomChange");
             };
 
             /**
@@ -174,7 +174,7 @@ define([
                     _self.baseLayer = observer; // @todo shouldn't be first object
                 }
                 observer.onAddToMap(_self.getEventObject());
-                Vendors_PubSub.publish("Map/MapUpdating");
+                Vendors_PubSub.publish("Map/OnMapUpdate");
             };
 
             /**
@@ -186,7 +186,7 @@ define([
 
                 observer.onRemoveFromMap(_self.getEventObject());
                 _directObservers.splice(_directObservers.indexOf(observer), 1);
-                Vendors_PubSub.publish("Map/MapUpdating");
+                Vendors_PubSub.publish("Map/OnMapUpdate");
             };
             
             /**
