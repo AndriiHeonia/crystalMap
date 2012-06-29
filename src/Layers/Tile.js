@@ -202,10 +202,7 @@ define([
                 var left = _containerOffset.x + event.currentPixel.x - event.startPixel.x;
                 var top = _containerOffset.y + event.currentPixel.y - event.startPixel.y;
 
-                Vendors_PubSub.publish('Layers/Tile/Dragging', event, {
-                    x: left,
-                    y: top
-                });
+                Vendors_PubSub.publish('Layers/Tile/Dragging', event);
 
                 _self.container.style.cssText += "; left: " + left + "px; top: " + top + "px;";
                 _drawer.redraw(left, top);
