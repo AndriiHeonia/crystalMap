@@ -123,7 +123,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         img = document.createElement('img');
         img.id = x + '_' + y;
         Utils_Dom.setOpacity(img, 0);
-        img.onload = function () {
+        img.onload = function() {
             Utils_Dom.fadeIn(img, 250);
         };
         img.src = 'http://' + subdomain + '.' + url;
