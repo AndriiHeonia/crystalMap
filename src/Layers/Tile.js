@@ -18,7 +18,6 @@ define([
         'Projections/SphericalMercator',
         'Interfaces/Projection',
         'System/InterfaceChecker',
-        'Draggable',
         'Vendors/PubSub',
         'Layers/Tile/Drawer'
     ],
@@ -34,7 +33,6 @@ define([
         Projections_SphericalMercator,
         Interfaces_Projection,
         System_InterfaceChecker,
-        Draggable,
         Vendors_PubSub,
         Layers_Tile_Drawer
     ) {
@@ -127,6 +125,25 @@ define([
              _self.map = null;
 
             /**
+             * @todo doc and test
+             */
+            _storeContainerOffset = function(event) {
+                _containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
+                _containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
+            };
+
+            /**
+             * @todo doc and test
+             */
+            _moveLayerContainer = function(event) {
+                var left = _containerOffset.x + event.currentPixel.x - event.startPixel.x;
+                var top = _containerOffset.y + event.currentPixel.y - event.startPixel.y;
+
+                _self.container.style.cssText += "; left: " + left + "px; top: " + top + "px;";
+                _drawer.redraw(left, top);
+            };
+
+            /**
              * Init.
              * @param {Object} options Layer options object. Required. Structure:
              * - {String} url Tile server url (without "http://"). Required.
@@ -169,8 +186,8 @@ define([
                 _drawer.initViewPortTileSize();
                 _drawer.draw();
                 
-                _self.enableDragging(_self.map, _self.map.container);
-
+                Vendors_PubSub.subscribe("Map/OnDragStart", _storeContainerOffset);
+                Vendors_PubSub.subscribe("Map/OnDrag", _moveLayerContainer);
                 Vendors_PubSub.subscribe('Map/OnCenterChange', _drawer.draw);
                 Vendors_PubSub.subscribe('Map/OnZoomChange', _drawer.draw);
             };
@@ -180,32 +197,13 @@ define([
             * @param {Events/Map} mapEvent Incapsulates information about the map that has been updated.
             */
             _self.onRemoveFromMap = function(mapEvent) {
+                Vendors_PubSub.unsubscribe('Map/OnDragStart', _storeContainerOffset);
+                Vendors_PubSub.unsubscribe("Map/OnDrag", _moveLayerContainer);
                 Vendors_PubSub.unsubscribe('Map/OnCenterChange', _drawer.draw);
                 Vendors_PubSub.unsubscribe('Map/OnZoomChange', _drawer.draw);
-                
+
                 _destroyContainer();
                 _self.map = null;
-            };
-
-            /**
-             * @todo doc and test
-             */
-            _self.onDragStart = function(event) {
-                _containerOffset.x = _self.container.style.left ? parseInt(_self.container.style.left, 10) : 0;
-                _containerOffset.y = _self.container.style.top ? parseInt(_self.container.style.top, 10) : 0;
-            };
-
-            /**
-             * @todo doc and test
-             */
-            _self.onDrag = function(event) {
-                var left = _containerOffset.x + event.currentPixel.x - event.startPixel.x;
-                var top = _containerOffset.y + event.currentPixel.y - event.startPixel.y;
-
-                Vendors_PubSub.publish('Layers/Tile/OnDrag', event);
-
-                _self.container.style.cssText += "; left: " + left + "px; top: " + top + "px;";
-                _drawer.redraw(left, top);
             };
 
             /**
@@ -216,9 +214,6 @@ define([
                 return _self.tileSize * Math.pow(2, _self.map.getZoom());
             };
         };
-
-        constructor.prototype = Draggable;
-        constructor.prototype.parent = constructor.prototype;
 
         return constructor;
     }

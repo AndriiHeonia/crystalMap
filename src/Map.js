@@ -20,7 +20,8 @@ define([
         'Utils/Dom',
         'Utils/Common',
         'Map/Behavior',
-        'Vendors/PubSub'
+        'Vendors/PubSub',
+        'Draggable'
     ],
     function(
         Utils_Type,
@@ -35,7 +36,8 @@ define([
         Utils_Dom,
         Utils_Common,
         Map_Behavior,
-        Vendors_PubSub
+        Vendors_PubSub,
+        Draggable
     ) {
         /**
          * @type {Map}
@@ -116,13 +118,15 @@ define([
                 MapRegister.add(_self);
 
                 _behavior = new Map_Behavior(_self);
+
+                _self.enableDragging(_self, _self.container);
              })(arguments[0], arguments[1], arguments[2]);
 
             /**
             * Returns an event object with information about the map.
             * @return {Events.Map}
             */
-            this.getEventObject = function() {
+            _self.getEventObject = function() {
                 return new Events_Map(_self);
             };
 
@@ -130,7 +134,7 @@ define([
             * Returns geographic coordinates of the center.
             * @return {Object} Coordinates of the center.
             */
-            this.getCenter = function() {
+            _self.getCenter = function() {
                 return _center;
             };
 
@@ -138,7 +142,7 @@ define([
              * Sets geographic coordinates of the center.
              * @param {Object} center Coordinates of the center. Required.
              */
-            this.setCenter = function(center) {
+            _self.setCenter = function(center) {
                 Validators_GeoPoint.validate(center);
                 _center = center;
                 Vendors_PubSub.publish("Map/OnCenterChange");
@@ -148,7 +152,7 @@ define([
              * Returns zoom level of the map.
              * @return {Number} Zoom level.
              */
-            this.getZoom = function() {
+            _self.getZoom = function() {
                 return _zoom;
             };
 
@@ -156,7 +160,7 @@ define([
              * Sets zoom level of the map.
              * @param {Number} zoom Zoom level. Required.
              */
-            this.setZoom = function(zoom) {
+            _self.setZoom = function(zoom) {
                 Validators_Number.validate(zoom, 'Map', 'setZoom');
                 _zoom = zoom;
                 Vendors_PubSub.publish("Map/OnZoomChange");
@@ -166,7 +170,7 @@ define([
              * Adds an observer to the map.
              * @param {Interfaces/MapObserver} observer Observer to listen map events. Required.
              */
-            this.add = function(observer) {
+            _self.add = function(observer) {
                 System_InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
                 
                 _directObservers.push(observer);
@@ -181,7 +185,7 @@ define([
              * Removes an observer from the map.
              * @param {Interfaces/MapObserver} observer Registered observer. Required.
              */
-            this.remove = function(observer) {
+            _self.remove = function(observer) {
                 System_InterfaceChecker.isImplements(observer, [Interfaces_MapObserver]);
 
                 observer.onRemoveFromMap(_self.getEventObject());
@@ -192,7 +196,7 @@ define([
             /**
              * Destructor
              */
-            this.destroy = function() {
+            _self.destroy = function() {
                 // Calls onRemoveFromMap method to each user added observer and clears _directObservers array
                 for(var i = 0; i < _directObservers.length; i++) {
                     _directObservers[i].onRemoveFromMap(_self.getEventObject);
@@ -203,7 +207,7 @@ define([
             };
 
             // @todo doc and test
-            this.projectToViewPort = function(geoPoint) {
+            _self.projectToViewPort = function(geoPoint) {
                 return _self.baseLayer.projection.projectToViewPort(
                     geoPoint,
                     _self.getCenter(),
@@ -216,7 +220,7 @@ define([
             };
 
             // @todo doc and test
-            this.unprojectFromViewPort = function(pixel) {
+            _self.unprojectFromViewPort = function(pixel) {
                 return _self.baseLayer.projection.unprojectFromViewPort(
                     pixel,
                     _self.getCenter(),
@@ -227,7 +231,20 @@ define([
                     }
                 );
             };
+
+            // @todo doc and test
+            _self.onDragStart = function(event) {
+                Vendors_PubSub.publish("Map/OnDragStart", event);
+            };
+
+            // @todo doc and test
+            _self.onDrag = function(event) {
+                Vendors_PubSub.publish("Map/OnDrag", event);
+            };
         };
+
+        constructor.prototype = Draggable;
+        constructor.prototype.parent = constructor.prototype;
 
         return constructor;
     }

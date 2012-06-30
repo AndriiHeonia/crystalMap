@@ -19,13 +19,18 @@ require([
     ) {
         // subscribe to the tiles drawing
         Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnDraw', function(drawedTiles) {
-            //console.log(drawedTiles);
+            console.log(drawedTiles);
         });
         // subscribe to the tiles removing
         Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnRemove', function(tile) {
-            //console.log(tile);
+            console.log(tile);
         });
-
+        Vendors_PubSub.subscribe("Map/OnDragStart", function(event) {
+            console.log(event);
+        });
+        Vendors_PubSub.subscribe("Map/OnDrag", function(event) {
+            console.log(event);
+        });
 
         var geoPoint = {
             lat: 55.028,
@@ -46,7 +51,7 @@ require([
             geoPoint: geoPoint,
             isDraggable: true
         });
-        //map.add(marker);
+        map.add(marker);
 
         var zoomInBtn = document.getElementById('zoomin');
         var zoomOutBtn = document.getElementById('zoomout');
