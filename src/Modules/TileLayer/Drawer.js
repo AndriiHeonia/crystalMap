@@ -4,12 +4,12 @@
  */
 define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
     /**
-     * @type {Layers/Tile/Drawer}
+     * @type {Modules/TileLayer/Drawer}
      */
     var _self;
 
     /**
-     * @type {Layers/Tile}
+     * @type {Modules/TileLayer/Main}
      */
     var _layer;
 
@@ -198,7 +198,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         elements = document.getElementsByClassName(className);
         _layer.container.style.display = 'none';
         while(typeof(elements[0]) !== 'undefined') {
-            Vendors_PubSub.publish('Layers/Tile/Drawer/OnRemove', elements[0]);
+            Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnRemove', elements[0]);
             _layer.container.removeChild(elements[0]);
         }
         _layer.container.style.display = 'block';
@@ -244,7 +244,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.rightBottom.x--;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
+        Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -271,7 +271,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.leftTop.x++;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
+        Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -298,7 +298,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.rightBottom.y--;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
+        Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -325,7 +325,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
         _showedTiles.leftTop.y++;
         _updateTileClasses();
 
-        Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
+        Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnDraw', drawedTiles);
     }
 
     /**
@@ -336,7 +336,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
 
         /**
          * Init.
-         * @param {Layers/Tile} layer Layer, drawer belongs to. Required.
+         * @param {Modules/TileLayer/Main} layer Layer, drawer belongs to. Required.
          * @param {Number} tileBufferSize Number of cached tiles on each side. Optional. 1 by default.
          */
         (function(layer, tileBufferSize) {
@@ -412,7 +412,7 @@ define(['Utils/Dom', 'Vendors/PubSub'], function(Utils_Dom, Vendors_PubSub) {
             _layer.container.appendChild(documentFragment);
             _updateTileClasses();
 
-            Vendors_PubSub.publish('Layers/Tile/Drawer/OnDraw', drawedTiles);
+            Vendors_PubSub.publish('Modules/TileLayer/Drawer/OnDraw', drawedTiles);
         };
 
         /**

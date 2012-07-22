@@ -5,24 +5,24 @@
  */
 require([
         'Map',
-        'Layers/Tile',
+        'Vendors/PubSub',
         'Projections/SphericalMercator',
-        'Modules/Marker/Main',
-        'Vendors/PubSub'
+        'Modules/TileLayer/Main',
+        'Modules/Marker/Main'
     ],
     function(
         Map,
-        Layers_Tile,
+        Vendors_PubSub,
         Projections_SphericalMercator,
-        Modules_Marker_Main,
-        Vendors_PubSub
+        Modules_TileLayer_Main,
+        Modules_Marker_Main
     ) {
         // subscribe to the tiles drawing
-        Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnDraw', function(drawedTiles) {
+        Vendors_PubSub.subscribe('Modules/TileLayer/Drawer/OnDraw', function(drawedTiles) {
             console.log(drawedTiles);
         });
         // subscribe to the tiles removing
-        Vendors_PubSub.subscribe('Layers/Tile/Drawer/OnRemove', function(tile) {
+        Vendors_PubSub.subscribe('Modules/TileLayer/Drawer/OnRemove', function(tile) {
             console.log(tile);
         });
         Vendors_PubSub.subscribe("Map/OnDragStart", function(event) {
@@ -38,7 +38,7 @@ require([
         };
         
         var map = new Map('myMap', geoPoint, 9);
-        var layer = new Layers_Tile({
+        var layer = new Modules_TileLayer_Main({
             url: 'maps.2gis.ru/tiles?x={x}&y={y}&z={z}',
             subdomains: ['tile0', 'tile1', 'tile2', 'tile3'],
             tileSize: 256,

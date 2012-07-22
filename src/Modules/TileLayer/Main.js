@@ -19,7 +19,7 @@ define([
         'Interfaces/Projection',
         'System/InterfaceChecker',
         'Vendors/PubSub',
-        'Layers/Tile/Drawer'
+        'Modules/TileLayer/Drawer'
     ],
     function(
         Validators_NotUndefined,
@@ -34,10 +34,10 @@ define([
         Interfaces_Projection,
         System_InterfaceChecker,
         Vendors_PubSub,
-        Layers_Tile_Drawer
+        Modules_TileLayer_Drawer
     ) {
         /**
-         * @type {Layers/Tile}
+         * @type {Modules/TileLayer/Main}
          */
         var _self;
 
@@ -53,7 +53,7 @@ define([
         };
 
         /**
-         * @type {Layers/Tile/Drawer} Tile drawer.
+         * @type {Modules/TileLayer/Drawer} Tile drawer.
          */
         var _drawer;
 
@@ -63,7 +63,7 @@ define([
         function _initContainer() {
             _self.container = Utils_Dom.create(
                 'div',
-                Utils_Common.createUniqueId('Layers/Tile'),
+                Utils_Common.createUniqueId('Modules/TileLayer/Main'),
                 'crystal-layer',
                 _self.map.container
             );
@@ -153,12 +153,12 @@ define([
              * - {Interfaces/Projection} projection Projection of this layer. Optional. Projections/SphericalMercator by default.
              */
             (function(options) {
-                Validators_NotUndefined.validate(options, 'Layers/Tile', 'init');
-                Validators_String.validate(options.url, 'Layers/Tile', 'init');
-                Validators_Array.validate(options.subdomains, 'Layers/Tile', 'init');
-                Validators_MoreThan.validate(options.subdomains.length, 0, 'Layers/Tile', 'init');
-                Validators_Number.validate(options.tileSize, 'Layers/Tile', 'init');
-                Validators_String.validate(options.errorTileUrl, 'Layers/Tile', 'init');
+                Validators_NotUndefined.validate(options, 'Modules/TileLayer/Main', 'init');
+                Validators_String.validate(options.url, 'Modules/TileLayer/Main', 'init');
+                Validators_Array.validate(options.subdomains, 'Modules/TileLayer/Main', 'init');
+                Validators_MoreThan.validate(options.subdomains.length, 0, 'Modules/TileLayer/Main', 'init');
+                Validators_Number.validate(options.tileSize, 'Modules/TileLayer/Main', 'init');
+                Validators_String.validate(options.errorTileUrl, 'Modules/TileLayer/Main', 'init');
                 
                 if(Utils_Type.isUndefined(options.projection) === false) { // @todo to add test
                     System_InterfaceChecker.isImplements(options.projection, [Interfaces_Projection]);
@@ -172,7 +172,7 @@ define([
                 _self.tileSize = options.tileSize;
                 _self.errorTileUrl = options.errorTileUrl;
 
-                _drawer = new Layers_Tile_Drawer(_self, 1);
+                _drawer = new Modules_TileLayer_Drawer(_self, 1);
             })(arguments[0]);
 
             /**
