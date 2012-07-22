@@ -2,9 +2,11 @@
  * Map module.
  * Provides a map functionaity.
  * Fires the next events:
- * - MapUpdating - when any object added to the map or removed from the map;
- * - ZoomChanging - when map zoom changed;
- * - CenterChanging - when map center changed.
+ * - Map/OnMapUpdate - when any object added to the map or removed from the map;
+ * - Map/OnZoomChange - when map zoom changed;
+ * - Map/OnCenterChange - when map center changed.
+ * - Map/OnDragStart - when user starts dragging.
+ * - Map/OnDrag - when user dragging.
  * @author Andrey Geonya <a.geonya@gmail.com>
  */
 define([

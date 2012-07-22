@@ -7,14 +7,14 @@ require([
         'Map',
         'Layers/Tile',
         'Projections/SphericalMercator',
-        'Marker',
+        'Modules/Marker/Main',
         'Vendors/PubSub'
     ],
     function(
         Map,
         Layers_Tile,
         Projections_SphericalMercator,
-        Marker,
+        Modules_Marker_Main,
         Vendors_PubSub
     ) {
         // subscribe to the tiles drawing
@@ -47,7 +47,7 @@ require([
         });
         map.add(layer);
 
-        var marker = new Marker({
+        var marker = new Modules_Marker_Main({
             geoPoint: geoPoint,
             isDraggable: true
         });

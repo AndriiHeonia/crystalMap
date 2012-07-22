@@ -1,11 +1,21 @@
 /**
  * DOM marker.
  * @author Andrey Geonya <a.geonya@gmail.com>
- * @todo Should be completed
  */
-define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Utils_Dom, Utils_Common, Draggable, Vendors_PubSub) {
+define([
+        'Utils/Dom',
+        'Utils/Common',
+        'Draggable',
+        'Vendors/PubSub'
+    ], 
+    function(
+        Utils_Dom,
+        Utils_Common,
+        Draggable,
+        Vendors_PubSub
+    ) {
     /**
-     * @type {Markers/Common}
+     * @type {Modules/Marker/Main}
      */
     var _self;
 
@@ -48,7 +58,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
     }
 
     /**
-     * Destroys a tile container.
+     * Destroys marker container.
      */
     function _destroyContainer() {
         _map.baseLayer.container.removeChild(_self.container);
@@ -64,7 +74,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
     }
 
     /**
-     * Redraws marker into new position.
+     * Redraws marker in new position.
      */
     function _redraw() {
         _self.container.style.left = _pixel.x - (_self.container.clientWidth / 2) + 'px';
@@ -99,7 +109,7 @@ define(['Utils/Dom', 'Utils/Common', 'Draggable', 'Vendors/PubSub'], function(Ut
          */
         (function(options) {
             _initGeoPoint = options.geoPoint;
-            _iconUrl = options.iconUrl || Utils_Common.getBaseUrl() + '/images/marker.png';
+            _iconUrl = options.iconUrl || Utils_Common.getBaseUrl() + '/src/Modules/Marker/img/marker.png';
             _isDraggable = options.isDraggable || false;
         })(arguments[0]);
 
